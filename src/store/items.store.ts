@@ -2,10 +2,9 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import {
   databases,
-  storage,
   DATABASE_ID,
   COLLECTIONS,
-  BUCKETS,
+  uploadMultipleFiles,
   ID,
   Query,
 } from '@/lib/appwrite';
@@ -195,23 +194,18 @@ export const useItemsStore = defineStore('items', () => {
     }
   }
 
-  async function uploadItemImages(files: File[]): Promise<string[]> {
+  async function uploadItemImages(
+    files: File[],
+    itemId?: string
+  ): Promise<string[]> {
     try {
-      const uploadPromises = files.map(async (file) => {
-        const fileId = ID.unique();
-        const response = await storage.createFile(
-          BUCKETS.ITEM_IMAGES,
-          fileId,
-          file
-        );
-
-        // Get the file URL
-        const fileUrl = storage.getFileView(BUCKETS.ITEM_IMAGES, response.$id);
-        return fileUrl.toString();
-      });
-
-      const imageUrls = await Promise.all(uploadPromises);
-      return imageUrls;
+      const actualItemId = itemId || ID.unique();
+      const uploadResults = await uploadMultipleFiles(
+        files,
+        'item',
+        actualItemId
+      );
+      return uploadResults.map((result) => result.url);
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : 'Failed to upload images';
