@@ -1,20 +1,26 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import type { User as FirebaseUser } from 'firebase/auth';
-import { authService } from '@/services/auth.service';
+import {
+  account,
+  databases,
+  DATABASE_ID,
+  COLLECTIONS,
+  ID,
+} from '@/lib/appwrite';
 import type { User } from '@/types';
+import type { Models } from 'appwrite';
 
 export const useAuthStore = defineStore('auth', () => {
   // State
-  const firebaseUser = ref<FirebaseUser | null>(null);
+  const appwriteUser = ref<Models.User<Models.Preferences> | null>(null);
   const userData = ref<User | null>(null);
   const isLoading = ref(false);
   const error = ref<string | null>(null);
 
   // Getters
-  const isAuthenticated = computed(() => firebaseUser.value !== null);
+  const isAuthenticated = computed(() => appwriteUser.value !== null);
   const currentUser = computed(() => userData.value);
-  const userId = computed(() => firebaseUser.value?.uid || null);
+  const userId = computed(() => appwriteUser.value?.$id || null);
 
   // Actions
   async function signInWithEmail(email: string, password: string) {
@@ -22,43 +28,45 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null;
 
     try {
-      const user = await authService.signInWithEmail(email, password);
-      firebaseUser.value = user;
-      await loadUserData();
-    } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Failed to sign in';
+      await account.createEmailPasswordSession(email, password);
+      await getCurrentUser();
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to sign in';
+      error.value = errorMessage;
       throw err;
     } finally {
       isLoading.value = false;
     }
   }
 
-  async function signUpWithEmail(email: string, password: string, displayName: string) {
+  async function signUpWithEmail(
+    email: string,
+    password: string,
+    name: string
+  ) {
     isLoading.value = true;
     error.value = null;
 
     try {
-      const user = await authService.signUpWithEmail(email, password, displayName);
-      firebaseUser.value = user;
-      await loadUserData();
-    } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Failed to sign up';
-      throw err;
-    } finally {
-      isLoading.value = false;
-    }
-  }
+      // Create account
+      const user = await account.create(ID.unique(), email, password, name);
 
-  async function signInWithGoogle() {
-    isLoading.value = true;
-    error.value = null;
+      // Create session
+      await account.createEmailPasswordSession(email, password);
 
-    try {
-      const user = await authService.signInWithGoogle();
-      firebaseUser.value = user;
-      await loadUserData();
-    } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Failed to sign in with Google';
+      // Create user document in database
+      await databases.createDocument(DATABASE_ID, COLLECTIONS.USERS, user.$id, {
+        email: user.email,
+        name: user.name,
+        avatarUrl: '',
+      });
+
+      await getCurrentUser();
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to sign up';
+      error.value = errorMessage;
       throw err;
     } finally {
       isLoading.value = false;
@@ -70,40 +78,87 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null;
 
     try {
-      await authService.signOut();
-      firebaseUser.value = null;
+      await account.deleteSession('current');
+      appwriteUser.value = null;
       userData.value = null;
-    } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Failed to sign out';
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to sign out';
+      error.value = errorMessage;
       throw err;
     } finally {
       isLoading.value = false;
     }
   }
 
-  async function loadUserData() {
-    if (!firebaseUser.value) {
-      userData.value = null;
-      return;
-    }
-
+  async function getCurrentUser() {
     try {
-      const data = await authService.getCurrentUserData();
-      userData.value = data;
-    } catch (err) {
-      console.error('Failed to load user data:', err);
+      const user = await account.get();
+      appwriteUser.value = user;
+
+      // Load user data from database
+      try {
+        const userDoc = await databases.getDocument(
+          DATABASE_ID,
+          COLLECTIONS.USERS,
+          user.$id
+        );
+        userData.value = userDoc as unknown as User;
+      } catch {
+        // If user document doesn't exist, create it
+        const newUserDoc = await databases.createDocument(
+          DATABASE_ID,
+          COLLECTIONS.USERS,
+          user.$id,
+          {
+            email: user.email,
+            name: user.name,
+            avatarUrl: '',
+          }
+        );
+        userData.value = newUserDoc as unknown as User;
+      }
+    } catch (err: unknown) {
+      // Clear user data on any error (including 401 Unauthorized)
+      appwriteUser.value = null;
+      userData.value = null;
+
+      // Only log error if it's not a 401 (user not authenticated) or 404 (session not found)
+      if (
+        err &&
+        typeof err === 'object' &&
+        'code' in err &&
+        'type' in err &&
+        err.code !== 401 &&
+        err.code !== 404 &&
+        err.type !== 'general_unauthorized_scope'
+      ) {
+        console.error('Error getting current user:', err);
+      }
     }
   }
 
-  function initializeAuth() {
-    return authService.onAuthStateChanged(async (user) => {
-      firebaseUser.value = user;
-      if (user) {
-        await loadUserData();
-      } else {
-        userData.value = null;
+  async function initializeAuth() {
+    isLoading.value = true;
+    try {
+      await getCurrentUser();
+    } catch (err: unknown) {
+      // User not logged in - this is expected behavior
+      // Only log if it's an unexpected error
+      if (
+        err &&
+        typeof err === 'object' &&
+        'code' in err &&
+        'type' in err &&
+        err.code !== 401 &&
+        err.code !== 404 &&
+        err.type !== 'general_unauthorized_scope'
+      ) {
+        console.error('Unexpected error during auth initialization:', err);
       }
-    });
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   function clearError() {
@@ -112,7 +167,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   return {
     // State
-    firebaseUser,
+    appwriteUser,
     userData,
     isLoading,
     error,
@@ -123,9 +178,8 @@ export const useAuthStore = defineStore('auth', () => {
     // Actions
     signInWithEmail,
     signUpWithEmail,
-    signInWithGoogle,
     signOut,
-    loadUserData,
+    getCurrentUser,
     initializeAuth,
     clearError,
   };

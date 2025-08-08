@@ -8,10 +8,14 @@
             to="/"
             class="flex items-center space-x-2 text-primary-600 hover:text-primary-700 transition-colors"
           >
-            <div class="h-8 w-8 bg-primary-600 rounded-lg flex items-center justify-center">
+            <div
+              class="h-8 w-8 bg-primary-600 rounded-lg flex items-center justify-center"
+            >
               <span class="text-white font-bold text-sm">LoT</span>
             </div>
-            <span class="font-bold text-lg hidden sm:block">Library of Things</span>
+            <span class="font-bold text-lg hidden sm:block"
+              >Library of Things</span
+            >
           </router-link>
         </div>
 
@@ -55,13 +59,17 @@
                 :src="currentUser.photoURL"
                 :alt="currentUser.displayName"
                 class="h-8 w-8 rounded-full object-cover"
-              >
+              />
               <div
                 v-else
                 class="h-8 w-8 rounded-full bg-primary-600 flex items-center justify-center"
               >
                 <span class="text-white text-sm font-medium">
-                  {{ currentUser?.displayName?.charAt(0) || currentUser?.email?.charAt(0) || 'U' }}
+                  {{
+                    currentUser?.displayName?.charAt(0) ||
+                    currentUser?.email?.charAt(0) ||
+                    'U'
+                  }}
                 </span>
               </div>
             </button>
@@ -77,7 +85,7 @@
             >
               <div
                 v-if="showUserMenu"
-                v-click-outside="() => showUserMenu = false"
+                v-click-outside="() => (showUserMenu = false)"
                 class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200"
               >
                 <router-link
@@ -94,7 +102,7 @@
                 >
                   My Reservations
                 </router-link>
-                <hr class="border-gray-200 my-1">
+                <hr class="border-gray-200 my-1" />
                 <button
                   @click="handleSignOut"
                   class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
@@ -113,10 +121,7 @@
             >
               Sign In
             </router-link>
-            <router-link
-              to="/register"
-              class="btn-primary text-sm"
-            >
+            <router-link to="/register" class="btn-primary text-sm">
               Sign Up
             </router-link>
           </div>
@@ -141,7 +146,10 @@
         leave-from-class="transform opacity-100 scale-100"
         leave-to-class="transform opacity-0 scale-95"
       >
-        <div v-if="showMobileMenu" class="md:hidden py-3 border-t border-gray-200">
+        <div
+          v-if="showMobileMenu"
+          class="md:hidden py-3 border-t border-gray-200"
+        >
           <div class="space-y-1">
             <router-link
               to="/"
@@ -177,8 +185,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
 import { useAuthStore } from '@/store/auth.store';
 
@@ -202,7 +211,7 @@ async function handleSignOut() {
 
 // Close menus when clicking outside
 const vClickOutside = {
-  beforeMount(el: HTMLElement, binding: any) {
+  beforeMount(el: HTMLElement, binding: { value: () => void }) {
     el.clickOutsideEvent = (event: Event) => {
       if (!(el === event.target || el.contains(event.target as Node))) {
         binding.value();

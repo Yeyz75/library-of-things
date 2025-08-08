@@ -1,16 +1,16 @@
 // Global types and interfaces
 
 export interface User {
-  id: string;
+  $id: string;
   email: string;
-  displayName?: string;
-  photoURL?: string;
-  createdAt: Date;
-  updatedAt: Date;
+  name?: string;
+  avatarUrl?: string;
+  $createdAt: string;
+  $updatedAt: string;
 }
 
 export interface Item {
-  id: string;
+  $id: string;
   title: string;
   description: string;
   category: string;
@@ -22,12 +22,12 @@ export interface Item {
   location: string;
   isAvailable: boolean;
   tags: string[];
-  createdAt: Date;
-  updatedAt: Date;
+  $createdAt: string;
+  $updatedAt: string;
 }
 
 export interface Reservation {
-  id: string;
+  $id: string;
   itemId: string;
   itemTitle: string;
   itemImageUrl?: string;
@@ -37,11 +37,11 @@ export interface Reservation {
   ownerId: string;
   ownerName: string;
   status: 'pending' | 'approved' | 'active' | 'returned' | 'cancelled';
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   message?: string;
-  createdAt: Date;
-  updatedAt: Date;
+  $createdAt: string;
+  $updatedAt: string;
 }
 
 export interface LoadingState {
@@ -55,7 +55,7 @@ export interface ApiResponse<T> {
   success: boolean;
 }
 
-export type ItemCategory = 
+export type ItemCategory =
   | 'tools'
   | 'electronics'
   | 'books'

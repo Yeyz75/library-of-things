@@ -1,11 +1,18 @@
 <template>
   <div class="flex items-center justify-center" :class="containerClass">
-    <div class="animate-spin rounded-full border-2 border-gray-300 border-t-primary-600" :class="sizeClass"></div>
-    <span v-if="text" class="ml-3 text-gray-600" :class="textClass">{{ text }}</span>
+    <div
+      class="animate-spin rounded-full border-2 border-gray-300 border-t-primary-600"
+      :class="sizeClass"
+    ></div>
+    <span v-if="text" class="ml-3 text-gray-600" :class="textClass">{{
+      text
+    }}</span>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+
 interface Props {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   text?: string;
