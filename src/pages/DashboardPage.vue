@@ -218,6 +218,7 @@ import { useAuthStore } from '@/store/auth.store';
 import { useItemsStore } from '@/store/items.store';
 import { useReservationsStore } from '@/store/reservations.store';
 import type { ReservationStatus } from '@/types';
+import { storeToRefs } from 'pinia';
 
 const authStore = useAuthStore();
 const itemsStore = useItemsStore();

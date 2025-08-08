@@ -11,15 +11,15 @@ export const databases = new Databases(client);
 export const storage = new Storage(client);
 
 // Database and Collection IDs
-export const DATABASE_ID = 'main';
+export const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 export const COLLECTIONS = {
-  USERS: 'users',
-  ITEMS: 'items',
-  RESERVATIONS: 'reservations',
+  USERS: import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID,
+  ITEMS: import.meta.env.VITE_APPWRITE_ITEMS_COLLECTION_ID,
+  RESERVATIONS: import.meta.env.VITE_APPWRITE_RESERVATIONS_COLLECTION_ID,
 } as const;
 
-// Storage Bucket ID (single bucket for free plan)
-export const BUCKET_ID = 'images';
+// Storage Bucket ID
+export const BUCKET_ID = import.meta.env.VITE_APPWRITE_BUCKET_ID;
 
 // Helper function to generate file metadata
 export const generateFileMetadata = (
