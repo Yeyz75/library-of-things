@@ -8,9 +8,9 @@
           <div class="flex items-center space-x-6 mb-8">
             <div class="relative">
               <img
-                v-if="currentUser?.photoURL"
-                :src="currentUser.photoURL"
-                :alt="currentUser.displayName"
+                v-if="currentUser?.avatarUrl"
+                :src="currentUser.avatarUrl"
+                :alt="currentUser.name"
                 class="h-24 w-24 rounded-full object-cover"
               />
               <div
@@ -19,7 +19,7 @@
               >
                 <span class="text-white text-2xl font-medium">
                   {{
-                    currentUser?.displayName?.charAt(0) ||
+                    currentUser?.name?.charAt(0) ||
                     currentUser?.email?.charAt(0) ||
                     'U'
                   }}
@@ -28,11 +28,11 @@
             </div>
             <div>
               <h2 class="text-2xl font-semibold text-gray-900">
-                {{ currentUser?.displayName || 'User' }}
+                {{ currentUser?.name || 'User' }}
               </h2>
               <p class="text-gray-600">{{ currentUser?.email }}</p>
               <p class="text-sm text-gray-500 mt-1">
-                Member since {{ formatDate(currentUser?.createdAt) }}
+                Member since {{ formatDate(currentUser?.$createdAt) }}
               </p>
             </div>
           </div>
@@ -73,7 +73,7 @@
                 >
                 <input
                   type="text"
-                  :value="currentUser?.displayName || ''"
+                  :value="currentUser?.name || ''"
                   disabled
                   class="input bg-gray-50"
                 />
@@ -95,7 +95,7 @@
                 >
                 <input
                   type="text"
-                  :value="formatDate(currentUser?.createdAt)"
+                  :value="formatDate(currentUser?.$createdAt)"
                   disabled
                   class="input bg-gray-50"
                 />
@@ -127,6 +127,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import BaseLoader from '@/components/common/BaseLoader.vue';
@@ -166,14 +167,13 @@ const completedReservationsCount = computed(
     ).length
 );
 
-function formatDate(date?: Date): string {
+function formatDate(date?: string): string {
   if (!date) return 'Unknown';
-
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-  }).format(date);
+  }).format(new Date(date));
 }
 
 async function handleSignOut() {

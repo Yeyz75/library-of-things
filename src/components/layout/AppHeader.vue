@@ -212,15 +212,19 @@ async function handleSignOut() {
 // Close menus when clicking outside
 const vClickOutside = {
   beforeMount(el: HTMLElement, binding: { value: () => void }) {
-    el.clickOutsideEvent = (event: Event) => {
-      if (!(el === event.target || el.contains(event.target as Node))) {
-        binding.value();
+    el.clickOutsideEvent = (event: MouseEvent) => {
+      // Si el menú está abierto y el clic NO es dentro del menú ni del botón de usuario
+      if (!el.contains(event.target as Node)) {
+        // Esperar al siguiente tick para permitir que los eventos internos (como Sign Out) se procesen primero
+        setTimeout(() => {
+          binding.value();
+        }, 0);
       }
     };
-    document.addEventListener('click', el.clickOutsideEvent);
+    document.addEventListener('mousedown', el.clickOutsideEvent);
   },
   unmounted(el: HTMLElement) {
-    document.removeEventListener('click', el.clickOutsideEvent);
+    document.removeEventListener('mousedown', el.clickOutsideEvent);
   },
 };
 </script>

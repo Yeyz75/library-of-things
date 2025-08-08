@@ -73,7 +73,7 @@
           <div v-else class="space-y-4">
             <div
               v-for="reservation in borrowedReservations"
-              :key="reservation.id"
+              :key="reservation.$id"
               class="card hover:shadow-md transition-shadow"
             >
               <div class="flex items-start space-x-4">
@@ -121,14 +121,14 @@
                   <div class="flex space-x-2">
                     <button
                       v-if="reservation.status === 'active'"
-                      @click="returnItem(reservation.id)"
+                      @click="returnItem(reservation.$id)"
                       class="btn btn-sm bg-success-600 text-white hover:bg-success-700"
                     >
                       Mark as Returned
                     </button>
                     <button
                       v-if="reservation.status === 'pending'"
-                      @click="cancelReservation(reservation.id)"
+                      @click="cancelReservation(reservation.$id)"
                       class="btn btn-sm bg-error-600 text-white hover:bg-error-700"
                     >
                       Cancel
@@ -158,7 +158,7 @@
           <div v-else class="space-y-4">
             <div
               v-for="reservation in lentReservations"
-              :key="reservation.id"
+              :key="reservation.$id"
               class="card hover:shadow-md transition-shadow"
             >
               <div class="flex items-start space-x-4">
@@ -206,14 +206,14 @@
                   <div class="flex space-x-2">
                     <button
                       v-if="reservation.status === 'pending'"
-                      @click="approveReservation(reservation.id)"
+                      @click="approveReservation(reservation.$id)"
                       class="btn btn-sm bg-success-600 text-white hover:bg-success-700"
                     >
                       Approve
                     </button>
                     <button
                       v-if="reservation.status === 'pending'"
-                      @click="rejectReservation(reservation.id)"
+                      @click="rejectReservation(reservation.$id)"
                       class="btn btn-sm bg-error-600 text-white hover:bg-error-700"
                     >
                       Decline
@@ -231,6 +231,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
 import {
   CalendarDaysIcon,
   HandRaisedIcon,
@@ -254,7 +255,7 @@ const borrowedReservations = computed(() =>
     .filter((r) => r.borrowerId === userId.value)
     .sort(
       (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        new Date(b.$createdAt).getTime() - new Date(a.$createdAt).getTime()
     )
 );
 
@@ -263,7 +264,7 @@ const lentReservations = computed(() =>
     .filter((r) => r.ownerId === userId.value)
     .sort(
       (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        new Date(b.$createdAt).getTime() - new Date(a.$createdAt).getTime()
     )
 );
 
@@ -289,12 +290,12 @@ function getStatusText(status: ReservationStatus): string {
   return texts[status] || status;
 }
 
-function formatDate(date: Date): string {
+function formatDate(date: string): string {
   return new Intl.DateTimeFormat('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
-  }).format(date);
+  }).format(new Date(date));
 }
 
 async function approveReservation(id: string) {
