@@ -12,18 +12,24 @@
                 :src="currentUser.photoURL"
                 :alt="currentUser.displayName"
                 class="h-24 w-24 rounded-full object-cover"
-              >
+              />
               <div
                 v-else
                 class="h-24 w-24 rounded-full bg-primary-600 flex items-center justify-center"
               >
                 <span class="text-white text-2xl font-medium">
-                  {{ currentUser?.displayName?.charAt(0) || currentUser?.email?.charAt(0) || 'U' }}
+                  {{
+                    currentUser?.displayName?.charAt(0) ||
+                    currentUser?.email?.charAt(0) ||
+                    'U'
+                  }}
                 </span>
               </div>
             </div>
             <div>
-              <h2 class="text-2xl font-semibold text-gray-900">{{ currentUser?.displayName || 'User' }}</h2>
+              <h2 class="text-2xl font-semibold text-gray-900">
+                {{ currentUser?.displayName || 'User' }}
+              </h2>
               <p class="text-gray-600">{{ currentUser?.email }}</p>
               <p class="text-sm text-gray-500 mt-1">
                 Member since {{ formatDate(currentUser?.createdAt) }}
@@ -32,27 +38,39 @@
           </div>
 
           <!-- Profile Stats -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 py-6 border-t border-b border-gray-200">
+          <div
+            class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 py-6 border-t border-b border-gray-200"
+          >
             <div class="text-center">
-              <div class="text-2xl font-bold text-primary-600">{{ userItemsCount }}</div>
+              <div class="text-2xl font-bold text-primary-600">
+                {{ userItemsCount }}
+              </div>
               <div class="text-sm text-gray-600">Items Shared</div>
             </div>
             <div class="text-center">
-              <div class="text-2xl font-bold text-secondary-600">{{ totalBorrowedCount }}</div>
+              <div class="text-2xl font-bold text-secondary-600">
+                {{ totalBorrowedCount }}
+              </div>
               <div class="text-sm text-gray-600">Items Borrowed</div>
             </div>
             <div class="text-center">
-              <div class="text-2xl font-bold text-accent-600">{{ completedReservationsCount }}</div>
+              <div class="text-2xl font-bold text-accent-600">
+                {{ completedReservationsCount }}
+              </div>
               <div class="text-sm text-gray-600">Completed Exchanges</div>
             </div>
           </div>
 
           <!-- Account Information -->
           <div>
-            <h3 class="text-lg font-medium text-gray-900 mb-4">Account Information</h3>
+            <h3 class="text-lg font-medium text-gray-900 mb-4">
+              Account Information
+            </h3>
             <div class="space-y-4">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Display Name</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2"
+                  >Display Name</label
+                >
                 <input
                   type="text"
                   :value="currentUser?.displayName || ''"
@@ -61,7 +79,9 @@
                 />
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2"
+                  >Email Address</label
+                >
                 <input
                   type="email"
                   :value="currentUser?.email || ''"
@@ -70,7 +90,9 @@
                 />
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Member Since</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2"
+                  >Member Since</label
+                >
                 <input
                   type="text"
                   :value="formatDate(currentUser?.createdAt)"
@@ -122,25 +144,31 @@ const { currentUser, userId } = storeToRefs(authStore);
 const isSigningOut = ref(false);
 
 // Computed properties for stats
-const userItemsCount = computed(() =>
-  itemsStore.items.filter(item => item.ownerId === userId.value).length
+const userItemsCount = computed(
+  () => itemsStore.items.filter((item) => item.ownerId === userId.value).length
 );
 
-const totalBorrowedCount = computed(() =>
-  reservationsStore.reservations.filter(r => 
-    r.borrowerId === userId.value && (r.status === 'active' || r.status === 'returned')
-  ).length
+const totalBorrowedCount = computed(
+  () =>
+    reservationsStore.reservations.filter(
+      (r) =>
+        r.borrowerId === userId.value &&
+        (r.status === 'active' || r.status === 'returned')
+    ).length
 );
 
-const completedReservationsCount = computed(() =>
-  reservationsStore.reservations.filter(r => 
-    (r.ownerId === userId.value || r.borrowerId === userId.value) && r.status === 'returned'
-  ).length
+const completedReservationsCount = computed(
+  () =>
+    reservationsStore.reservations.filter(
+      (r) =>
+        (r.ownerId === userId.value || r.borrowerId === userId.value) &&
+        r.status === 'returned'
+    ).length
 );
 
 function formatDate(date?: Date): string {
   if (!date) return 'Unknown';
-  
+
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'long',
@@ -150,7 +178,7 @@ function formatDate(date?: Date): string {
 
 async function handleSignOut() {
   isSigningOut.value = true;
-  
+
   try {
     await authStore.signOut();
     router.push('/');
@@ -166,7 +194,7 @@ onMounted(async () => {
     // Load user's items and reservations for stats
     await Promise.all([
       itemsStore.fetchItems({ ownerId: userId.value }),
-      reservationsStore.fetchReservations()
+      reservationsStore.fetchReservations(),
     ]);
   }
 });

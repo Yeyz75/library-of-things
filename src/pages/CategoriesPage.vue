@@ -7,7 +7,9 @@
       </div>
 
       <!-- Categories Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+      >
         <router-link
           v-for="category in categories"
           :key="category.key"
@@ -15,13 +17,17 @@
           class="card hover:shadow-md transition-all duration-200 hover:-translate-y-1 cursor-pointer group"
         >
           <div class="text-center">
-            <div class="bg-gray-100 rounded-full p-6 mb-4 group-hover:bg-primary-100 transition-colors">
+            <div
+              class="bg-gray-100 rounded-full p-6 mb-4 group-hover:bg-primary-100 transition-colors"
+            >
               <component
                 :is="category.icon"
                 class="h-12 w-12 mx-auto text-gray-600 group-hover:text-primary-600 transition-colors"
               />
             </div>
-            <h3 class="font-semibold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
+            <h3
+              class="font-semibold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors"
+            >
               {{ category.name }}
             </h3>
             <p class="text-gray-600 text-sm mb-4">{{ category.description }}</p>
@@ -110,7 +116,7 @@ const categoriesData = [
 ];
 
 const categories = computed(() => {
-  return categoriesData.map(category => ({
+  return categoriesData.map((category) => ({
     ...category,
     count: itemsStore.itemsByCategory[category.key]?.length || 0,
   }));

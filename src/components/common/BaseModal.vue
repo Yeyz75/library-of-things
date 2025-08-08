@@ -31,7 +31,10 @@
             :class="sizeClass"
           >
             <!-- Header -->
-            <div v-if="title || $slots.header" class="flex items-center justify-between p-6 border-b border-gray-200">
+            <div
+              v-if="title || $slots.header"
+              class="flex items-center justify-between p-6 border-b border-gray-200"
+            >
               <slot name="header">
                 <h3 class="text-lg font-semibold text-gray-900">{{ title }}</h3>
               </slot>
@@ -50,7 +53,10 @@
             </div>
 
             <!-- Footer -->
-            <div v-if="$slots.footer" class="flex items-center justify-end p-6 border-t border-gray-200 space-x-3">
+            <div
+              v-if="$slots.footer"
+              class="flex items-center justify-end p-6 border-t border-gray-200 space-x-3"
+            >
               <slot name="footer"></slot>
             </div>
           </div>
@@ -72,7 +78,7 @@ interface Props {
 }
 
 interface Emits {
-  (e: 'close'): void;
+  close: [];
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -112,7 +118,7 @@ onMounted(() => {
   };
 
   document.addEventListener('keydown', handleEscape);
-  
+
   onUnmounted(() => {
     document.removeEventListener('keydown', handleEscape);
   });

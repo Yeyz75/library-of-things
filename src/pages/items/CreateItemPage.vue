@@ -4,7 +4,9 @@
       <div class="max-w-2xl mx-auto">
         <div class="mb-8">
           <h1 class="text-3xl font-bold text-gray-900">Add New Item</h1>
-          <p class="text-gray-600 mt-2">Share something amazing with your community</p>
+          <p class="text-gray-600 mt-2">
+            Share something amazing with your community
+          </p>
         </div>
 
         <form @submit.prevent="handleSubmit" class="space-y-6">
@@ -23,9 +25,14 @@
                 >
                   <PhotoIcon class="h-12 w-12 mx-auto text-gray-400 mb-4" />
                   <p class="text-sm text-gray-600">
-                    <span class="font-medium text-primary-600">Click to upload</span> or drag and drop
+                    <span class="font-medium text-primary-600"
+                      >Click to upload</span
+                    >
+                    or drag and drop
                   </p>
-                  <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB each</p>
+                  <p class="text-xs text-gray-500">
+                    PNG, JPG, GIF up to 10MB each
+                  </p>
                 </div>
                 <input
                   ref="fileInput"
@@ -38,7 +45,10 @@
               </div>
 
               <!-- Preview Images -->
-              <div v-if="selectedFiles.length > 0" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+              <div
+                v-if="selectedFiles.length > 0"
+                class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4"
+              >
                 <div
                   v-for="(file, index) in selectedFiles"
                   :key="index"
@@ -63,7 +73,10 @@
             <!-- Item Details -->
             <div class="space-y-4">
               <div>
-                <label for="title" class="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  for="title"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Item Title <span class="text-error-500">*</span>
                 </label>
                 <input
@@ -75,11 +88,16 @@
                   :class="{ 'border-error-500': errors.title }"
                   placeholder="What are you sharing?"
                 />
-                <p v-if="errors.title" class="mt-1 text-sm text-error-600">{{ errors.title }}</p>
+                <p v-if="errors.title" class="mt-1 text-sm text-error-600">
+                  {{ errors.title }}
+                </p>
               </div>
 
               <div>
-                <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  for="description"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Description <span class="text-error-500">*</span>
                 </label>
                 <textarea
@@ -91,12 +109,20 @@
                   :class="{ 'border-error-500': errors.description }"
                   placeholder="Describe your item, its condition, and any special instructions..."
                 ></textarea>
-                <p v-if="errors.description" class="mt-1 text-sm text-error-600">{{ errors.description }}</p>
+                <p
+                  v-if="errors.description"
+                  class="mt-1 text-sm text-error-600"
+                >
+                  {{ errors.description }}
+                </p>
               </div>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label for="category" class="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    for="category"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Category <span class="text-error-500">*</span>
                   </label>
                   <select
@@ -117,11 +143,16 @@
                     <option value="games">Games & Toys</option>
                     <option value="other">Other</option>
                   </select>
-                  <p v-if="errors.category" class="mt-1 text-sm text-error-600">{{ errors.category }}</p>
+                  <p v-if="errors.category" class="mt-1 text-sm text-error-600">
+                    {{ errors.category }}
+                  </p>
                 </div>
 
                 <div>
-                  <label for="condition" class="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    for="condition"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Condition <span class="text-error-500">*</span>
                   </label>
                   <select
@@ -137,12 +168,20 @@
                     <option value="fair">Fair</option>
                     <option value="poor">Poor</option>
                   </select>
-                  <p v-if="errors.condition" class="mt-1 text-sm text-error-600">{{ errors.condition }}</p>
+                  <p
+                    v-if="errors.condition"
+                    class="mt-1 text-sm text-error-600"
+                  >
+                    {{ errors.condition }}
+                  </p>
                 </div>
               </div>
 
               <div>
-                <label for="location" class="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  for="location"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Location <span class="text-error-500">*</span>
                 </label>
                 <input
@@ -154,11 +193,16 @@
                   :class="{ 'border-error-500': errors.location }"
                   placeholder="City, State or general area"
                 />
-                <p v-if="errors.location" class="mt-1 text-sm text-error-600">{{ errors.location }}</p>
+                <p v-if="errors.location" class="mt-1 text-sm text-error-600">
+                  {{ errors.location }}
+                </p>
               </div>
 
               <div>
-                <label for="tags" class="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  for="tags"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Tags (Optional)
                 </label>
                 <input
@@ -168,17 +212,24 @@
                   class="input"
                   placeholder="Separate tags with commas (e.g., power tools, construction, DIY)"
                 />
-                <p class="text-xs text-gray-500 mt-1">Add relevant tags to help others find your item</p>
+                <p class="text-xs text-gray-500 mt-1">
+                  Add relevant tags to help others find your item
+                </p>
               </div>
             </div>
 
             <!-- Error Display -->
-            <div v-if="submitError" class="bg-error-50 border border-error-200 text-error-600 px-4 py-3 rounded-md">
+            <div
+              v-if="submitError"
+              class="bg-error-50 border border-error-200 text-error-600 px-4 py-3 rounded-md"
+            >
               <p class="text-sm">{{ submitError }}</p>
             </div>
 
             <!-- Submit Buttons -->
-            <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
+            <div
+              class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200"
+            >
               <button
                 type="submit"
                 :disabled="isSubmitting"
@@ -199,7 +250,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue';
+import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { PhotoIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 import AppLayout from '@/components/layout/AppLayout.vue';
@@ -207,6 +258,7 @@ import BaseLoader from '@/components/common/BaseLoader.vue';
 import { useAuthStore } from '@/store/auth.store';
 import { useItemsStore } from '@/store/items.store';
 import type { Item, ItemCategory } from '@/types';
+import { storeToRefs } from 'pinia';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -240,7 +292,7 @@ function validateForm(): boolean {
   let isValid = true;
 
   // Reset errors
-  Object.keys(errors).forEach(key => {
+  Object.keys(errors).forEach((key) => {
     errors[key as keyof typeof errors] = '';
   });
 
@@ -301,9 +353,9 @@ function handleDrop(event: DragEvent) {
 }
 
 function addFiles(files: File[]) {
-  const imageFiles = files.filter(file => file.type.startsWith('image/'));
-  const validFiles = imageFiles.filter(file => file.size <= 10 * 1024 * 1024); // 10MB limit
-  
+  const imageFiles = files.filter((file) => file.type.startsWith('image/'));
+  const validFiles = imageFiles.filter((file) => file.size <= 10 * 1024 * 1024); // 10MB limit
+
   selectedFiles.value = [...selectedFiles.value, ...validFiles].slice(0, 8); // Max 8 images
 }
 
@@ -327,8 +379,8 @@ async function handleSubmit() {
     // Prepare tags
     const tags = tagsInput.value
       .split(',')
-      .map(tag => tag.trim())
-      .filter(tag => tag.length > 0);
+      .map((tag) => tag.trim())
+      .filter((tag) => tag.length > 0);
 
     // Create item data
     const itemData: Omit<Item, 'id' | 'createdAt' | 'updatedAt'> = {
@@ -338,7 +390,8 @@ async function handleSubmit() {
       condition: form.condition as Item['condition'],
       location: form.location.trim(),
       ownerId: userId.value,
-      ownerName: currentUser.value.displayName || currentUser.value.email || 'Unknown',
+      ownerName:
+        currentUser.value.displayName || currentUser.value.email || 'Unknown',
       ownerEmail: currentUser.value.email || '',
       isAvailable: true,
       imageUrls: [],
@@ -350,8 +403,11 @@ async function handleSubmit() {
 
     // Upload images if any
     if (selectedFiles.value.length > 0) {
-      const imageUrls = await itemsStore.uploadItemImages(itemId, selectedFiles.value);
-      
+      const imageUrls = await itemsStore.uploadItemImages(
+        itemId,
+        selectedFiles.value
+      );
+
       // Update item with image URLs
       await itemsStore.updateItem(itemId, { imageUrls });
     }
@@ -359,7 +415,8 @@ async function handleSubmit() {
     // Redirect to the new item
     router.push(`/items/${itemId}`);
   } catch (error) {
-    submitError.value = error instanceof Error ? error.message : 'Failed to create item';
+    submitError.value =
+      error instanceof Error ? error.message : 'Failed to create item';
   } finally {
     isSubmitting.value = false;
   }

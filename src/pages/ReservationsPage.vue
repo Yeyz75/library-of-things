@@ -3,7 +3,9 @@
     <div class="container py-8">
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-900">My Reservations</h1>
-        <p class="text-gray-600 mt-2">Manage your borrowing requests and lent items</p>
+        <p class="text-gray-600 mt-2">
+          Manage your borrowing requests and lent items
+        </p>
       </div>
 
       <!-- Tabs -->
@@ -12,18 +14,22 @@
           <button
             @click="activeTab = 'borrowed'"
             class="py-2 px-1 border-b-2 font-medium text-sm transition-colors"
-            :class="activeTab === 'borrowed' 
-              ? 'border-primary-500 text-primary-600' 
-              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+            :class="
+              activeTab === 'borrowed'
+                ? 'border-primary-500 text-primary-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            "
           >
             Items I'm Borrowing ({{ borrowedReservations.length }})
           </button>
           <button
             @click="activeTab = 'lent'"
             class="py-2 px-1 border-b-2 font-medium text-sm transition-colors"
-            :class="activeTab === 'lent' 
-              ? 'border-primary-500 text-primary-600' 
-              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+            :class="
+              activeTab === 'lent'
+                ? 'border-primary-500 text-primary-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            "
           >
             Items I'm Lending ({{ lentReservations.length }})
           </button>
@@ -40,7 +46,9 @@
         <div class="bg-error-50 text-error-600 p-6 rounded-lg max-w-md mx-auto">
           <p class="font-medium">Failed to load reservations</p>
           <p class="text-sm mt-1">{{ reservationsStore.error }}</p>
-          <button @click="loadReservations" class="btn-primary mt-4">Try Again</button>
+          <button @click="loadReservations" class="btn-primary mt-4">
+            Try Again
+          </button>
         </div>
       </div>
 
@@ -48,10 +56,17 @@
       <div v-else>
         <!-- Borrowed Items Tab -->
         <div v-if="activeTab === 'borrowed'">
-          <div v-if="borrowedReservations.length === 0" class="text-center py-12">
+          <div
+            v-if="borrowedReservations.length === 0"
+            class="text-center py-12"
+          >
             <CalendarDaysIcon class="h-16 w-16 mx-auto text-gray-300 mb-4" />
-            <h3 class="text-lg font-medium text-gray-900 mb-2">No borrowed items</h3>
-            <p class="text-gray-600 mb-6">You haven't borrowed any items yet.</p>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">
+              No borrowed items
+            </h3>
+            <p class="text-gray-600 mb-6">
+              You haven't borrowed any items yet.
+            </p>
             <router-link to="/" class="btn-primary">Browse Items</router-link>
           </div>
 
@@ -62,7 +77,9 @@
               class="card hover:shadow-md transition-shadow"
             >
               <div class="flex items-start space-x-4">
-                <div class="w-24 h-24 bg-gray-200 rounded-lg flex-shrink-0 overflow-hidden">
+                <div
+                  class="w-24 h-24 bg-gray-200 rounded-lg flex-shrink-0 overflow-hidden"
+                >
                   <img
                     v-if="reservation.itemImageUrl"
                     :src="reservation.itemImageUrl"
@@ -73,13 +90,22 @@
                 </div>
 
                 <div class="flex-1 min-w-0">
-                  <h3 class="font-medium text-gray-900 mb-1">{{ reservation.itemTitle }}</h3>
-                  <p class="text-sm text-gray-600 mb-2">Owned by {{ reservation.ownerName }}</p>
-                  <div class="flex items-center space-x-4 text-sm text-gray-500">
+                  <h3 class="font-medium text-gray-900 mb-1">
+                    {{ reservation.itemTitle }}
+                  </h3>
+                  <p class="text-sm text-gray-600 mb-2">
+                    Owned by {{ reservation.ownerName }}
+                  </p>
+                  <div
+                    class="flex items-center space-x-4 text-sm text-gray-500"
+                  >
                     <span>From {{ formatDate(reservation.startDate) }}</span>
                     <span>To {{ formatDate(reservation.endDate) }}</span>
                   </div>
-                  <p v-if="reservation.message" class="text-sm text-gray-600 mt-2">
+                  <p
+                    v-if="reservation.message"
+                    class="text-sm text-gray-600 mt-2"
+                  >
                     "{{ reservation.message }}"
                   </p>
                 </div>
@@ -118,9 +144,15 @@
         <div v-if="activeTab === 'lent'">
           <div v-if="lentReservations.length === 0" class="text-center py-12">
             <HandRaisedIcon class="h-16 w-16 mx-auto text-gray-300 mb-4" />
-            <h3 class="text-lg font-medium text-gray-900 mb-2">No lending history</h3>
-            <p class="text-gray-600 mb-6">No one has requested your items yet.</p>
-            <router-link to="/items/new" class="btn-primary">Add an Item</router-link>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">
+              No lending history
+            </h3>
+            <p class="text-gray-600 mb-6">
+              No one has requested your items yet.
+            </p>
+            <router-link to="/items/new" class="btn-primary"
+              >Add an Item</router-link
+            >
           </div>
 
           <div v-else class="space-y-4">
@@ -130,7 +162,9 @@
               class="card hover:shadow-md transition-shadow"
             >
               <div class="flex items-start space-x-4">
-                <div class="w-24 h-24 bg-gray-200 rounded-lg flex-shrink-0 overflow-hidden">
+                <div
+                  class="w-24 h-24 bg-gray-200 rounded-lg flex-shrink-0 overflow-hidden"
+                >
                   <img
                     v-if="reservation.itemImageUrl"
                     :src="reservation.itemImageUrl"
@@ -141,13 +175,22 @@
                 </div>
 
                 <div class="flex-1 min-w-0">
-                  <h3 class="font-medium text-gray-900 mb-1">{{ reservation.itemTitle }}</h3>
-                  <p class="text-sm text-gray-600 mb-2">Requested by {{ reservation.borrowerName }}</p>
-                  <div class="flex items-center space-x-4 text-sm text-gray-500">
+                  <h3 class="font-medium text-gray-900 mb-1">
+                    {{ reservation.itemTitle }}
+                  </h3>
+                  <p class="text-sm text-gray-600 mb-2">
+                    Requested by {{ reservation.borrowerName }}
+                  </p>
+                  <div
+                    class="flex items-center space-x-4 text-sm text-gray-500"
+                  >
                     <span>From {{ formatDate(reservation.startDate) }}</span>
                     <span>To {{ formatDate(reservation.endDate) }}</span>
                   </div>
-                  <p v-if="reservation.message" class="text-sm text-gray-600 mt-2">
+                  <p
+                    v-if="reservation.message"
+                    class="text-sm text-gray-600 mt-2"
+                  >
                     "{{ reservation.message }}"
                   </p>
                 </div>
@@ -208,14 +251,20 @@ const activeTab = ref<'borrowed' | 'lent'>('borrowed');
 
 const borrowedReservations = computed(() =>
   reservationsStore.reservations
-    .filter(r => r.borrowerId === userId.value)
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .filter((r) => r.borrowerId === userId.value)
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )
 );
 
 const lentReservations = computed(() =>
   reservationsStore.reservations
-    .filter(r => r.ownerId === userId.value)
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .filter((r) => r.ownerId === userId.value)
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )
 );
 
 function getStatusClass(status: ReservationStatus): string {

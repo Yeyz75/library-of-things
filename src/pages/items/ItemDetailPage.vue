@@ -18,26 +18,38 @@
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Images -->
         <div>
-          <div class="aspect-square bg-gray-200 rounded-lg overflow-hidden mb-4">
+          <div
+            class="aspect-square bg-gray-200 rounded-lg overflow-hidden mb-4"
+          >
             <img
               v-if="currentImageUrl"
               :src="currentImageUrl"
               :alt="currentItem.title"
               class="w-full h-full object-cover"
             />
-            <div v-else class="w-full h-full flex items-center justify-center text-gray-400">
+            <div
+              v-else
+              class="w-full h-full flex items-center justify-center text-gray-400"
+            >
               <PhotoIcon class="h-24 w-24" />
             </div>
           </div>
 
           <!-- Thumbnail Gallery -->
-          <div v-if="currentItem.imageUrls.length > 1" class="grid grid-cols-4 gap-2">
+          <div
+            v-if="currentItem.imageUrls.length > 1"
+            class="grid grid-cols-4 gap-2"
+          >
             <button
               v-for="(imageUrl, index) in currentItem.imageUrls"
               :key="index"
               @click="currentImageIndex = index"
               class="aspect-square bg-gray-200 rounded-lg overflow-hidden border-2 transition-colors"
-              :class="index === currentImageIndex ? 'border-primary-500' : 'border-transparent hover:border-gray-300'"
+              :class="
+                index === currentImageIndex
+                  ? 'border-primary-500'
+                  : 'border-transparent hover:border-gray-300'
+              "
             >
               <img
                 :src="imageUrl"
@@ -52,15 +64,25 @@
         <div>
           <div class="flex items-start justify-between mb-4">
             <div>
-              <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ currentItem.title }}</h1>
+              <h1 class="text-3xl font-bold text-gray-900 mb-2">
+                {{ currentItem.title }}
+              </h1>
               <div class="flex items-center space-x-3">
                 <span
                   class="inline-block px-3 py-1 text-sm font-medium rounded-full"
-                  :class="currentItem.isAvailable ? 'bg-success-100 text-success-800' : 'bg-gray-100 text-gray-800'"
+                  :class="
+                    currentItem.isAvailable
+                      ? 'bg-success-100 text-success-800'
+                      : 'bg-gray-100 text-gray-800'
+                  "
                 >
-                  {{ currentItem.isAvailable ? 'Available' : 'Currently Borrowed' }}
+                  {{
+                    currentItem.isAvailable ? 'Available' : 'Currently Borrowed'
+                  }}
                 </span>
-                <span class="inline-block bg-primary-100 text-primary-800 text-sm font-medium px-3 py-1 rounded-full">
+                <span
+                  class="inline-block bg-primary-100 text-primary-800 text-sm font-medium px-3 py-1 rounded-full"
+                >
                   {{ getCategoryName(currentItem.category) }}
                 </span>
               </div>
@@ -75,10 +97,7 @@
                 <PencilIcon class="h-4 w-4 mr-2" />
                 Edit
               </router-link>
-              <button
-                @click="showDeleteModal = true"
-                class="btn-danger"
-              >
+              <button @click="showDeleteModal = true" class="btn-danger">
                 <TrashIcon class="h-4 w-4 mr-2" />
                 Delete
               </button>
@@ -89,14 +108,18 @@
             <!-- Description -->
             <div>
               <h3 class="font-medium text-gray-900 mb-2">Description</h3>
-              <p class="text-gray-700 leading-relaxed">{{ currentItem.description }}</p>
+              <p class="text-gray-700 leading-relaxed">
+                {{ currentItem.description }}
+              </p>
             </div>
 
             <!-- Details -->
             <div class="grid grid-cols-2 gap-4">
               <div>
                 <h4 class="font-medium text-gray-900 mb-1">Condition</h4>
-                <p class="text-gray-700 capitalize">{{ currentItem.condition }}</p>
+                <p class="text-gray-700 capitalize">
+                  {{ currentItem.condition }}
+                </p>
               </div>
               <div>
                 <h4 class="font-medium text-gray-900 mb-1">Location</h4>
@@ -122,14 +145,20 @@
             <div class="border-t border-gray-200 pt-6">
               <h4 class="font-medium text-gray-900 mb-3">Shared by</h4>
               <div class="flex items-center space-x-3">
-                <div class="h-10 w-10 bg-primary-600 rounded-full flex items-center justify-center">
+                <div
+                  class="h-10 w-10 bg-primary-600 rounded-full flex items-center justify-center"
+                >
                   <span class="text-white font-medium text-sm">
                     {{ currentItem.ownerName.charAt(0).toUpperCase() }}
                   </span>
                 </div>
                 <div>
-                  <p class="font-medium text-gray-900">{{ currentItem.ownerName }}</p>
-                  <p class="text-sm text-gray-600">Member since {{ formatDate(currentItem.createdAt) }}</p>
+                  <p class="font-medium text-gray-900">
+                    {{ currentItem.ownerName }}
+                  </p>
+                  <p class="text-sm text-gray-600">
+                    Member since {{ formatDate(currentItem.createdAt) }}
+                  </p>
                 </div>
               </div>
             </div>
@@ -140,13 +169,25 @@
                 @click="showReserveModal = true"
                 :disabled="!currentItem.isAvailable || !isAuthenticated"
                 class="w-full btn-primary"
-                :class="{ 'opacity-50 cursor-not-allowed': !currentItem.isAvailable }"
+                :class="{
+                  'opacity-50 cursor-not-allowed': !currentItem.isAvailable,
+                }"
               >
                 <CalendarDaysIcon class="h-5 w-5 mr-2" />
-                {{ currentItem.isAvailable ? 'Request to Borrow' : 'Not Available' }}
+                {{
+                  currentItem.isAvailable
+                    ? 'Request to Borrow'
+                    : 'Not Available'
+                }}
               </button>
-              <p v-if="!isAuthenticated" class="text-sm text-gray-600 text-center mt-2">
-                <router-link to="/login" class="text-primary-600 hover:text-primary-700">
+              <p
+                v-if="!isAuthenticated"
+                class="text-sm text-gray-600 text-center mt-2"
+              >
+                <router-link
+                  to="/login"
+                  class="text-primary-600 hover:text-primary-700"
+                >
                   Sign in
                 </router-link>
                 to request this item
@@ -173,11 +214,14 @@
       @close="showDeleteModal = false"
     >
       <p class="text-gray-600 mb-4">
-        Are you sure you want to delete "{{ currentItem?.title }}"? This action cannot be undone.
+        Are you sure you want to delete "{{ currentItem?.title }}"? This action
+        cannot be undone.
       </p>
-      
+
       <template #footer>
-        <button @click="showDeleteModal = false" class="btn-secondary">Cancel</button>
+        <button @click="showDeleteModal = false" class="btn-secondary">
+          Cancel
+        </button>
         <button
           @click="handleDelete"
           :disabled="isDeleting"
@@ -248,7 +292,7 @@ function getCategoryName(categoryKey: string): string {
 
 function formatDate(date?: Date): string {
   if (!date) return '';
-  
+
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'long',
@@ -259,7 +303,7 @@ async function handleDelete() {
   if (!currentItem.value) return;
 
   isDeleting.value = true;
-  
+
   try {
     await itemsStore.deleteItem(currentItem.value.id);
     router.push('/dashboard');

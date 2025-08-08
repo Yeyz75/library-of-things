@@ -6,6 +6,17 @@ import vueParser from 'vue-eslint-parser';
 import prettier from 'eslint-plugin-prettier';
 
 export default [
+  {
+    ignores: [
+      'node_modules/**',
+      'dist/**',
+      '*.d.ts',
+      'test-appwrite.js',
+      'test-appwrite-new.js',
+      'discover-appwrite.js',
+      '.eslintrc.js',
+    ],
+  },
   js.configs.recommended,
   ...vue.configs['flat/essential'],
   {
@@ -24,6 +35,12 @@ export default [
         defineExpose: 'readonly',
         withDefaults: 'readonly',
         process: 'readonly',
+        computed: 'readonly',
+        onMounted: 'readonly',
+        onUnmounted: 'readonly',
+        storeToRefs: 'readonly',
+        ref: 'readonly',
+        reactive: 'readonly',
       },
     },
     plugins: {
@@ -31,7 +48,12 @@ export default [
       prettier,
     },
     rules: {
-      'prettier/prettier': 'error',
+      'prettier/prettier': [
+        'error',
+        {
+          endOfLine: 'auto',
+        },
+      ],
       'vue/multi-word-component-names': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
       'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',

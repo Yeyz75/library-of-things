@@ -8,7 +8,9 @@
     <div class="space-y-6">
       <!-- Item Summary -->
       <div class="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg">
-        <div class="w-20 h-20 bg-gray-200 rounded-lg flex-shrink-0 overflow-hidden">
+        <div
+          class="w-20 h-20 bg-gray-200 rounded-lg flex-shrink-0 overflow-hidden"
+        >
           <img
             v-if="item.imageUrls?.[0]"
             :src="item.imageUrls[0]"
@@ -28,7 +30,10 @@
       <form @submit.prevent="handleSubmit" class="space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label for="startDate" class="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              for="startDate"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
               Start Date <span class="text-error-500">*</span>
             </label>
             <input
@@ -40,11 +45,16 @@
               class="input"
               :class="{ 'border-error-500': errors.startDate }"
             />
-            <p v-if="errors.startDate" class="mt-1 text-sm text-error-600">{{ errors.startDate }}</p>
+            <p v-if="errors.startDate" class="mt-1 text-sm text-error-600">
+              {{ errors.startDate }}
+            </p>
           </div>
 
           <div>
-            <label for="endDate" class="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              for="endDate"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
               End Date <span class="text-error-500">*</span>
             </label>
             <input
@@ -56,12 +66,17 @@
               class="input"
               :class="{ 'border-error-500': errors.endDate }"
             />
-            <p v-if="errors.endDate" class="mt-1 text-sm text-error-600">{{ errors.endDate }}</p>
+            <p v-if="errors.endDate" class="mt-1 text-sm text-error-600">
+              {{ errors.endDate }}
+            </p>
           </div>
         </div>
 
         <div>
-          <label for="message" class="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            for="message"
+            class="block text-sm font-medium text-gray-700 mb-1"
+          >
             Message to Owner (Optional)
           </label>
           <textarea
@@ -72,11 +87,15 @@
             placeholder="Tell the owner why you need this item and any relevant details..."
           ></textarea>
           <p class="text-xs text-gray-500 mt-1">
-            Be polite and specific about your needs to increase your chances of approval
+            Be polite and specific about your needs to increase your chances of
+            approval
           </p>
         </div>
 
-        <div v-if="submitError" class="bg-error-50 border border-error-200 text-error-600 px-4 py-3 rounded-md">
+        <div
+          v-if="submitError"
+          class="bg-error-50 border border-error-200 text-error-600 px-4 py-3 rounded-md"
+        >
           <p class="text-sm">{{ submitError }}</p>
         </div>
       </form>
@@ -104,6 +123,7 @@ import BaseLoader from '@/components/common/BaseLoader.vue';
 import { useAuthStore } from '@/store/auth.store';
 import { useReservationsStore } from '@/store/reservations.store';
 import type { Item, Reservation } from '@/types';
+import { storeToRefs } from 'pinia';
 
 interface Props {
   isOpen: boolean;
@@ -111,8 +131,8 @@ interface Props {
 }
 
 interface Emits {
-  (e: 'close'): void;
-  (e: 'reserved'): void;
+  close: [];
+  reserved: [];
 }
 
 const props = defineProps<Props>();
@@ -157,7 +177,7 @@ function validateForm(): boolean {
     const startDate = new Date(form.startDate);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+
     if (startDate < today) {
       errors.startDate = 'Start date cannot be in the past';
       isValid = false;
@@ -171,7 +191,7 @@ function validateForm(): boolean {
   } else if (form.startDate && form.endDate) {
     const startDate = new Date(form.startDate);
     const endDate = new Date(form.endDate);
-    
+
     if (endDate <= startDate) {
       errors.endDate = 'End date must be after start date';
       isValid = false;
@@ -180,7 +200,7 @@ function validateForm(): boolean {
     // Check if the duration is reasonable (not more than 30 days)
     const diffTime = endDate.getTime() - startDate.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays > 30) {
       errors.endDate = 'Reservation cannot be longer than 30 days';
       isValid = false;
@@ -199,26 +219,29 @@ async function handleSubmit() {
   submitError.value = '';
 
   try {
-    const reservationData: Omit<Reservation, 'id' | 'createdAt' | 'updatedAt'> = {
-      itemId: props.item.id,
-      itemTitle: props.item.title,
-      itemImageUrl: props.item.imageUrls[0] || undefined,
-      borrowerId: userId.value,
-      borrowerName: currentUser.value.displayName || currentUser.value.email || 'Unknown',
-      borrowerEmail: currentUser.value.email || '',
-      ownerId: props.item.ownerId,
-      ownerName: props.item.ownerName,
-      status: 'pending',
-      startDate: new Date(form.startDate),
-      endDate: new Date(form.endDate),
-      message: form.message.trim() || undefined,
-    };
+    const reservationData: Omit<Reservation, 'id' | 'createdAt' | 'updatedAt'> =
+      {
+        itemId: props.item.id,
+        itemTitle: props.item.title,
+        itemImageUrl: props.item.imageUrls[0] || undefined,
+        borrowerId: userId.value,
+        borrowerName:
+          currentUser.value.displayName || currentUser.value.email || 'Unknown',
+        borrowerEmail: currentUser.value.email || '',
+        ownerId: props.item.ownerId,
+        ownerName: props.item.ownerName,
+        status: 'pending',
+        startDate: new Date(form.startDate),
+        endDate: new Date(form.endDate),
+        message: form.message.trim() || undefined,
+      };
 
     await reservationsStore.createReservation(reservationData);
-    
+
     emit('reserved');
   } catch (error) {
-    submitError.value = error instanceof Error ? error.message : 'Failed to create reservation';
+    submitError.value =
+      error instanceof Error ? error.message : 'Failed to create reservation';
   } finally {
     isSubmitting.value = false;
   }

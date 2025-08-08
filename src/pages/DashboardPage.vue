@@ -18,7 +18,9 @@
             </div>
             <div class="ml-4">
               <p class="text-sm font-medium text-gray-600">Your Items</p>
-              <p class="text-2xl font-bold text-gray-900">{{ userItemsCount }}</p>
+              <p class="text-2xl font-bold text-gray-900">
+                {{ userItemsCount }}
+              </p>
             </div>
           </div>
         </div>
@@ -29,8 +31,12 @@
               <CalendarDaysIcon class="h-6 w-6 text-secondary-600" />
             </div>
             <div class="ml-4">
-              <p class="text-sm font-medium text-gray-600">Active Reservations</p>
-              <p class="text-2xl font-bold text-gray-900">{{ activeReservationsCount }}</p>
+              <p class="text-sm font-medium text-gray-600">
+                Active Reservations
+              </p>
+              <p class="text-2xl font-bold text-gray-900">
+                {{ activeReservationsCount }}
+              </p>
             </div>
           </div>
         </div>
@@ -42,7 +48,9 @@
             </div>
             <div class="ml-4">
               <p class="text-sm font-medium text-gray-600">Pending Requests</p>
-              <p class="text-2xl font-bold text-gray-900">{{ pendingRequestsCount }}</p>
+              <p class="text-2xl font-bold text-gray-900">
+                {{ pendingRequestsCount }}
+              </p>
             </div>
           </div>
         </div>
@@ -54,7 +62,9 @@
             </div>
             <div class="ml-4">
               <p class="text-sm font-medium text-gray-600">Items Borrowed</p>
-              <p class="text-2xl font-bold text-gray-900">{{ borrowedItemsCount }}</p>
+              <p class="text-2xl font-bold text-gray-900">
+                {{ borrowedItemsCount }}
+              </p>
             </div>
           </div>
         </div>
@@ -78,7 +88,9 @@
           <div v-else-if="userItems.length === 0" class="text-center py-8">
             <ArchiveBoxIcon class="h-16 w-16 mx-auto text-gray-300 mb-4" />
             <p class="text-gray-600 mb-4">You haven't added any items yet</p>
-            <router-link to="/items/new" class="btn-primary">Add Your First Item</router-link>
+            <router-link to="/items/new" class="btn-primary"
+              >Add Your First Item</router-link
+            >
           </div>
 
           <div v-else class="space-y-4">
@@ -88,22 +100,32 @@
               class="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
               @click="$router.push(`/items/${item.id}`)"
             >
-              <div class="w-16 h-16 bg-gray-200 rounded-lg flex-shrink-0 overflow-hidden">
+              <div
+                class="w-16 h-16 bg-gray-200 rounded-lg flex-shrink-0 overflow-hidden"
+              >
                 <img
                   v-if="item.imageUrls?.[0]"
                   :src="item.imageUrls[0]"
                   :alt="item.title"
                   class="w-full h-full object-cover"
-                >
+                />
                 <PhotoIcon v-else class="w-full h-full text-gray-400 p-2" />
               </div>
               <div class="flex-1 min-w-0">
-                <h3 class="font-medium text-gray-900 truncate">{{ item.title }}</h3>
-                <p class="text-sm text-gray-600 truncate">{{ item.description }}</p>
+                <h3 class="font-medium text-gray-900 truncate">
+                  {{ item.title }}
+                </h3>
+                <p class="text-sm text-gray-600 truncate">
+                  {{ item.description }}
+                </p>
                 <div class="flex items-center space-x-2 mt-1">
                   <span
                     class="inline-block text-xs font-medium px-2 py-1 rounded"
-                    :class="item.isAvailable ? 'bg-success-100 text-success-800' : 'bg-gray-100 text-gray-800'"
+                    :class="
+                      item.isAvailable
+                        ? 'bg-success-100 text-success-800'
+                        : 'bg-gray-100 text-gray-800'
+                    "
                   >
                     {{ item.isAvailable ? 'Available' : 'Borrowed' }}
                   </span>
@@ -111,7 +133,10 @@
               </div>
             </div>
             <div v-if="userItems.length > 5" class="text-center pt-4">
-              <router-link to="/items" class="text-primary-600 hover:text-primary-700 font-medium">
+              <router-link
+                to="/items"
+                class="text-primary-600 hover:text-primary-700 font-medium"
+              >
                 View all {{ userItems.length }} items →
               </router-link>
             </div>
@@ -121,8 +146,13 @@
         <!-- Recent Reservations -->
         <div class="card">
           <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl font-semibold text-gray-900">Recent Reservations</h2>
-            <router-link to="/reservations" class="text-primary-600 hover:text-primary-700 font-medium">
+            <h2 class="text-xl font-semibold text-gray-900">
+              Recent Reservations
+            </h2>
+            <router-link
+              to="/reservations"
+              class="text-primary-600 hover:text-primary-700 font-medium"
+            >
               View all
             </router-link>
           </div>
@@ -131,7 +161,10 @@
             <BaseLoader size="md" text="Loading reservations..." />
           </div>
 
-          <div v-else-if="recentReservations.length === 0" class="text-center py-8">
+          <div
+            v-else-if="recentReservations.length === 0"
+            class="text-center py-8"
+          >
             <CalendarDaysIcon class="h-16 w-16 mx-auto text-gray-300 mb-4" />
             <p class="text-gray-600 mb-4">No reservations yet</p>
             <router-link to="/" class="btn-primary">Browse Items</router-link>
@@ -144,10 +177,15 @@
               class="flex items-center justify-between p-4 border border-gray-200 rounded-lg"
             >
               <div class="flex-1">
-                <h3 class="font-medium text-gray-900">{{ reservation.itemTitle }}</h3>
-                <p class="text-sm text-gray-600">{{ reservation.borrowerName }}</p>
+                <h3 class="font-medium text-gray-900">
+                  {{ reservation.itemTitle }}
+                </h3>
+                <p class="text-sm text-gray-600">
+                  {{ reservation.borrowerName }}
+                </p>
                 <p class="text-xs text-gray-500">
-                  {{ formatDate(reservation.startDate) }} - {{ formatDate(reservation.endDate) }}
+                  {{ formatDate(reservation.startDate) }} -
+                  {{ formatDate(reservation.endDate) }}
                 </p>
               </div>
               <span
@@ -165,7 +203,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import {
   PlusIcon,
   ArchiveBoxIcon,
@@ -189,32 +227,35 @@ const { currentUser, userId } = storeToRefs(authStore);
 
 // Computed properties for stats
 const userItems = computed(() =>
-  itemsStore.items.filter(item => item.ownerId === userId.value)
+  itemsStore.items.filter((item) => item.ownerId === userId.value)
 );
 
 const userItemsCount = computed(() => userItems.value.length);
 
-const activeReservationsCount = computed(() =>
-  reservationsStore.reservations.filter(r => 
-    r.ownerId === userId.value && r.status === 'active'
-  ).length
+const activeReservationsCount = computed(
+  () =>
+    reservationsStore.reservations.filter(
+      (r) => r.ownerId === userId.value && r.status === 'active'
+    ).length
 );
 
-const pendingRequestsCount = computed(() =>
-  reservationsStore.reservations.filter(r => 
-    r.ownerId === userId.value && r.status === 'pending'
-  ).length
+const pendingRequestsCount = computed(
+  () =>
+    reservationsStore.reservations.filter(
+      (r) => r.ownerId === userId.value && r.status === 'pending'
+    ).length
 );
 
-const borrowedItemsCount = computed(() =>
-  reservationsStore.reservations.filter(r => 
-    r.borrowerId === userId.value && r.status === 'active'
-  ).length
+const borrowedItemsCount = computed(
+  () =>
+    reservationsStore.reservations.filter(
+      (r) => r.borrowerId === userId.value && r.status === 'active'
+    ).length
 );
 
 const recentReservations = computed(() =>
   reservationsStore.reservations
-    .filter(r => r.ownerId === userId.value || r.borrowerId === userId.value)
+    .filter((r) => r.ownerId === userId.value || r.borrowerId === userId.value)
     .slice(0, 5)
 );
 
@@ -240,7 +281,7 @@ onMounted(async () => {
   if (userId.value) {
     // Load user's items
     await itemsStore.fetchItems({ ownerId: userId.value });
-    
+
     // Load all reservations involving the user
     await reservationsStore.fetchReservations();
   }
