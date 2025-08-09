@@ -189,6 +189,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/store/auth.store';
+import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
 const router = useRouter();
 const authStore = useAuthStore();
 
