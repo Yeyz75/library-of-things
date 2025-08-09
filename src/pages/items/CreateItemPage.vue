@@ -3,8 +3,10 @@
     <div class="container py-8">
       <div class="max-w-2xl mx-auto">
         <div class="mb-8">
-          <h1 class="text-3xl font-bold text-gray-900">Add New Item</h1>
-          <p class="text-gray-600 mt-2">
+          <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-50">
+            Add New Item
+          </h1>
+          <p class="text-gray-600 dark:text-gray-300 mt-2">
             Share something amazing with your community
           </p>
         </div>
@@ -13,18 +15,20 @@
           <div class="card">
             <!-- Item Images -->
             <div class="mb-6">
-              <label class="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              >
                 Photos (Optional)
               </label>
               <div class="mt-2">
                 <div
-                  class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary-400 transition-colors cursor-pointer"
+                  class="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-6 text-center hover:border-primary-400 transition-colors cursor-pointer"
                   @click="triggerFileInput"
                   @dragover.prevent
                   @drop.prevent="handleDrop"
                 >
                   <PhotoIcon class="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                  <p class="text-sm text-gray-600">
+                  <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">
                     <span class="font-medium text-primary-600"
                       >Click to upload</span
                     >
@@ -52,7 +56,7 @@
                 <div
                   v-for="(file, index) in selectedFiles"
                   :key="index"
-                  class="relative aspect-square bg-gray-100 rounded-lg overflow-hidden"
+                  class="relative aspect-square bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden"
                 >
                   <img
                     :src="getFilePreview(file)"
@@ -62,7 +66,7 @@
                   <button
                     type="button"
                     @click="removeFile(index)"
-                    class="absolute top-2 right-2 bg-error-600 text-white rounded-full p-1 hover:bg-error-700 transition-colors"
+                    class="absolute top-2 right-2 bg-error-600 text-white dark:bg-error-700 dark:text-error-300 rounded-full p-1 hover:bg-error-700 transition-colors"
                   >
                     <XMarkIcon class="h-4 w-4" />
                   </button>
@@ -75,7 +79,7 @@
               <div>
                 <label
                   for="title"
-                  class="block text-sm font-medium text-gray-700 mb-1"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                 >
                   Item Title <span class="text-error-500">*</span>
                 </label>
@@ -96,7 +100,7 @@
               <div>
                 <label
                   for="description"
-                  class="block text-sm font-medium text-gray-700 mb-1"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                 >
                   Description <span class="text-error-500">*</span>
                 </label>
@@ -121,7 +125,7 @@
                 <div>
                   <label
                     for="category"
-                    class="block text-sm font-medium text-gray-700 mb-1"
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                   >
                     Category <span class="text-error-500">*</span>
                   </label>
@@ -151,7 +155,7 @@
                 <div>
                   <label
                     for="condition"
-                    class="block text-sm font-medium text-gray-700 mb-1"
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                   >
                     Condition <span class="text-error-500">*</span>
                   </label>
@@ -180,7 +184,7 @@
               <div>
                 <label
                   for="location"
-                  class="block text-sm font-medium text-gray-700 mb-1"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                 >
                   Location <span class="text-error-500">*</span>
                 </label>
@@ -201,7 +205,7 @@
               <div>
                 <label
                   for="tags"
-                  class="block text-sm font-medium text-gray-700 mb-1"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                 >
                   Tags (Optional)
                 </label>

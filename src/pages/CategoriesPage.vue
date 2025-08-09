@@ -2,8 +2,12 @@
   <AppLayout>
     <div class="container py-8">
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">Browse by Category</h1>
-        <p class="text-gray-600 mt-2">Find exactly what you're looking for</p>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-50">
+          Browse by Category
+        </h1>
+        <p class="text-gray-600 dark:text-gray-300 mt-2">
+          Find exactly what you're looking for
+        </p>
       </div>
 
       <!-- Categories Grid -->
@@ -18,7 +22,7 @@
         >
           <div class="text-center">
             <div
-              class="bg-gray-100 rounded-full p-6 mb-4 group-hover:bg-primary-100 transition-colors"
+              class="bg-gray-100 dark:bg-gray-700 rounded-full p-6 mb-4 group-hover:bg-primary-100 transition-colors"
             >
               <component
                 :is="category.icon"

@@ -19,7 +19,7 @@
         <!-- Images -->
         <div>
           <div
-            class="aspect-square bg-gray-200 rounded-lg overflow-hidden mb-4"
+            class="aspect-square bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden mb-4"
           >
             <img
               v-if="currentImageUrl"
@@ -64,7 +64,9 @@
         <div>
           <div class="flex items-start justify-between mb-4">
             <div>
-              <h1 class="text-3xl font-bold text-gray-900 mb-2">
+              <h1
+                class="text-3xl font-bold text-gray-900 dark:text-gray-50 mb-2"
+              >
                 {{ currentItem.title }}
               </h1>
               <div class="flex items-center space-x-3">
@@ -72,8 +74,8 @@
                   class="inline-block px-3 py-1 text-sm font-medium rounded-full"
                   :class="
                     currentItem.isAvailable
-                      ? 'bg-success-100 text-success-800'
-                      : 'bg-gray-100 text-gray-800'
+                      ? 'bg-success-100 text-success-800 dark:bg-success-900 dark:text-success-300'
+                      : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
                   "
                 >
                   {{
@@ -107,8 +109,10 @@
           <div class="space-y-6">
             <!-- Description -->
             <div>
-              <h3 class="font-medium text-gray-900 mb-2">Description</h3>
-              <p class="text-gray-700 leading-relaxed">
+              <h3 class="font-medium text-gray-900 dark:text-gray-50 mb-2">
+                Description
+              </h3>
+              <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
                 {{ currentItem.description }}
               </p>
             </div>
@@ -116,25 +120,33 @@
             <!-- Details -->
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <h4 class="font-medium text-gray-900 mb-1">Condition</h4>
-                <p class="text-gray-700 capitalize">
+                <h4 class="font-medium text-gray-900 dark:text-gray-50 mb-1">
+                  Condition
+                </h4>
+                <p class="text-gray-700 dark:text-gray-300 capitalize">
                   {{ currentItem.condition }}
                 </p>
               </div>
               <div>
-                <h4 class="font-medium text-gray-900 mb-1">Location</h4>
-                <p class="text-gray-700">{{ currentItem.location }}</p>
+                <h4 class="font-medium text-gray-900 dark:text-gray-50 mb-1">
+                  Location
+                </h4>
+                <p class="text-gray-700 dark:text-gray-300">
+                  {{ currentItem.location }}
+                </p>
               </div>
             </div>
 
             <!-- Tags -->
             <div v-if="currentItem.tags.length > 0">
-              <h4 class="font-medium text-gray-900 mb-2">Tags</h4>
+              <h4 class="font-medium text-gray-900 dark:text-gray-50 mb-2">
+                Tags
+              </h4>
               <div class="flex flex-wrap gap-2">
                 <span
                   v-for="tag in currentItem.tags"
                   :key="tag"
-                  class="inline-block bg-gray-100 text-gray-800 text-sm px-3 py-1 rounded-full"
+                  class="inline-block bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 text-sm px-3 py-1 rounded-full"
                 >
                   {{ tag }}
                 </span>
@@ -143,7 +155,9 @@
 
             <!-- Owner Info -->
             <div class="border-t border-gray-200 pt-6">
-              <h4 class="font-medium text-gray-900 mb-3">Shared by</h4>
+              <h4 class="font-medium text-gray-900 dark:text-gray-50 mb-3">
+                Shared by
+              </h4>
               <div class="flex items-center space-x-3">
                 <div
                   class="h-10 w-10 bg-primary-600 rounded-full flex items-center justify-center"
@@ -153,10 +167,10 @@
                   </span>
                 </div>
                 <div>
-                  <p class="font-medium text-gray-900">
+                  <p class="font-medium text-gray-900 dark:text-gray-50">
                     {{ currentItem.ownerName }}
                   </p>
-                  <p class="text-sm text-gray-600">
+                  <p class="text-sm text-gray-600 dark:text-gray-300">
                     Member since
                     {{ formatDate(new Date(currentItem.$createdAt)) }}
                   </p>
@@ -183,7 +197,7 @@
               </button>
               <p
                 v-if="!isAuthenticated"
-                class="text-sm text-gray-600 text-center mt-2"
+                class="text-sm text-gray-600 dark:text-gray-300 text-center mt-2"
               >
                 <router-link
                   to="/login"
@@ -214,7 +228,7 @@
       title="Delete Item"
       @close="showDeleteModal = false"
     >
-      <p class="text-gray-600 mb-4">
+      <p class="text-gray-600 dark:text-gray-300 mb-4">
         Are you sure you want to delete "{{ currentItem?.title }}"? This action
         cannot be undone.
       </p>

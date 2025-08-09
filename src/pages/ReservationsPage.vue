@@ -2,8 +2,10 @@
   <AppLayout>
     <div class="container py-8">
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">My Reservations</h1>
-        <p class="text-gray-600 mt-2">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-50">
+          My Reservations
+        </h1>
+        <p class="text-gray-600 dark:text-gray-300 mt-2">
           Manage your borrowing requests and lent items
         </p>
       </div>
@@ -61,10 +63,12 @@
             class="text-center py-12"
           >
             <CalendarDaysIcon class="h-16 w-16 mx-auto text-gray-300 mb-4" />
-            <h3 class="text-lg font-medium text-gray-900 mb-2">
+            <h3
+              class="text-lg font-medium text-gray-900 dark:text-gray-50 mb-2"
+            >
               No borrowed items
             </h3>
-            <p class="text-gray-600 mb-6">
+            <p class="text-gray-600 dark:text-gray-300 mb-6">
               You haven't borrowed any items yet.
             </p>
             <router-link to="/" class="btn-primary">Browse Items</router-link>
@@ -90,21 +94,21 @@
                 </div>
 
                 <div class="flex-1 min-w-0">
-                  <h3 class="font-medium text-gray-900 mb-1">
+                  <h3 class="font-medium text-gray-900 dark:text-gray-50 mb-1">
                     {{ reservation.itemTitle }}
                   </h3>
-                  <p class="text-sm text-gray-600 mb-2">
+                  <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">
                     Owned by {{ reservation.ownerName }}
                   </p>
                   <div
-                    class="flex items-center space-x-4 text-sm text-gray-500"
+                    class="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400"
                   >
                     <span>From {{ formatDate(reservation.startDate) }}</span>
                     <span>To {{ formatDate(reservation.endDate) }}</span>
                   </div>
                   <p
                     v-if="reservation.message"
-                    class="text-sm text-gray-600 mt-2"
+                    class="text-sm text-gray-600 dark:text-gray-300 mt-2"
                   >
                     "{{ reservation.message }}"
                   </p>
@@ -144,10 +148,12 @@
         <div v-if="activeTab === 'lent'">
           <div v-if="lentReservations.length === 0" class="text-center py-12">
             <HandRaisedIcon class="h-16 w-16 mx-auto text-gray-300 mb-4" />
-            <h3 class="text-lg font-medium text-gray-900 mb-2">
+            <h3
+              class="text-lg font-medium text-gray-900 dark:text-gray-50 mb-2"
+            >
               No lending history
             </h3>
-            <p class="text-gray-600 mb-6">
+            <p class="text-gray-600 dark:text-gray-300 mb-6">
               No one has requested your items yet.
             </p>
             <router-link to="/items/new" class="btn-primary"
@@ -175,21 +181,21 @@
                 </div>
 
                 <div class="flex-1 min-w-0">
-                  <h3 class="font-medium text-gray-900 mb-1">
+                  <h3 class="font-medium text-gray-900 dark:text-gray-50 mb-1">
                     {{ reservation.itemTitle }}
                   </h3>
-                  <p class="text-sm text-gray-600 mb-2">
+                  <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">
                     Requested by {{ reservation.borrowerName }}
                   </p>
                   <div
-                    class="flex items-center space-x-4 text-sm text-gray-500"
+                    class="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400"
                   >
                     <span>From {{ formatDate(reservation.startDate) }}</span>
                     <span>To {{ formatDate(reservation.endDate) }}</span>
                   </div>
                   <p
                     v-if="reservation.message"
-                    class="text-sm text-gray-600 mt-2"
+                    class="text-sm text-gray-600 dark:text-gray-300 mt-2"
                   >
                     "{{ reservation.message }}"
                   </p>
@@ -273,10 +279,13 @@ function getStatusClass(status: ReservationStatus): string {
     pending: 'bg-warning-100 text-warning-800',
     approved: 'bg-primary-100 text-primary-800',
     active: 'bg-success-100 text-success-800',
-    returned: 'bg-gray-100 text-gray-800',
+    returned: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
     cancelled: 'bg-error-100 text-error-800',
   };
-  return classes[status] || 'bg-gray-100 text-gray-800';
+  return (
+    classes[status] ||
+    'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+  );
 }
 
 function getStatusText(status: ReservationStatus): string {

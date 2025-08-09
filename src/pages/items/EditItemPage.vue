@@ -3,8 +3,12 @@
     <div class="container py-8">
       <div class="max-w-2xl mx-auto">
         <div class="mb-8">
-          <h1 class="text-3xl font-bold text-gray-900">Edit Item</h1>
-          <p class="text-gray-600 mt-2">Update your item details</p>
+          <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-50">
+            Edit Item
+          </h1>
+          <p class="text-gray-600 mt-2 dark:text-gray-300">
+            Update your item details
+          </p>
         </div>
 
         <div v-if="loading" class="flex justify-center py-12">
@@ -22,18 +26,22 @@
           <div class="card">
             <!-- Item Images -->
             <div class="mb-6">
-              <label class="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              >
                 Photos (Optional)
               </label>
 
               <!-- Existing Images -->
               <div v-if="existingImages.length > 0" class="mb-4">
-                <p class="text-sm text-gray-600 mb-2">Current images:</p>
+                <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                  Current images:
+                </p>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div
                     v-for="(imageUrl, index) in existingImages"
                     :key="`existing-${index}`"
-                    class="relative aspect-square bg-gray-100 rounded-lg overflow-hidden"
+                    class="relative aspect-square bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden"
                   >
                     <img
                       :src="imageUrl"
@@ -43,7 +51,7 @@
                     <button
                       type="button"
                       @click="removeExistingImage(index)"
-                      class="absolute top-2 right-2 bg-error-600 text-white rounded-full p-1 hover:bg-error-700 transition-colors"
+                      class="absolute top-2 right-2 bg-error-600 text-white dark:bg-error-700 dark:text-error-300 rounded-full p-1 hover:bg-error-700 transition-colors"
                     >
                       <XMarkIcon class="h-4 w-4" />
                     </button>
@@ -54,19 +62,19 @@
               <!-- Upload New Images -->
               <div class="mt-2">
                 <div
-                  class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary-400 transition-colors cursor-pointer"
+                  class="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-6 text-center hover:border-primary-400 transition-colors cursor-pointer"
                   @click="triggerFileInput"
                   @dragover.prevent
                   @drop.prevent="handleDrop"
                 >
                   <PhotoIcon class="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                  <p class="text-sm text-gray-600">
+                  <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">
                     <span class="font-medium text-primary-600"
                       >Click to upload</span
                     >
                     or drag and drop
                   </p>
-                  <p class="text-xs text-gray-500">
+                  <p class="text-xs text-gray-500 dark:text-gray-400">
                     PNG, JPG, GIF up to 10MB each
                   </p>
                 </div>
@@ -82,12 +90,14 @@
 
               <!-- Preview New Images -->
               <div v-if="selectedFiles.length > 0" class="mt-4">
-                <p class="text-sm text-gray-600 mb-2">New images to add:</p>
+                <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                  New images to add:
+                </p>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div
                     v-for="(file, index) in selectedFiles"
                     :key="`new-${index}`"
-                    class="relative aspect-square bg-gray-100 rounded-lg overflow-hidden"
+                    class="relative aspect-square bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden"
                   >
                     <img
                       :src="getFilePreview(file)"
@@ -97,7 +107,7 @@
                     <button
                       type="button"
                       @click="removeFile(index)"
-                      class="absolute top-2 right-2 bg-error-600 text-white rounded-full p-1 hover:bg-error-700 transition-colors"
+                      class="absolute top-2 right-2 bg-error-600 text-white dark:bg-error-700 dark:text-error-300 rounded-full p-1 hover:bg-error-700 transition-colors"
                     >
                       <XMarkIcon class="h-4 w-4" />
                     </button>
@@ -111,7 +121,7 @@
               <div>
                 <label
                   for="title"
-                  class="block text-sm font-medium text-gray-700 mb-1"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                 >
                   Item Title <span class="text-error-500">*</span>
                 </label>
@@ -132,7 +142,7 @@
               <div>
                 <label
                   for="description"
-                  class="block text-sm font-medium text-gray-700 mb-1"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                 >
                   Description <span class="text-error-500">*</span>
                 </label>
@@ -157,7 +167,7 @@
                 <div>
                   <label
                     for="category"
-                    class="block text-sm font-medium text-gray-700 mb-1"
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                   >
                     Category <span class="text-error-500">*</span>
                   </label>
@@ -237,7 +247,7 @@
               <div>
                 <label
                   for="tags"
-                  class="block text-sm font-medium text-gray-700 mb-1"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                 >
                   Tags (Optional)
                 </label>
@@ -248,7 +258,7 @@
                   class="input"
                   placeholder="Separate tags with commas (e.g., power tools, construction, DIY)"
                 />
-                <p class="text-xs text-gray-500 mt-1">
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   Add relevant tags to help others find your item
                 </p>
               </div>
@@ -260,9 +270,9 @@
                     type="checkbox"
                     class="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
                   />
-                  <span class="ml-2 text-sm text-gray-700"
-                    >Item is available for borrowing</span
-                  >
+                  <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                    Item is available for borrowing
+                  </span>
                 </label>
               </div>
             </div>

@@ -2,7 +2,9 @@
   <AppLayout>
     <div class="container py-8">
       <div class="max-w-2xl mx-auto">
-        <h1 class="text-3xl font-bold text-gray-900 mb-8">Profile Settings</h1>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-50 mb-8">
+          Profile Settings
+        </h1>
 
         <div class="card">
           <div class="flex items-center space-x-6 mb-8">
@@ -27,11 +29,15 @@
               </div>
             </div>
             <div>
-              <h2 class="text-2xl font-semibold text-gray-900">
+              <h2
+                class="text-2xl font-semibold text-gray-900 dark:text-gray-50"
+              >
                 {{ currentUser?.name || 'User' }}
               </h2>
-              <p class="text-gray-600">{{ currentUser?.email }}</p>
-              <p class="text-sm text-gray-500 mt-1">
+              <p class="text-gray-600 dark:text-gray-300">
+                {{ currentUser?.email }}
+              </p>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
                 Member since {{ formatDate(currentUser?.$createdAt) }}
               </p>
             </div>
@@ -45,30 +51,39 @@
               <div class="text-2xl font-bold text-primary-600">
                 {{ userItemsCount }}
               </div>
-              <div class="text-sm text-gray-600">Items Shared</div>
+              <div class="text-sm text-gray-600 dark:text-gray-300">
+                Items Shared
+              </div>
             </div>
             <div class="text-center">
               <div class="text-2xl font-bold text-secondary-600">
                 {{ totalBorrowedCount }}
               </div>
-              <div class="text-sm text-gray-600">Items Borrowed</div>
+              <div class="text-sm text-gray-600 dark:text-gray-300">
+                Items Borrowed
+              </div>
             </div>
             <div class="text-center">
               <div class="text-2xl font-bold text-accent-600">
                 {{ completedReservationsCount }}
               </div>
-              <div class="text-sm text-gray-600">Completed Exchanges</div>
+              <div class="text-sm text-gray-600 dark:text-gray-300">
+                Completed Exchanges
+              </div>
             </div>
           </div>
 
           <!-- Account Information -->
           <div>
-            <h3 class="text-lg font-medium text-gray-900 mb-4">
+            <h3
+              class="text-lg font-medium text-gray-900 dark:text-gray-50 mb-4"
+            >
               Account Information
             </h3>
             <div class="space-y-4">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2"
+                <label
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                   >Display Name</label
                 >
                 <input
@@ -79,7 +94,8 @@
                 />
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2"
+                <label
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                   >Email Address</label
                 >
                 <input
@@ -90,7 +106,8 @@
                 />
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2"
+                <label
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                   >Member Since</label
                 >
                 <input

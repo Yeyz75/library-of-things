@@ -3,10 +3,12 @@
     <div class="container py-8">
       <!-- Welcome Header -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-50">
           Welcome back, {{ currentUser?.name || 'User' }}!
         </h1>
-        <p class="text-gray-600 mt-2">Manage your items and reservations</p>
+        <p class="text-gray-600 dark:text-gray-300 mt-2">
+          Manage your items and reservations
+        </p>
       </div>
 
       <!-- Stats Cards -->
@@ -17,8 +19,10 @@
               <ArchiveBoxIcon class="h-6 w-6 text-primary-600" />
             </div>
             <div class="ml-4">
-              <p class="text-sm font-medium text-gray-600">Your Items</p>
-              <p class="text-2xl font-bold text-gray-900">
+              <p class="text-sm font-medium text-gray-600 dark:text-gray-300">
+                Your Items
+              </p>
+              <p class="text-2xl font-bold text-gray-900 dark:text-gray-50">
                 {{ userItemsCount }}
               </p>
             </div>
@@ -31,10 +35,10 @@
               <CalendarDaysIcon class="h-6 w-6 text-secondary-600" />
             </div>
             <div class="ml-4">
-              <p class="text-sm font-medium text-gray-600">
+              <p class="text-sm font-medium text-gray-600 dark:text-gray-300">
                 Active Reservations
               </p>
-              <p class="text-2xl font-bold text-gray-900">
+              <p class="text-2xl font-bold text-gray-900 dark:text-gray-50">
                 {{ activeReservationsCount }}
               </p>
             </div>
@@ -47,8 +51,10 @@
               <ClockIcon class="h-6 w-6 text-accent-600" />
             </div>
             <div class="ml-4">
-              <p class="text-sm font-medium text-gray-600">Pending Requests</p>
-              <p class="text-2xl font-bold text-gray-900">
+              <p class="text-sm font-medium text-gray-600 dark:text-gray-300">
+                Pending Requests
+              </p>
+              <p class="text-2xl font-bold text-gray-900 dark:text-gray-50">
                 {{ pendingRequestsCount }}
               </p>
             </div>
@@ -61,8 +67,10 @@
               <HandRaisedIcon class="h-6 w-6 text-success-600" />
             </div>
             <div class="ml-4">
-              <p class="text-sm font-medium text-gray-600">Items Borrowed</p>
-              <p class="text-2xl font-bold text-gray-900">
+              <p class="text-sm font-medium text-gray-600 dark:text-gray-300">
+                Items Borrowed
+              </p>
+              <p class="text-2xl font-bold text-gray-900 dark:text-gray-50">
                 {{ borrowedItemsCount }}
               </p>
             </div>
@@ -74,7 +82,9 @@
         <!-- Your Items -->
         <div class="card">
           <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl font-semibold text-gray-900">Your Items</h2>
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">
+              Your Items
+            </h2>
             <router-link to="/items/new" class="btn-primary">
               <PlusIcon class="h-4 w-4 mr-2" />
               Add Item
@@ -87,7 +97,9 @@
 
           <div v-else-if="userItems.length === 0" class="text-center py-8">
             <ArchiveBoxIcon class="h-16 w-16 mx-auto text-gray-300 mb-4" />
-            <p class="text-gray-600 mb-4">You haven't added any items yet</p>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">
+              You haven't added any items yet
+            </p>
             <router-link to="/items/new" class="btn-primary"
               >Add Your First Item</router-link
             >
@@ -112,10 +124,12 @@
                 <PhotoIcon v-else class="w-full h-full text-gray-400 p-2" />
               </div>
               <div class="flex-1 min-w-0">
-                <h3 class="font-medium text-gray-900 truncate">
+                <h3
+                  class="font-medium text-gray-900 dark:text-gray-50 truncate"
+                >
                   {{ item.title }}
                 </h3>
-                <p class="text-sm text-gray-600 truncate">
+                <p class="text-sm text-gray-600 dark:text-gray-300 truncate">
                   {{ item.description }}
                 </p>
                 <div class="flex items-center space-x-2 mt-1">
@@ -123,8 +137,8 @@
                     class="inline-block text-xs font-medium px-2 py-1 rounded"
                     :class="
                       item.isAvailable
-                        ? 'bg-success-100 text-success-800'
-                        : 'bg-gray-100 text-gray-800'
+                        ? 'bg-success-100 text-success-800 dark:bg-success-200 dark:text-success-900'
+                        : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
                     "
                   >
                     {{ item.isAvailable ? 'Available' : 'Borrowed' }}
@@ -146,7 +160,7 @@
         <!-- Recent Reservations -->
         <div class="card">
           <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl font-semibold text-gray-900">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">
               Recent Reservations
             </h2>
             <router-link
@@ -166,7 +180,9 @@
             class="text-center py-8"
           >
             <CalendarDaysIcon class="h-16 w-16 mx-auto text-gray-300 mb-4" />
-            <p class="text-gray-600 mb-4">No reservations yet</p>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">
+              No reservations yet
+            </p>
             <router-link to="/" class="btn-primary">Browse Items</router-link>
           </div>
 
@@ -180,10 +196,10 @@
                 <h3 class="font-medium text-gray-900">
                   {{ reservation.itemTitle }}
                 </h3>
-                <p class="text-sm text-gray-600">
+                <p class="text-sm text-gray-600 dark:text-gray-300">
                   {{ reservation.borrowerName }}
                 </p>
-                <p class="text-xs text-gray-500">
+                <p class="text-xs text-gray-500 dark:text-gray-400">
                   {{ formatDate(new Date(reservation.startDate)) }} -
                   {{ formatDate(new Date(reservation.endDate)) }}
                 </p>
@@ -265,10 +281,13 @@ function getStatusClass(status: ReservationStatus): string {
     pending: 'bg-warning-100 text-warning-800',
     approved: 'bg-primary-100 text-primary-800',
     active: 'bg-success-100 text-success-800',
-    returned: 'bg-gray-100 text-gray-800',
+    returned: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
     cancelled: 'bg-error-100 text-error-800',
   };
-  return classes[status] || 'bg-gray-100 text-gray-800';
+  return (
+    classes[status] ||
+    'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+  );
 }
 
 function formatDate(date: Date): string {

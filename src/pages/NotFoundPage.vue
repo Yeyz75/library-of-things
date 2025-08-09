@@ -3,11 +3,15 @@
     <div class="container py-16">
       <div class="text-center">
         <div class="mb-8">
-          <h1 class="text-6xl font-bold text-gray-300 mb-4">404</h1>
-          <h2 class="text-2xl font-semibold text-gray-900 mb-2">
+          <h1 class="text-6xl font-bold text-gray-300 dark:text-gray-600 mb-4">
+            404
+          </h1>
+          <h2
+            class="text-2xl font-semibold text-gray-900 dark:text-gray-50 mb-2"
+          >
             Page not found
           </h2>
-          <p class="text-gray-600 max-w-md mx-auto">
+          <p class="text-gray-600 dark:text-gray-300 max-w-md mx-auto">
             Sorry, we couldn't find the page you're looking for. The item might
             have been removed or the link might be incorrect.
           </p>
