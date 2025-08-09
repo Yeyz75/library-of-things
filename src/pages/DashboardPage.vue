@@ -4,7 +4,7 @@
       <!-- Welcome Header -->
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-900">
-          Welcome back, {{ currentUser?.displayName || 'User' }}!
+          Welcome back, {{ currentUser?.name || 'User' }}!
         </h1>
         <p class="text-gray-600 mt-2">Manage your items and reservations</p>
       </div>
@@ -96,9 +96,9 @@
           <div v-else class="space-y-4">
             <div
               v-for="item in userItems.slice(0, 5)"
-              :key="item.id"
+              :key="item.$id"
               class="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
-              @click="$router.push(`/items/${item.id}`)"
+              @click="$router.push(`/items/${item.$id}`)"
             >
               <div
                 class="w-16 h-16 bg-gray-200 rounded-lg flex-shrink-0 overflow-hidden"
@@ -173,7 +173,7 @@
           <div v-else class="space-y-4">
             <div
               v-for="reservation in recentReservations"
-              :key="reservation.id"
+              :key="reservation.$id"
               class="flex items-center justify-between p-4 border border-gray-200 rounded-lg"
             >
               <div class="flex-1">
@@ -184,8 +184,8 @@
                   {{ reservation.borrowerName }}
                 </p>
                 <p class="text-xs text-gray-500">
-                  {{ formatDate(reservation.startDate) }} -
-                  {{ formatDate(reservation.endDate) }}
+                  {{ formatDate(new Date(reservation.startDate)) }} -
+                  {{ formatDate(new Date(reservation.endDate)) }}
                 </p>
               </div>
               <span

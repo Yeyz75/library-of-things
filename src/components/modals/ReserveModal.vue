@@ -219,22 +219,24 @@ async function handleSubmit() {
   submitError.value = '';
 
   try {
-    const reservationData: Omit<Reservation, 'id' | 'createdAt' | 'updatedAt'> =
-      {
-        itemId: props.item.id,
-        itemTitle: props.item.title,
-        itemImageUrl: props.item.imageUrls[0] || undefined,
-        borrowerId: userId.value,
-        borrowerName:
-          currentUser.value.displayName || currentUser.value.email || 'Unknown',
-        borrowerEmail: currentUser.value.email || '',
-        ownerId: props.item.ownerId,
-        ownerName: props.item.ownerName,
-        status: 'pending',
-        startDate: new Date(form.startDate),
-        endDate: new Date(form.endDate),
-        message: form.message.trim() || undefined,
-      };
+    const reservationData: Omit<
+      Reservation,
+      'id' | '$id' | 'createdAt' | '$createdAt' | 'updatedAt' | '$updatedAt'
+    > = {
+      itemId: props.item.$id,
+      itemTitle: props.item.title,
+      itemImageUrl: props.item.imageUrls[0] || undefined,
+      borrowerId: userId.value,
+      borrowerName:
+        currentUser.value.name || currentUser.value.email || 'Unknown',
+      borrowerEmail: currentUser.value.email || '',
+      ownerId: props.item.ownerId,
+      ownerName: props.item.ownerName,
+      status: 'pending',
+      startDate: form.startDate,
+      endDate: form.endDate,
+      message: form.message.trim() || undefined,
+    };
 
     await reservationsStore.createReservation(reservationData);
 

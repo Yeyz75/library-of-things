@@ -111,9 +111,9 @@
         >
           <div
             v-for="item in displayedItems"
-            :key="item.id"
+            :key="item.$id"
             class="card hover:shadow-md transition-shadow cursor-pointer"
-            @click="$router.push(`/items/${item.id}`)"
+            @click="$router.push(`/items/${item.$id}`)"
           >
             <div
               class="aspect-square bg-gray-200 rounded-lg mb-4 overflow-hidden"
@@ -257,6 +257,7 @@ onMounted(() => {
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
