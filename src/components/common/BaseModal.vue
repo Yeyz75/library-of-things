@@ -67,6 +67,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed, onMounted, onUnmounted } from 'vue';
 import { XMarkIcon } from '@heroicons/vue/24/outline';
 
 interface Props {

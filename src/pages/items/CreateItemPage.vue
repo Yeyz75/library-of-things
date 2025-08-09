@@ -383,15 +383,15 @@ async function handleSubmit() {
       .filter((tag) => tag.length > 0);
 
     // Create item data
-    const itemData: Omit<Item, 'id' | 'createdAt' | 'updatedAt'> = {
+    // Solo los campos requeridos para crear un item (sin $id, $createdAt, $updatedAt)
+    const itemData = {
       title: form.title.trim(),
       description: form.description.trim(),
       category: form.category as ItemCategory,
       condition: form.condition as Item['condition'],
       location: form.location.trim(),
       ownerId: userId.value,
-      ownerName:
-        currentUser.value.displayName || currentUser.value.email || 'Unknown',
+      ownerName: currentUser.value.name || currentUser.value.email || 'Unknown',
       ownerEmail: currentUser.value.email || '',
       isAvailable: true,
       imageUrls: [],
@@ -404,8 +404,8 @@ async function handleSubmit() {
     // Upload images if any
     if (selectedFiles.value.length > 0) {
       const imageUrls = await itemsStore.uploadItemImages(
-        itemId,
-        selectedFiles.value
+        selectedFiles.value,
+        itemId
       );
 
       // Update item with image URLs

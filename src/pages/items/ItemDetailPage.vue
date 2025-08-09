@@ -91,7 +91,7 @@
             <!-- Owner Actions -->
             <div v-if="isOwner" class="flex items-center space-x-2">
               <router-link
-                :to="`/items/${currentItem.id}/edit`"
+                :to="`/items/${currentItem.$id}/edit`"
                 class="btn-secondary"
               >
                 <PencilIcon class="h-4 w-4 mr-2" />
@@ -157,7 +157,8 @@
                     {{ currentItem.ownerName }}
                   </p>
                   <p class="text-sm text-gray-600">
-                    Member since {{ formatDate(currentItem.createdAt) }}
+                    Member since
+                    {{ formatDate(new Date(currentItem.$createdAt)) }}
                   </p>
                 </div>
               </div>
@@ -250,6 +251,7 @@ import BaseModal from '@/components/common/BaseModal.vue';
 import ReserveModal from '@/components/modals/ReserveModal.vue';
 import { useAuthStore } from '@/store/auth.store';
 import { useItemsStore } from '@/store/items.store';
+import { storeToRefs } from 'pinia';
 
 const route = useRoute();
 const router = useRouter();
@@ -305,7 +307,7 @@ async function handleDelete() {
   isDeleting.value = true;
 
   try {
-    await itemsStore.deleteItem(currentItem.value.id);
+    await itemsStore.deleteItem(currentItem.value.$id);
     router.push('/dashboard');
   } catch (error) {
     console.error('Error deleting item:', error);
