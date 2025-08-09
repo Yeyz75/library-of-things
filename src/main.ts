@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import router from '@/router';
 import { useAuthStore } from '@/store/auth.store';
+import { useThemeStore } from '@/store/theme.store';
 import './style.css';
 import App from './App.vue';
 import clickOutside from './directives/clickOutside';
@@ -15,8 +16,11 @@ app.use(router);
 // Registrar directiva global
 app.directive('click-outside', clickOutside);
 
-// Initialize auth state
+// Initialize stores
 const authStore = useAuthStore();
+const themeStore = useThemeStore();
+
 authStore.initializeAuth();
+themeStore.initTheme();
 
 app.mount('#app');

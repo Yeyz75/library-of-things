@@ -14,7 +14,9 @@
         @click="handleBackdropClick"
       >
         <!-- Backdrop -->
-        <div class="fixed inset-0 bg-black bg-opacity-50"></div>
+        <div
+          class="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 transition-colors duration-300"
+        ></div>
 
         <!-- Modal Content -->
         <transition
@@ -27,35 +29,39 @@
         >
           <div
             v-if="isOpen"
-            class="relative z-50 w-full max-w-lg mx-4 bg-white rounded-lg shadow-xl"
+            class="relative z-50 w-full max-w-lg mx-4 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 transition-colors duration-300"
             :class="sizeClass"
           >
             <!-- Header -->
             <div
               v-if="title || $slots.header"
-              class="flex items-center justify-between p-6 border-b border-gray-200"
+              class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700"
             >
               <slot name="header">
-                <h3 class="text-lg font-semibold text-gray-900">{{ title }}</h3>
+                <h3
+                  class="text-lg font-semibold text-gray-900 dark:text-gray-100"
+                >
+                  {{ title }}
+                </h3>
               </slot>
               <button
                 v-if="closable"
                 @click="handleClose"
-                class="text-gray-400 hover:text-gray-600 focus:outline-none focus:text-gray-600 transition ease-in-out duration-150"
+                class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none focus:text-gray-600 dark:focus:text-gray-300 transition ease-in-out duration-150 p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <XMarkIcon class="h-6 w-6" />
               </button>
             </div>
 
             <!-- Body -->
-            <div class="p-6">
+            <div class="p-6 text-gray-900 dark:text-gray-100">
               <slot></slot>
             </div>
 
             <!-- Footer -->
             <div
               v-if="$slots.footer"
-              class="flex items-center justify-end p-6 border-t border-gray-200 space-x-3"
+              class="flex items-center justify-end p-6 border-t border-gray-200 dark:border-gray-700 space-x-3 bg-gray-50 dark:bg-gray-750 rounded-b-lg"
             >
               <slot name="footer"></slot>
             </div>

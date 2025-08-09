@@ -1,25 +1,31 @@
 <template>
-  <footer class="bg-gray-50 border-t border-gray-200">
+  <footer
+    class="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 transition-colors duration-300"
+  >
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
         <!-- Brand -->
         <div class="col-span-1 md:col-span-2">
-          <div class="flex items-center space-x-2 text-primary-600 mb-4">
+          <div
+            class="flex items-center space-x-2 text-primary-600 dark:text-primary-400 mb-4"
+          >
             <div
-              class="h-8 w-8 bg-primary-600 rounded-lg flex items-center justify-center"
+              class="h-8 w-8 bg-primary-600 dark:bg-primary-500 rounded-lg flex items-center justify-center hover-glow"
             >
               <span class="text-white font-bold text-sm">LoT</span>
             </div>
-            <span class="font-bold text-lg">Library of Things</span>
+            <span class="font-bold text-lg text-gray-900 dark:text-gray-100"
+              >Library of Things</span
+            >
           </div>
-          <p class="text-gray-600 text-sm max-w-md">
+          <p class="text-gray-600 dark:text-gray-300 text-sm max-w-md">
             Share, borrow, and discover amazing items in your community.
             Building connections through shared resources.
           </p>
           <div class="flex space-x-4 mt-4">
             <a
               href="#"
-              class="text-gray-400 hover:text-primary-600 transition-colors"
+              class="text-gray-400 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
             >
               <span class="sr-only">Twitter</span>
               <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
@@ -30,7 +36,7 @@
             </a>
             <a
               href="#"
-              class="text-gray-400 hover:text-primary-600 transition-colors"
+              class="text-gray-400 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
             >
               <span class="sr-only">GitHub</span>
               <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
@@ -47,7 +53,7 @@
         <!-- Quick Links -->
         <div>
           <h3
-            class="text-sm font-semibold text-gray-900 tracking-wider uppercase mb-4"
+            class="text-sm font-semibold text-gray-900 dark:text-gray-100 tracking-wider uppercase mb-4"
           >
             Quick Links
           </h3>
@@ -55,7 +61,7 @@
             <li>
               <router-link
                 to="/"
-                class="text-sm text-gray-600 hover:text-primary-600 transition-colors"
+                class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
                 Browse Items
               </router-link>
@@ -63,7 +69,7 @@
             <li>
               <router-link
                 to="/categories"
-                class="text-sm text-gray-600 hover:text-primary-600 transition-colors"
+                class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
                 Categories
               </router-link>
@@ -72,14 +78,14 @@
               <router-link
                 v-if="isAuthenticated"
                 to="/dashboard"
-                class="text-sm text-gray-600 hover:text-primary-600 transition-colors"
+                class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
                 Dashboard
               </router-link>
               <router-link
                 v-else
                 to="/login"
-                class="text-sm text-gray-600 hover:text-primary-600 transition-colors"
+                class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
                 Sign In
               </router-link>
@@ -90,7 +96,7 @@
         <!-- Support -->
         <div>
           <h3
-            class="text-sm font-semibold text-gray-900 tracking-wider uppercase mb-4"
+            class="text-sm font-semibold text-gray-900 dark:text-gray-100 tracking-wider uppercase mb-4"
           >
             Support
           </h3>
@@ -98,7 +104,7 @@
             <li>
               <a
                 href="#"
-                class="text-sm text-gray-600 hover:text-primary-600 transition-colors"
+                class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
                 Help Center
               </a>
@@ -106,7 +112,7 @@
             <li>
               <a
                 href="#"
-                class="text-sm text-gray-600 hover:text-primary-600 transition-colors"
+                class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
                 Community Guidelines
               </a>
@@ -114,7 +120,7 @@
             <li>
               <a
                 href="#"
-                class="text-sm text-gray-600 hover:text-primary-600 transition-colors"
+                class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
                 Contact Us
               </a>
@@ -123,8 +129,8 @@
         </div>
       </div>
 
-      <div class="mt-8 pt-8 border-t border-gray-200">
-        <p class="text-sm text-gray-500 text-center">
+      <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+        <p class="text-sm text-gray-500 dark:text-gray-400 text-center">
           © {{ currentYear }} Library of Things. Built with ❤️ for sharing
           communities.
         </p>

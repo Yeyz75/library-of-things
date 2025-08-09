@@ -1,24 +1,38 @@
 <template>
   <AppLayout>
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-primary-50 to-secondary-50 py-20">
+    <section
+      class="bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-900 dark:to-gray-800 py-20 transition-colors duration-300"
+    >
       <div class="container">
         <div class="text-center max-w-4xl mx-auto">
-          <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+          <h1
+            class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-gray-100 mb-6 animate-fade-in"
+          >
             Share, Borrow,
-            <span class="text-primary-600">Discover</span>
+            <span
+              class="text-primary-600 dark:text-primary-400 gradient-primary bg-clip-text text-transparent"
+              >Discover</span
+            >
           </h1>
-          <p class="text-xl text-gray-600 mb-8">
+          <p
+            class="text-xl text-gray-600 dark:text-gray-300 mb-8 animate-slide-up"
+          >
             Welcome to the Library of Things - where communities share resources
             and build connections through the things we own.
           </p>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <router-link to="/register" class="btn-primary text-lg px-8 py-3">
+          <div
+            class="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up"
+          >
+            <router-link
+              to="/register"
+              class="btn-primary text-lg px-8 py-3 hover-lift"
+            >
               Get Started
             </router-link>
             <button
               @click="scrollToItems"
-              class="btn-secondary text-lg px-8 py-3"
+              class="btn-secondary text-lg px-8 py-3 hover-lift"
             >
               Browse Items
             </button>
@@ -28,13 +42,15 @@
     </section>
 
     <!-- Featured Categories -->
-    <section class="py-16 bg-white">
+    <section
+      class="py-16 bg-white dark:bg-gray-950 transition-colors duration-300"
+    >
       <div class="container">
         <div class="text-center mb-12">
-          <h2 class="text-3xl font-bold text-gray-900 mb-4">
+          <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             Popular Categories
           </h2>
-          <p class="text-lg text-gray-600">
+          <p class="text-lg text-gray-600 dark:text-gray-300">
             Discover amazing items across different categories
           </p>
         </div>
@@ -42,19 +58,19 @@
           <div
             v-for="category in categories"
             :key="category.name"
-            class="text-center group cursor-pointer"
+            class="text-center group cursor-pointer hover-lift"
             @click="filterByCategory(category.key)"
           >
             <div
-              class="bg-gray-100 rounded-full p-6 mb-4 group-hover:bg-primary-100 transition-colors"
+              class="bg-gray-100 dark:bg-gray-800 rounded-full p-6 mb-4 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/20 transition-all duration-300 hover-glow"
             >
               <component
                 :is="category.icon"
-                class="h-12 w-12 mx-auto text-gray-600 group-hover:text-primary-600 transition-colors"
+                class="h-12 w-12 mx-auto text-gray-600 dark:text-gray-300 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300"
               />
             </div>
             <h3
-              class="font-medium text-gray-900 group-hover:text-primary-600 transition-colors"
+              class="font-medium text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300"
             >
               {{ category.name }}
             </h3>
@@ -64,10 +80,15 @@
     </section>
 
     <!-- Items Listing -->
-    <section ref="itemsSection" class="py-16 bg-gray-50">
+    <section
+      ref="itemsSection"
+      class="py-16 bg-gray-50 dark:bg-gray-900 transition-colors duration-300"
+    >
       <div class="container">
         <div class="flex items-center justify-between mb-8">
-          <h2 class="text-3xl font-bold text-gray-900">Recent Items</h2>
+          <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100">
+            Recent Items
+          </h2>
           <div class="flex items-center space-x-4">
             <select
               v-model="selectedCategory"
@@ -94,7 +115,7 @@
         <!-- Error State -->
         <div v-else-if="itemsStore.error" class="text-center py-12">
           <div
-            class="bg-error-50 text-error-600 p-6 rounded-lg max-w-md mx-auto"
+            class="bg-error-50 dark:bg-error-900/20 text-error-600 dark:text-error-400 p-6 rounded-lg max-w-md mx-auto border border-error-200 dark:border-error-800"
           >
             <p class="font-medium">Failed to load items</p>
             <p class="text-sm mt-1">{{ itemsStore.error }}</p>
@@ -112,42 +133,42 @@
           <div
             v-for="item in displayedItems"
             :key="item.$id"
-            class="card hover:shadow-md transition-shadow cursor-pointer"
+            class="card hover:shadow-lg dark:hover:shadow-2xl transition-all duration-300 cursor-pointer hover-lift hover-glow"
             @click="$router.push(`/items/${item.$id}`)"
           >
             <div
-              class="aspect-square bg-gray-200 rounded-lg mb-4 overflow-hidden"
+              class="aspect-square bg-gray-200 dark:bg-gray-700 rounded-lg mb-4 overflow-hidden"
             >
               <img
                 v-if="item.imageUrls?.[0]"
                 :src="item.imageUrls[0]"
                 :alt="item.title"
-                class="w-full h-full object-cover hover:scale-105 transition-transform"
+                class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
               />
               <div
                 v-else
-                class="w-full h-full flex items-center justify-center text-gray-400"
+                class="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-500"
               >
                 <PhotoIcon class="h-16 w-16" />
               </div>
             </div>
-            <h3 class="font-semibold text-gray-900 mb-2">{{ item.title }}</h3>
-            <p class="text-gray-600 text-sm mb-3 line-clamp-2">
+            <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+              {{ item.title }}
+            </h3>
+            <p
+              class="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2"
+            >
               {{ item.description }}
             </p>
             <div class="flex items-center justify-between">
               <span
-                class="inline-block bg-primary-100 text-primary-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                class="inline-block bg-primary-100 dark:bg-primary-900/20 text-primary-800 dark:text-primary-300 text-xs font-medium px-2.5 py-0.5 rounded"
               >
                 {{ getCategoryName(item.category) }}
               </span>
               <span
-                class="inline-block text-xs font-medium px-2.5 py-0.5 rounded"
-                :class="
-                  item.isAvailable
-                    ? 'bg-success-100 text-success-800'
-                    : 'bg-gray-100 text-gray-800'
-                "
+                class="status-badge text-xs font-medium px-2.5 py-0.5 rounded"
+                :class="item.isAvailable ? 'success' : 'neutral'"
               >
                 {{ item.isAvailable ? 'Available' : 'Borrowed' }}
               </span>
@@ -157,9 +178,13 @@
 
         <!-- Empty State -->
         <div v-else class="text-center py-12">
-          <PhotoIcon class="h-24 w-24 mx-auto text-gray-300 mb-4" />
-          <h3 class="text-lg font-medium text-gray-900 mb-2">No items found</h3>
-          <p class="text-gray-600 mb-6">
+          <PhotoIcon
+            class="h-24 w-24 mx-auto text-gray-300 dark:text-gray-600 mb-4"
+          />
+          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+            No items found
+          </h3>
+          <p class="text-gray-600 dark:text-gray-300 mb-6">
             {{
               selectedCategory
                 ? 'No items in this category yet.'
@@ -169,11 +194,11 @@
           <router-link
             v-if="isAuthenticated"
             to="/items/new"
-            class="btn-primary"
+            class="btn-primary hover-lift"
           >
             Add First Item
           </router-link>
-          <router-link v-else to="/register" class="btn-primary">
+          <router-link v-else to="/register" class="btn-primary hover-lift">
             Sign Up to Add Items
           </router-link>
         </div>

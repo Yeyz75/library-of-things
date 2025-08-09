@@ -1,12 +1,15 @@
 <template>
   <div class="flex items-center justify-center" :class="containerClass">
     <div
-      class="animate-spin rounded-full border-2 border-gray-300 border-t-primary-600"
+      class="animate-spin rounded-full border-2 border-gray-300 dark:border-gray-600 border-t-primary-600 dark:border-t-primary-400"
       :class="sizeClass"
     ></div>
-    <span v-if="text" class="ml-3 text-gray-600" :class="textClass">{{
-      text
-    }}</span>
+    <span
+      v-if="text"
+      class="ml-3 text-gray-600 dark:text-gray-300"
+      :class="textClass"
+      >{{ text }}</span
+    >
   </div>
 </template>
 
