@@ -55,9 +55,9 @@
               class="flex items-center space-x-2 text-gray-600 hover:text-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-full p-1"
             >
               <img
-                v-if="currentUser?.photoURL"
-                :src="currentUser.photoURL"
-                :alt="currentUser.displayName"
+                v-if="currentUser?.avatarUrl"
+                :src="currentUser.avatarUrl"
+                :alt="currentUser.name"
                 class="h-8 w-8 rounded-full object-cover"
               />
               <div
@@ -66,7 +66,7 @@
               >
                 <span class="text-white text-sm font-medium">
                   {{
-                    currentUser?.displayName?.charAt(0) ||
+                    currentUser?.name?.charAt(0) ||
                     currentUser?.email?.charAt(0) ||
                     'U'
                   }}
@@ -188,9 +188,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
-import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
 import { useAuthStore } from '@/store/auth.store';
-
 const router = useRouter();
 const authStore = useAuthStore();
 
@@ -208,23 +206,4 @@ async function handleSignOut() {
     console.error('Error signing out:', error);
   }
 }
-
-// Close menus when clicking outside
-const vClickOutside = {
-  beforeMount(el: HTMLElement, binding: { value: () => void }) {
-    el.clickOutsideEvent = (event: MouseEvent) => {
-      // Si el menú está abierto y el clic NO es dentro del menú ni del botón de usuario
-      if (!el.contains(event.target as Node)) {
-        // Esperar al siguiente tick para permitir que los eventos internos (como Sign Out) se procesen primero
-        setTimeout(() => {
-          binding.value();
-        }, 0);
-      }
-    };
-    document.addEventListener('mousedown', el.clickOutsideEvent);
-  },
-  unmounted(el: HTMLElement) {
-    document.removeEventListener('mousedown', el.clickOutsideEvent);
-  },
-};
 </script>
