@@ -7,6 +7,9 @@ import i18n from '@/lib/i18n';
 import './style.css';
 import App from './App.vue';
 import clickOutside from './directives/clickOutside';
+import PrimeVue from 'primevue/config';
+import { MotionPlugin } from '@vueuse/motion';
+import '@/primevue-style';
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -14,6 +17,8 @@ const pinia = createPinia();
 app.use(pinia);
 app.use(router);
 app.use(i18n);
+app.use(PrimeVue, { unstyled: true });
+app.use(MotionPlugin);
 
 // Registrar directiva global
 app.directive('click-outside', clickOutside);
