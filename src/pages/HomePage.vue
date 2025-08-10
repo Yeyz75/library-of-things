@@ -1,340 +1,34 @@
 <template>
   <AppLayout>
-    <!-- Hero Section - Storytelling + Impacto Social -->
-    <section
-      ref="heroSectionRef"
-      class="animated-section relative overflow-hidden bg-gradient-to-br from-primary-100 via-primary-50 to-white dark:from-primary-900 dark:via-primary-800 dark:to-gray-900 py-20 lg:py-32"
-    >
-      <!-- Background Pattern -->
-      <div class="absolute inset-0 opacity-5 dark:opacity-10">
-        <div class="absolute inset-0 hero-pattern"></div>
-      </div>
-
-      <div class="container relative">
-        <div class="text-center max-w-5xl mx-auto">
-          <!-- Badge -->
-          <div
-            class="inline-flex items-center px-4 py-2 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-sm font-medium mb-6"
-          >
-            <span
-              class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"
-            ></span>
-            {{ t('home.hero.badge') }}
-          </div>
-
-          <!-- Main Title -->
-          <h1
-            class="text-5xl md:text-7xl font-bold text-gray-900 dark:text-gray-100 mb-6 leading-tight"
-          >
-            {{ t('home.hero.title') }}
-          </h1>
-
-          <!-- Subtitle -->
-          <p
-            class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed"
-          >
-            {{ t('home.hero.subtitle') }}
-          </p>
-
-          <!-- Impact Stats -->
-          <div class="grid grid-cols-3 gap-8 max-w-2xl mx-auto mb-12">
-            <div class="text-center">
-              <div
-                class="text-3xl md:text-4xl font-bold text-accent-600 dark:text-accent-400 mb-2"
-              >
-                {{ communityStats.itemsShared }}+
-              </div>
-              <div class="text-sm text-gray-600 dark:text-gray-400">
-                {{ t('home.hero.stats.itemsShared') }}
-              </div>
-            </div>
-            <div class="text-center">
-              <div
-                class="text-3xl md:text-4xl font-bold text-green-600 dark:text-green-400 mb-2"
-              >
-                {{ communityStats.co2Saved }}kg
-              </div>
-              <div class="text-sm text-gray-600 dark:text-gray-400">
-                {{ t('home.hero.stats.co2Saved') }}
-              </div>
-            </div>
-            <div class="text-center">
-              <div
-                class="text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2"
-              >
-                ${{ communityStats.moneySaved }}
-              </div>
-              <div class="text-sm text-gray-600 dark:text-gray-400">
-                {{ t('home.hero.stats.moneySaved') }}
-              </div>
-            </div>
-          </div>
-
-          <!-- CTA Buttons -->
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <router-link
-              to="/register"
-              class="btn-accent text-lg px-8 py-4 hover-lift shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              {{ t('home.hero.getStarted') }}
-            </router-link>
-            <button
-              @click="scrollToHowItWorks"
-              class="btn-secondary text-lg px-8 py-4 hover-lift"
-            >
-              {{ t('home.hero.learnMore') }}
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section
-      ref="howItWorksSectionRef"
-      class="animated-section py-20 bg-primary-50 dark:bg-gray-900"
-    >
-      <div class="container">
-        <div class="text-center mb-16">
-          <h2 class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-            {{ t('home.howItWorks.title') }}
-          </h2>
-          <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            {{ t('home.howItWorks.subtitle') }}
-          </p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-12 max-w-5xl mx-auto">
-          <div
-            v-for="(step, index) in howItWorksSteps"
-            :key="index"
-            class="text-center group"
-          >
-            <!-- Step Number -->
-            <div class="relative mb-8">
-              <div
-                class="w-20 h-20 bg-primary-100 dark:bg-primary-800/30 rounded-full flex items-center justify-center mx-auto group-hover:bg-primary-200 dark:group-hover:bg-primary-800/50 transition-all duration-300"
-              >
-                <span
-                  class="text-2xl font-bold text-accent-600 dark:text-accent-400"
-                  >{{ index + 1 }}</span
-                >
-              </div>
-              <!-- Connector Line (except last item) -->
-              <div
-                v-if="index < howItWorksSteps.length - 1"
-                class="hidden md:block absolute top-10 left-1/2 w-full h-0.5 bg-gray-200 dark:bg-gray-700 -z-10"
-              ></div>
-            </div>
-
-            <!-- Icon -->
-            <div class="mb-6">
-              <component
-                :is="step.icon"
-                class="h-16 w-16 mx-auto text-gray-400 dark:text-gray-500 group-hover:text-accent-500 transition-colors duration-300"
-              />
-            </div>
-
-            <!-- Content -->
-            <h3
-              class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4"
-            >
-              {{ step.title }}
-            </h3>
-            <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
-              {{ step.description }}
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Why It Works - Trust & Safety -->
-    <section
-      ref="whyItWorksSectionRef"
-      class="animated-section py-20 bg-white dark:bg-gray-950"
-    >
-      <div class="container">
-        <div class="text-center mb-16">
-          <h2 class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-            {{ t('home.whyItWorks.title') }}
-          </h2>
-          <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            {{ t('home.whyItWorks.subtitle') }}
-          </p>
-        </div>
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          <div
-            v-for="feature in trustFeatures"
-            :key="feature.title"
-            class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
-          >
-            <div
-              class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-xl flex items-center justify-center mb-6"
-            >
-              <component
-                :is="feature.icon"
-                class="h-6 w-6 text-accent-600 dark:text-accent-400"
-              />
-            </div>
-            <h3
-              class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4"
-            >
-              {{ feature.title }}
-            </h3>
-            <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
-              {{ feature.description }}
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Community Impact -->
-    <section
-      ref="communityImpactSectionRef"
-      class="animated-section py-20 bg-primary-50 dark:bg-gray-900"
-    >
-      <div class="container">
-        <div class="grid lg:grid-cols-2 gap-16 items-center">
-          <!-- Content -->
-          <div>
-            <h2
-              class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6"
-            >
-              {{ t('home.impact.title') }}
-            </h2>
-            <p
-              class="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed"
-            >
-              {{ t('home.impact.subtitle') }}
-            </p>
-
-            <!-- Impact Metrics -->
-            <div class="grid grid-cols-2 gap-6 mb-8">
-              <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-6">
-                <div
-                  class="text-3xl font-bold text-green-600 dark:text-green-400 mb-2"
-                >
-                  {{ communityStats.co2Saved }}kg
-                </div>
-                <div class="text-sm text-green-700 dark:text-green-300">
-                  {{ t('home.impact.co2Prevented') }}
-                </div>
-              </div>
-              <div class="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-6">
-                <div
-                  class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2"
-                >
-                  ${{ communityStats.moneySaved }}
-                </div>
-                <div class="text-sm text-blue-700 dark:text-blue-300">
-                  {{ t('home.impact.communitySavings') }}
-                </div>
-              </div>
-            </div>
-
-            <router-link
-              to="/register"
-              class="btn-accent inline-flex items-center"
-            >
-              {{ t('home.impact.joinCommunity') }}
-              <svg
-                class="ml-2 h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                ></path>
-              </svg>
-            </router-link>
-          </div>
-
-          <!-- Visual/Testimonial -->
-          <div
-            class="bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-8"
-          >
-            <div class="text-center">
-              <div
-                class="w-20 h-20 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-6"
-              >
-                <svg
-                  class="h-10 w-10 text-accent-600 dark:text-accent-400"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
-                  />
-                </svg>
-              </div>
-              <blockquote
-                class="text-lg text-gray-700 dark:text-gray-300 mb-4 italic"
-              >
-                "{{ t('home.impact.testimonial.quote') }}"
-              </blockquote>
-              <div class="text-sm text-gray-600 dark:text-gray-400">
-                <div class="font-medium">
-                  {{ t('home.impact.testimonial.author') }}
-                </div>
-                <div>{{ t('home.impact.testimonial.role') }}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Featured Items - Reduced prominence -->
-    <section
-      ref="featuredItemsSectionRef"
-      class="animated-section py-16 bg-white dark:bg-gray-950"
-    >
-      <div class="container">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-            {{ t('home.featuredItems.title') }}
-          </h2>
-          <p class="text-lg text-gray-600 dark:text-gray-300">
-            {{ t('home.featuredItems.subtitle') }}
-          </p>
-        </div>
-
-        <!-- Loading State -->
-        <div v-if="itemsStore.isLoading" class="text-center py-12">
-          <BaseLoader size="lg" :text="t('home.items.loading')" />
-        </div>
-
-        <!-- Featured Items Grid -->
-        <div
-          v-else-if="featuredItems.length > 0"
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto"
-        >
-          <ItemCard
-            v-for="item in featuredItems"
-            :key="item.$id"
-            :item="item"
-            :categories="categories"
-            @click="$router.push(`/items/${item.$id}`)"
-            @reserve="handleReserve"
-            @share="handleShare"
-          />
-        </div>
-
-        <!-- CTA to browse all -->
-        <div class="text-center mt-12">
-          <router-link to="/search" class="btn-secondary">
-            {{ t('home.featuredItems.browseAll') }}
-          </router-link>
-        </div>
-      </div>
-    </section>
+    <HeroSection
+      :communityStats="communityStats"
+      :t="t"
+      :scrollToHowItWorks="scrollToHowItWorks"
+    />
+    <HowItWorksSection
+      :howItWorksSteps="howItWorksSteps"
+      :t="t"
+      :howItWorksSectionRef="howItWorksSectionRef"
+    />
+    <WhyItWorksSection
+      :trustFeatures="trustFeatures"
+      :t="t"
+      :whyItWorksSectionRef="whyItWorksSectionRef"
+    />
+    <CommunityImpactSection
+      :communityStats="communityStats"
+      :t="t"
+      :communityImpactSectionRef="communityImpactSectionRef"
+    />
+    <FeaturedItemsSection
+      :featuredItems="featuredItems"
+      :isLoading="itemsStore.isLoading"
+      :categories="categories"
+      :t="t"
+      :handleReserve="handleReserve"
+      :handleShare="handleShare"
+      :featuredItemsSectionRef="featuredItemsSectionRef"
+    />
   </AppLayout>
 </template>
 
@@ -360,8 +54,11 @@ import {
   CurrencyDollarIcon,
 } from '@heroicons/vue/24/outline';
 import AppLayout from '@/components/layout/AppLayout.vue';
-import BaseLoader from '@/components/common/BaseLoader.vue';
-import ItemCard from '@/components/common/ItemCard.vue';
+import HeroSection from '@/components/pages/home/HeroSection.vue';
+import HowItWorksSection from '@/components/pages/home/HowItWorksSection.vue';
+import WhyItWorksSection from '@/components/pages/home/WhyItWorksSection.vue';
+import CommunityImpactSection from '@/components/pages/home/CommunityImpactSection.vue';
+import FeaturedItemsSection from '@/components/pages/home/FeaturedItemsSection.vue';
 import { useItemsStore } from '@/store/items.store';
 import { useAuthStore } from '@/store/auth.store';
 import { useToast } from '@/composables/useToast';
