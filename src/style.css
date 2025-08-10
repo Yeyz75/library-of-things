@@ -6,29 +6,29 @@
 @layer base {
   :root {
     scroll-behavior: smooth;
-    /* Light theme variables */
-    --color-background: 255 255 255;
-    --color-foreground: 17 24 39;
-    --color-muted: 249 250 251;
-    --color-muted-foreground: 107 114 128;
+    /* Light theme variables - Paleta 2025 */
+    --color-background: 250 250 249;
+    --color-foreground: 28 25 23;
+    --color-muted: 245 245 244;
+    --color-muted-foreground: 120 113 108;
     --color-card: 255 255 255;
-    --color-card-foreground: 17 24 39;
-    --color-border: 229 231 235;
+    --color-card-foreground: 28 25 23;
+    --color-border: 231 229 228;
     --color-input: 255 255 255;
-    --color-ring: 94 90 255;
+    --color-ring: 59 130 246;
   }
 
   .dark {
-    /* Dark theme variables */
-    --color-background: 3 7 18;
-    --color-foreground: 249 250 251;
-    --color-muted: 31 41 55;
-    --color-muted-foreground: 156 163 175;
-    --color-card: 17 24 39;
-    --color-card-foreground: 249 250 251;
-    --color-border: 55 65 81;
-    --color-input: 31 41 55;
-    --color-ring: 94 90 255;
+    /* Dark theme variables - Paleta 2025 */
+    --color-background: 12 10 9;
+    --color-foreground: 250 250 249;
+    --color-muted: 41 37 36;
+    --color-muted-foreground: 168 162 158;
+    --color-card: 28 25 23;
+    --color-card-foreground: 250 250 249;
+    --color-border: 68 64 60;
+    --color-input: 41 37 36;
+    --color-ring: 59 130 246;
   }
 
   * {
@@ -36,7 +36,7 @@
   }
 
   body {
-    @apply bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-50 font-sans antialiased transition-colors duration-300;
+    @apply bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-50 font-sans antialiased transition-colors duration-300;
     background-color: rgb(var(--color-background));
     color: rgb(var(--color-foreground));
   }
@@ -185,5 +185,44 @@
 
   .hover-glow {
     @apply transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/25 dark:hover:shadow-primary-400/25;
+  }
+
+  /* Nuevos estilos con paleta 2025 rebalanceada */
+  .gradient-digital-harmony {
+    @apply bg-gradient-to-br from-primary-400 via-secondary-400 to-accent-500;
+  }
+
+  .gradient-tech-nature {
+    @apply bg-gradient-to-r from-primary-400 to-brand-400;
+  }
+
+  .gradient-sunset {
+    @apply bg-gradient-to-br from-warning-400 via-accent-500 to-error-400;
+  }
+
+  .gradient-cool-warm {
+    @apply bg-gradient-to-br from-primary-400 to-secondary-500;
+  }
+
+  /* Efectos de brillo modernos */
+  .glow-primary {
+    @apply shadow-lg shadow-primary-500/30 dark:shadow-primary-400/30;
+  }
+
+  .glow-secondary {
+    @apply shadow-lg shadow-secondary-500/30 dark:shadow-secondary-400/30;
+  }
+
+  .glow-accent {
+    @apply shadow-lg shadow-accent-500/30 dark:shadow-accent-400/30;
+  }
+
+  /* Bordes con gradiente */
+  .border-gradient-primary {
+    @apply border-2 border-transparent bg-gradient-to-r from-primary-500 to-success-500 bg-clip-border;
+  }
+
+  .border-gradient-warm {
+    @apply border-2 border-transparent bg-gradient-to-r from-secondary-500 to-warning-500 bg-clip-border;
   }
 }
