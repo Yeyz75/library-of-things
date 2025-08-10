@@ -4,10 +4,14 @@
       <!-- Welcome Header -->
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-50">
-          Welcome back, {{ currentUser?.name || 'User' }}!
+          {{
+            currentUser?.name
+              ? t('dashboard.welcome', { name: currentUser.name })
+              : t('dashboard.welcomeDefault')
+          }}
         </h1>
         <p class="text-gray-600 dark:text-gray-300 mt-2">
-          Manage your items and reservations
+          {{ t('dashboard.subtitle') }}
         </p>
       </div>
 
@@ -20,7 +24,7 @@
             </div>
             <div class="ml-4">
               <p class="text-sm font-medium text-gray-600 dark:text-gray-300">
-                Your Items
+                {{ t('dashboard.stats.yourItems') }}
               </p>
               <p class="text-2xl font-bold text-gray-900 dark:text-gray-50">
                 {{ userItemsCount }}
@@ -36,7 +40,7 @@
             </div>
             <div class="ml-4">
               <p class="text-sm font-medium text-gray-600 dark:text-gray-300">
-                Active Reservations
+                {{ t('dashboard.stats.activeReservations') }}
               </p>
               <p class="text-2xl font-bold text-gray-900 dark:text-gray-50">
                 {{ activeReservationsCount }}
@@ -52,7 +56,7 @@
             </div>
             <div class="ml-4">
               <p class="text-sm font-medium text-gray-600 dark:text-gray-300">
-                Pending Requests
+                {{ t('dashboard.stats.pendingRequests') }}
               </p>
               <p class="text-2xl font-bold text-gray-900 dark:text-gray-50">
                 {{ pendingRequestsCount }}
@@ -68,7 +72,7 @@
             </div>
             <div class="ml-4">
               <p class="text-sm font-medium text-gray-600 dark:text-gray-300">
-                Items Borrowed
+                {{ t('dashboard.stats.itemsBorrowed') }}
               </p>
               <p class="text-2xl font-bold text-gray-900 dark:text-gray-50">
                 {{ borrowedItemsCount }}
@@ -83,26 +87,26 @@
         <div class="card">
           <div class="flex items-center justify-between mb-6">
             <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">
-              Your Items
+              {{ t('dashboard.yourItems.title') }}
             </h2>
             <router-link to="/items/new" class="btn-primary">
               <PlusIcon class="h-4 w-4 mr-2" />
-              Add Item
+              {{ t('dashboard.yourItems.addItem') }}
             </router-link>
           </div>
 
           <div v-if="itemsStore.isLoading" class="text-center py-8">
-            <BaseLoader size="md" text="Loading your items..." />
+            <BaseLoader size="md" :text="t('dashboard.yourItems.loading')" />
           </div>
 
           <div v-else-if="userItems.length === 0" class="text-center py-8">
             <ArchiveBoxIcon class="h-16 w-16 mx-auto text-gray-300 mb-4" />
             <p class="text-gray-600 dark:text-gray-300 mb-4">
-              You haven't added any items yet
+              {{ t('dashboard.yourItems.noItems') }}
             </p>
-            <router-link to="/items/new" class="btn-primary"
-              >Add Your First Item</router-link
-            >
+            <router-link to="/items/new" class="btn-primary">
+              {{ t('dashboard.yourItems.addFirstItem') }}
+            </router-link>
           </div>
 
           <div v-else class="space-y-4">
@@ -141,7 +145,11 @@
                         : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
                     "
                   >
-                    {{ item.isAvailable ? 'Available' : 'Borrowed' }}
+                    {{
+                      item.isAvailable
+                        ? t('dashboard.yourItems.available')
+                        : t('dashboard.yourItems.borrowed')
+                    }}
                   </span>
                 </div>
               </div>
@@ -151,7 +159,9 @@
                 to="/items"
                 class="text-primary-600 hover:text-primary-700 font-medium"
               >
-                View all {{ userItems.length }} items →
+                {{
+                  t('dashboard.yourItems.viewAll', { count: userItems.length })
+                }}
               </router-link>
             </div>
           </div>
@@ -161,18 +171,18 @@
         <div class="card">
           <div class="flex items-center justify-between mb-6">
             <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">
-              Recent Reservations
+              {{ t('dashboard.reservations.title') }}
             </h2>
             <router-link
               to="/reservations"
               class="text-primary-600 hover:text-primary-700 font-medium"
             >
-              View all
+              {{ t('dashboard.reservations.viewAll') }}
             </router-link>
           </div>
 
           <div v-if="reservationsStore.isLoading" class="text-center py-8">
-            <BaseLoader size="md" text="Loading reservations..." />
+            <BaseLoader size="md" :text="t('dashboard.reservations.loading')" />
           </div>
 
           <div
@@ -181,9 +191,11 @@
           >
             <CalendarDaysIcon class="h-16 w-16 mx-auto text-gray-300 mb-4" />
             <p class="text-gray-600 dark:text-gray-300 mb-4">
-              No reservations yet
+              {{ t('dashboard.reservations.noReservations') }}
             </p>
-            <router-link to="/" class="btn-primary">Browse Items</router-link>
+            <router-link to="/" class="btn-primary">{{
+              t('dashboard.reservations.browseItems')
+            }}</router-link>
           </div>
 
           <div v-else class="space-y-4">
@@ -233,12 +245,14 @@ import BaseLoader from '@/components/common/BaseLoader.vue';
 import { useAuthStore } from '@/store/auth.store';
 import { useItemsStore } from '@/store/items.store';
 import { useReservationsStore } from '@/store/reservations.store';
+import { useI18n } from '@/composables/useI18n';
 import type { ReservationStatus } from '@/types';
 import { storeToRefs } from 'pinia';
 
 const authStore = useAuthStore();
 const itemsStore = useItemsStore();
 const reservationsStore = useReservationsStore();
+const { t } = useI18n();
 
 const { currentUser, userId } = storeToRefs(authStore);
 

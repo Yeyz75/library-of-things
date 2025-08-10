@@ -29,7 +29,7 @@
             class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
           >
-            Browse Items
+            {{ t('header.browseItems') }}
           </router-link>
           <router-link
             v-if="isAuthenticated"
@@ -37,7 +37,7 @@
             class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
           >
-            Dashboard
+            {{ t('header.dashboard') }}
           </router-link>
           <router-link
             v-if="isAuthenticated"
@@ -45,7 +45,7 @@
             class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
           >
-            Add Item
+            {{ t('header.addItem') }}
           </router-link>
         </div>
 
@@ -102,21 +102,21 @@
                   class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   @click="showUserMenu = false"
                 >
-                  Profile
+                  {{ t('header.profile') }}
                 </router-link>
                 <router-link
                   to="/reservations"
                   class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   @click="showUserMenu = false"
                 >
-                  My Reservations
+                  {{ t('header.myReservations') }}
                 </router-link>
                 <hr class="border-gray-200 dark:border-gray-700 my-1" />
                 <button
                   @click="handleSignOut"
                   class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                 >
-                  Sign Out
+                  {{ t('header.signOut') }}
                 </button>
               </div>
             </transition>
@@ -128,10 +128,10 @@
               to="/login"
               class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >
-              Sign In
+              {{ t('header.signIn') }}
             </router-link>
             <router-link to="/register" class="btn-primary text-sm">
-              Sign Up
+              {{ t('header.signUp') }}
             </router-link>
           </div>
 
@@ -166,7 +166,7 @@
               active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
               @click="showMobileMenu = false"
             >
-              Browse Items
+              {{ t('header.browseItems') }}
             </router-link>
             <router-link
               v-if="isAuthenticated"
@@ -175,7 +175,7 @@
               active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
               @click="showMobileMenu = false"
             >
-              Dashboard
+              {{ t('header.dashboard') }}
             </router-link>
             <router-link
               v-if="isAuthenticated"
@@ -184,7 +184,7 @@
               active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
               @click="showMobileMenu = false"
             >
-              Add Item
+              {{ t('header.addItem') }}
             </router-link>
           </div>
         </div>
@@ -199,6 +199,7 @@ import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/store/auth.store';
 import { useThemeStore } from '@/store/theme.store';
+import { useI18n } from '@/composables/useI18n';
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
 import ThemeToggle from '@/components/common/ThemeToggle.vue';
 import LanguageToggle from '@/components/common/LanguageToggle.vue';
@@ -206,6 +207,7 @@ import LanguageToggle from '@/components/common/LanguageToggle.vue';
 const router = useRouter();
 const authStore = useAuthStore();
 const themeStore = useThemeStore();
+const { t } = useI18n();
 
 const showUserMenu = ref(false);
 const showMobileMenu = ref(false);

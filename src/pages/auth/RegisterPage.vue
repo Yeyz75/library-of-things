@@ -16,9 +16,9 @@
           <span class="font-bold text-xl">Library of Things</span>
         </router-link>
         <h2 class="text-3xl font-bold text-gray-900 mb-2">
-          Create your account
+          {{ t('auth.register.title') }}
         </h2>
-        <p class="text-gray-600">Join our community and start sharing</p>
+        <p class="text-gray-600">{{ t('auth.register.subtitle') }}</p>
       </div>
 
       <form @submit.prevent="handleSubmit" class="space-y-6">
@@ -27,7 +27,7 @@
             for="displayName"
             class="block text-sm font-medium text-gray-700 mb-1"
           >
-            Full name
+            {{ t('auth.register.fullName') }}
           </label>
           <input
             id="displayName"
@@ -37,7 +37,7 @@
             required
             class="input"
             :class="{ 'border-error-500': errors.displayName }"
-            placeholder="Enter your full name"
+            :placeholder="t('auth.register.fullNamePlaceholder')"
           />
           <p v-if="errors.displayName" class="mt-1 text-sm text-error-600">
             {{ errors.displayName }}
@@ -49,7 +49,7 @@
             for="email"
             class="block text-sm font-medium text-gray-700 mb-1"
           >
-            Email address
+            {{ t('auth.register.email') }}
           </label>
           <input
             id="email"
@@ -59,7 +59,7 @@
             required
             class="input"
             :class="{ 'border-error-500': errors.email }"
-            placeholder="Enter your email"
+            :placeholder="t('auth.register.emailPlaceholder')"
           />
           <p v-if="errors.email" class="mt-1 text-sm text-error-600">
             {{ errors.email }}
@@ -71,7 +71,7 @@
             for="password"
             class="block text-sm font-medium text-gray-700 mb-1"
           >
-            Password
+            {{ t('auth.register.password') }}
           </label>
           <input
             id="password"
@@ -81,7 +81,7 @@
             required
             class="input"
             :class="{ 'border-error-500': errors.password }"
-            placeholder="Create a password"
+            :placeholder="t('auth.register.passwordPlaceholder')"
           />
           <p v-if="errors.password" class="mt-1 text-sm text-error-600">
             {{ errors.password }}
@@ -93,7 +93,7 @@
             for="confirmPassword"
             class="block text-sm font-medium text-gray-700 mb-1"
           >
-            Confirm password
+            {{ t('auth.register.confirmPassword') }}
           </label>
           <input
             id="confirmPassword"
@@ -103,7 +103,7 @@
             required
             class="input"
             :class="{ 'border-error-500': errors.confirmPassword }"
-            placeholder="Confirm your password"
+            :placeholder="t('auth.register.confirmPasswordPlaceholder')"
           />
           <p v-if="errors.confirmPassword" class="mt-1 text-sm text-error-600">
             {{ errors.confirmPassword }}
@@ -124,7 +124,11 @@
             class="w-full btn-primary flex items-center justify-center"
           >
             <BaseLoader v-if="authStore.isLoading" size="sm" class="mr-2" />
-            {{ authStore.isLoading ? 'Creating account...' : 'Create account' }}
+            {{
+              authStore.isLoading
+                ? t('auth.register.creatingAccount')
+                : t('auth.register.createAccount')
+            }}
           </button>
 
           <div class="relative">
@@ -132,7 +136,9 @@
               <div class="w-full border-t border-gray-300" />
             </div>
             <div class="relative flex justify-center text-sm">
-              <span class="px-2 bg-gray-50 text-gray-500">or</span>
+              <span class="px-2 bg-gray-50 text-gray-500">{{
+                t('auth.register.or')
+              }}</span>
             </div>
           </div>
 
@@ -160,17 +166,19 @@
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
-            Continue with Google
+            {{ t('auth.register.continueWithGoogle') }}
           </button>
         </div>
 
         <div class="text-center">
-          <span class="text-sm text-gray-600">Already have an account? </span>
+          <span class="text-sm text-gray-600"
+            >{{ t('auth.register.hasAccount') }}
+          </span>
           <router-link
             to="/login"
             class="text-sm font-medium text-primary-600 hover:text-primary-500"
           >
-            Sign in here
+            {{ t('auth.register.signInHere') }}
           </router-link>
         </div>
       </form>
@@ -183,9 +191,11 @@ import { reactive, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import BaseLoader from '@/components/common/BaseLoader.vue';
 import { useAuthStore } from '@/store/auth.store';
+import { useI18n } from '@/composables/useI18n';
 
 const router = useRouter();
 const authStore = useAuthStore();
+const { t } = useI18n();
 
 const form = reactive({
   displayName: '',
@@ -211,37 +221,37 @@ function validateForm(): boolean {
 
   // Validate display name
   if (!form.displayName.trim()) {
-    errors.displayName = 'Full name is required';
+    errors.displayName = t('auth.register.errors.nameRequired');
     isValid = false;
   } else if (form.displayName.trim().length < 2) {
-    errors.displayName = 'Full name must be at least 2 characters';
+    errors.displayName = t('auth.register.errors.nameTooShort');
     isValid = false;
   }
 
   // Validate email
   if (!form.email) {
-    errors.email = 'Email is required';
+    errors.email = t('auth.register.errors.emailRequired');
     isValid = false;
   } else if (!/\S+@\S+\.\S+/.test(form.email)) {
-    errors.email = 'Please enter a valid email address';
+    errors.email = t('auth.register.errors.emailInvalid');
     isValid = false;
   }
 
   // Validate password
   if (!form.password) {
-    errors.password = 'Password is required';
+    errors.password = t('auth.register.errors.passwordRequired');
     isValid = false;
   } else if (form.password.length < 6) {
-    errors.password = 'Password must be at least 6 characters';
+    errors.password = t('auth.register.errors.passwordTooShort');
     isValid = false;
   }
 
   // Validate password confirmation
   if (!form.confirmPassword) {
-    errors.confirmPassword = 'Please confirm your password';
+    errors.confirmPassword = t('auth.register.errors.confirmPasswordRequired');
     isValid = false;
   } else if (form.password !== form.confirmPassword) {
-    errors.confirmPassword = 'Passwords do not match';
+    errors.confirmPassword = t('auth.register.errors.passwordsDoNotMatch');
     isValid = false;
   }
 

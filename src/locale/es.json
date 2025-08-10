@@ -20,6 +20,101 @@
   "app": {
     "title": "Biblioteca de Cosas"
   },
+  "auth": {
+    "login": {
+      "title": "Bienvenido de vuelta",
+      "subtitle": "Inicia sesión en tu cuenta para continuar",
+      "email": "Correo electrónico",
+      "emailPlaceholder": "Ingresa tu correo electrónico",
+      "password": "Contraseña",
+      "passwordPlaceholder": "Ingresa tu contraseña",
+      "signIn": "Iniciar sesión",
+      "signingIn": "Iniciando sesión...",
+      "continueWithGoogle": "Continuar con Google",
+      "or": "o",
+      "noAccount": "¿No tienes una cuenta?",
+      "signUpHere": "Regístrate aquí",
+      "errors": {
+        "emailRequired": "El correo electrónico es requerido",
+        "emailInvalid": "Por favor ingresa un correo electrónico válido",
+        "passwordRequired": "La contraseña es requerida",
+        "passwordTooShort": "La contraseña debe tener al menos 6 caracteres"
+      }
+    },
+    "register": {
+      "title": "Crea tu cuenta",
+      "subtitle": "Únete a nuestra comunidad y comienza a compartir",
+      "fullName": "Nombre completo",
+      "fullNamePlaceholder": "Ingresa tu nombre completo",
+      "email": "Correo electrónico",
+      "emailPlaceholder": "Ingresa tu correo electrónico",
+      "password": "Contraseña",
+      "passwordPlaceholder": "Crea una contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "confirmPasswordPlaceholder": "Confirma tu contraseña",
+      "createAccount": "Crear cuenta",
+      "creatingAccount": "Creando cuenta...",
+      "continueWithGoogle": "Continuar con Google",
+      "or": "o",
+      "hasAccount": "¿Ya tienes una cuenta?",
+      "signInHere": "Inicia sesión aquí",
+      "errors": {
+        "nameRequired": "El nombre completo es requerido",
+        "nameTooShort": "El nombre completo debe tener al menos 2 caracteres",
+        "emailRequired": "El correo electrónico es requerido",
+        "emailInvalid": "Por favor ingresa un correo electrónico válido",
+        "passwordRequired": "La contraseña es requerida",
+        "passwordTooShort": "La contraseña debe tener al menos 6 caracteres",
+        "confirmPasswordRequired": "Por favor confirma tu contraseña",
+        "passwordsDoNotMatch": "Las contraseñas no coinciden"
+      }
+    }
+  },
+  "dashboard": {
+    "welcome": "¡Bienvenido de vuelta, {name}!",
+    "welcomeDefault": "¡Bienvenido de vuelta, Usuario!",
+    "subtitle": "Administra tus artículos y reservas",
+    "stats": {
+      "yourItems": "Tus Artículos",
+      "activeReservations": "Reservas Activas",
+      "pendingRequests": "Solicitudes Pendientes",
+      "itemsBorrowed": "Artículos Prestados"
+    },
+    "yourItems": {
+      "title": "Tus Artículos",
+      "addItem": "Agregar Artículo",
+      "loading": "Cargando tus artículos...",
+      "noItems": "Aún no has agregado ningún artículo",
+      "addFirstItem": "Agrega Tu Primer Artículo",
+      "available": "Disponible",
+      "borrowed": "Prestado",
+      "viewAll": "Ver todos los {count} artículos →"
+    },
+    "reservations": {
+      "title": "Reservas Recientes",
+      "viewAll": "Ver todas",
+      "loading": "Cargando reservas...",
+      "noReservations": "Aún no hay reservas",
+      "browseItems": "Explorar Artículos"
+    }
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "Página no encontrada",
+    "description": "Lo sentimos, no pudimos encontrar la página que buscas. El artículo podría haber sido eliminado o el enlace podría ser incorrecto.",
+    "browseItems": "Explorar Artículos",
+    "goToDashboard": "Ir al Panel"
+  },
+  "header": {
+    "browseItems": "Explorar Artículos",
+    "dashboard": "Panel",
+    "addItem": "Agregar Artículo",
+    "profile": "Perfil",
+    "myReservations": "Mis Reservas",
+    "signOut": "Cerrar Sesión",
+    "signIn": "Iniciar Sesión",
+    "signUp": "Registrarse"
+  },
   "home": {
     "hero": {
       "title": "Comparte, Pide Prestado, Descubre",

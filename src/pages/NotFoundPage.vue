@@ -4,23 +4,24 @@
       <div class="text-center">
         <div class="mb-8">
           <h1 class="text-6xl font-bold text-gray-300 dark:text-gray-600 mb-4">
-            404
+            {{ t('notFound.title') }}
           </h1>
           <h2
             class="text-2xl font-semibold text-gray-900 dark:text-gray-50 mb-2"
           >
-            Page not found
+            {{ t('notFound.heading') }}
           </h2>
           <p class="text-gray-600 dark:text-gray-300 max-w-md mx-auto">
-            Sorry, we couldn't find the page you're looking for. The item might
-            have been removed or the link might be incorrect.
+            {{ t('notFound.description') }}
           </p>
         </div>
 
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <router-link to="/" class="btn-primary"> Browse Items </router-link>
+          <router-link to="/" class="btn-primary">{{
+            t('notFound.browseItems')
+          }}</router-link>
           <router-link to="/dashboard" class="btn-secondary">
-            Go to Dashboard
+            {{ t('notFound.goToDashboard') }}
           </router-link>
         </div>
       </div>
@@ -30,4 +31,7 @@
 
 <script setup lang="ts">
 import AppLayout from '@/components/layout/AppLayout.vue';
+import { useI18n } from '@/composables/useI18n';
+
+const { t } = useI18n();
 </script>

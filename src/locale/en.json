@@ -20,6 +20,101 @@
   "app": {
     "title": "Library of Things"
   },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to your account to continue",
+      "email": "Email address",
+      "emailPlaceholder": "Enter your email",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "signIn": "Sign in",
+      "signingIn": "Signing in...",
+      "continueWithGoogle": "Continue with Google",
+      "or": "or",
+      "noAccount": "Don't have an account?",
+      "signUpHere": "Sign up here",
+      "errors": {
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email address",
+        "passwordRequired": "Password is required",
+        "passwordTooShort": "Password must be at least 6 characters"
+      }
+    },
+    "register": {
+      "title": "Create your account",
+      "subtitle": "Join our community and start sharing",
+      "fullName": "Full name",
+      "fullNamePlaceholder": "Enter your full name",
+      "email": "Email address",
+      "emailPlaceholder": "Enter your email",
+      "password": "Password",
+      "passwordPlaceholder": "Create a password",
+      "confirmPassword": "Confirm password",
+      "confirmPasswordPlaceholder": "Confirm your password",
+      "createAccount": "Create account",
+      "creatingAccount": "Creating account...",
+      "continueWithGoogle": "Continue with Google",
+      "or": "or",
+      "hasAccount": "Already have an account?",
+      "signInHere": "Sign in here",
+      "errors": {
+        "nameRequired": "Full name is required",
+        "nameTooShort": "Full name must be at least 2 characters",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email address",
+        "passwordRequired": "Password is required",
+        "passwordTooShort": "Password must be at least 6 characters",
+        "confirmPasswordRequired": "Please confirm your password",
+        "passwordsDoNotMatch": "Passwords do not match"
+      }
+    }
+  },
+  "dashboard": {
+    "welcome": "Welcome back, {name}!",
+    "welcomeDefault": "Welcome back, User!",
+    "subtitle": "Manage your items and reservations",
+    "stats": {
+      "yourItems": "Your Items",
+      "activeReservations": "Active Reservations",
+      "pendingRequests": "Pending Requests",
+      "itemsBorrowed": "Items Borrowed"
+    },
+    "yourItems": {
+      "title": "Your Items",
+      "addItem": "Add Item",
+      "loading": "Loading your items...",
+      "noItems": "You haven't added any items yet",
+      "addFirstItem": "Add Your First Item",
+      "available": "Available",
+      "borrowed": "Borrowed",
+      "viewAll": "View all {count} items →"
+    },
+    "reservations": {
+      "title": "Recent Reservations",
+      "viewAll": "View all",
+      "loading": "Loading reservations...",
+      "noReservations": "No reservations yet",
+      "browseItems": "Browse Items"
+    }
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "Page not found",
+    "description": "Sorry, we couldn't find the page you're looking for. The item might have been removed or the link might be incorrect.",
+    "browseItems": "Browse Items",
+    "goToDashboard": "Go to Dashboard"
+  },
+  "header": {
+    "browseItems": "Browse Items",
+    "dashboard": "Dashboard",
+    "addItem": "Add Item",
+    "profile": "Profile",
+    "myReservations": "My Reservations",
+    "signOut": "Sign Out",
+    "signIn": "Sign In",
+    "signUp": "Sign Up"
+  },
   "home": {
     "hero": {
       "title": "Share, Borrow, Discover",

@@ -15,8 +15,10 @@
           </div>
           <span class="font-bold text-xl">Library of Things</span>
         </router-link>
-        <h2 class="text-3xl font-bold text-gray-900 mb-2">Welcome back</h2>
-        <p class="text-gray-600">Sign in to your account to continue</p>
+        <h2 class="text-3xl font-bold text-gray-900 mb-2">
+          {{ t('auth.login.title') }}
+        </h2>
+        <p class="text-gray-600">{{ t('auth.login.subtitle') }}</p>
       </div>
 
       <form @submit.prevent="handleSubmit" class="space-y-6">
@@ -25,7 +27,7 @@
             for="email"
             class="block text-sm font-medium text-gray-700 mb-1"
           >
-            Email address
+            {{ t('auth.login.email') }}
           </label>
           <input
             id="email"
@@ -35,7 +37,7 @@
             required
             class="input"
             :class="{ 'border-error-500': errors.email }"
-            placeholder="Enter your email"
+            :placeholder="t('auth.login.emailPlaceholder')"
           />
           <p v-if="errors.email" class="mt-1 text-sm text-error-600">
             {{ errors.email }}
@@ -47,7 +49,7 @@
             for="password"
             class="block text-sm font-medium text-gray-700 mb-1"
           >
-            Password
+            {{ t('auth.login.password') }}
           </label>
           <input
             id="password"
@@ -57,7 +59,7 @@
             required
             class="input"
             :class="{ 'border-error-500': errors.password }"
-            placeholder="Enter your password"
+            :placeholder="t('auth.login.passwordPlaceholder')"
           />
           <p v-if="errors.password" class="mt-1 text-sm text-error-600">
             {{ errors.password }}
@@ -78,7 +80,11 @@
             class="w-full btn-primary flex items-center justify-center"
           >
             <BaseLoader v-if="authStore.isLoading" size="sm" class="mr-2" />
-            {{ authStore.isLoading ? 'Signing in...' : 'Sign in' }}
+            {{
+              authStore.isLoading
+                ? t('auth.login.signingIn')
+                : t('auth.login.signIn')
+            }}
           </button>
 
           <div class="relative">
@@ -86,7 +92,9 @@
               <div class="w-full border-t border-gray-300" />
             </div>
             <div class="relative flex justify-center text-sm">
-              <span class="px-2 bg-gray-50 text-gray-500">or</span>
+              <span class="px-2 bg-gray-50 text-gray-500">{{
+                t('auth.login.or')
+              }}</span>
             </div>
           </div>
 
@@ -114,17 +122,19 @@
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
-            Continue with Google
+            {{ t('auth.login.continueWithGoogle') }}
           </button>
         </div>
 
         <div class="text-center">
-          <span class="text-sm text-gray-600">Don't have an account? </span>
+          <span class="text-sm text-gray-600"
+            >{{ t('auth.login.noAccount') }}
+          </span>
           <router-link
             to="/register"
             class="text-sm font-medium text-primary-600 hover:text-primary-500"
           >
-            Sign up here
+            {{ t('auth.login.signUpHere') }}
           </router-link>
         </div>
       </form>
@@ -137,10 +147,12 @@ import { reactive, onUnmounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import BaseLoader from '@/components/common/BaseLoader.vue';
 import { useAuthStore } from '@/store/auth.store';
+import { useI18n } from '@/composables/useI18n';
 
 const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
+const { t } = useI18n();
 
 const form = reactive({
   email: '',
@@ -161,19 +173,19 @@ function validateForm(): boolean {
 
   // Validate email
   if (!form.email) {
-    errors.email = 'Email is required';
+    errors.email = t('auth.login.errors.emailRequired');
     isValid = false;
   } else if (!/\S+@\S+\.\S+/.test(form.email)) {
-    errors.email = 'Please enter a valid email address';
+    errors.email = t('auth.login.errors.emailInvalid');
     isValid = false;
   }
 
   // Validate password
   if (!form.password) {
-    errors.password = 'Password is required';
+    errors.password = t('auth.login.errors.passwordRequired');
     isValid = false;
   } else if (form.password.length < 6) {
-    errors.password = 'Password must be at least 6 characters';
+    errors.password = t('auth.login.errors.passwordTooShort');
     isValid = false;
   }
 
