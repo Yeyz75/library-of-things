@@ -617,5 +617,22 @@
     "confirm": "Confirm",
     "retry": "Retry",
     "refresh": "Refresh"
+  },
+  "footer": {
+    "description": "Share, borrow, and discover amazing items in your community. Building connections through shared resources.",
+    "quickLinks": {
+      "title": "Quick Links",
+      "browseItems": "Browse Items",
+      "categories": "Categories",
+      "dashboard": "Dashboard",
+      "signIn": "Sign In"
+    },
+    "support": {
+      "title": "Support",
+      "helpCenter": "Help Center",
+      "communityGuidelines": "Community Guidelines",
+      "contactUs": "Contact Us"
+    },
+    "copyright": "Library of Things. Built with ❤️ for sharing communities."
   }
 }

@@ -19,8 +19,7 @@
             >
           </div>
           <p class="text-gray-600 dark:text-gray-300 text-sm max-w-md">
-            Share, borrow, and discover amazing items in your community.
-            Building connections through shared resources.
+            {{ t('footer.description') }}
           </p>
           <div class="flex space-x-4 mt-4">
             <a
@@ -55,7 +54,7 @@
           <h3
             class="text-sm font-semibold text-gray-900 dark:text-gray-100 tracking-wider uppercase mb-4"
           >
-            Quick Links
+            {{ t('footer.quickLinks.title') }}
           </h3>
           <ul class="space-y-3">
             <li>
@@ -63,7 +62,7 @@
                 to="/"
                 class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
-                Browse Items
+                {{ t('footer.quickLinks.browseItems') }}
               </router-link>
             </li>
             <li>
@@ -71,7 +70,7 @@
                 to="/categories"
                 class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
-                Categories
+                {{ t('footer.quickLinks.categories') }}
               </router-link>
             </li>
             <li>
@@ -80,14 +79,14 @@
                 to="/dashboard"
                 class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
-                Dashboard
+                {{ t('footer.quickLinks.dashboard') }}
               </router-link>
               <router-link
                 v-else
                 to="/login"
                 class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
-                Sign In
+                {{ t('footer.quickLinks.signIn') }}
               </router-link>
             </li>
           </ul>
@@ -98,7 +97,7 @@
           <h3
             class="text-sm font-semibold text-gray-900 dark:text-gray-100 tracking-wider uppercase mb-4"
           >
-            Support
+            {{ t('footer.support.title') }}
           </h3>
           <ul class="space-y-3">
             <li>
@@ -106,7 +105,7 @@
                 href="#"
                 class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
-                Help Center
+                {{ t('footer.support.helpCenter') }}
               </a>
             </li>
             <li>
@@ -114,7 +113,7 @@
                 href="#"
                 class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
-                Community Guidelines
+                {{ t('footer.support.communityGuidelines') }}
               </a>
             </li>
             <li>
@@ -122,7 +121,7 @@
                 href="#"
                 class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
-                Contact Us
+                {{ t('footer.support.contactUs') }}
               </a>
             </li>
           </ul>
@@ -131,8 +130,7 @@
 
       <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
         <p class="text-sm text-gray-500 dark:text-gray-400 text-center">
-          © {{ currentYear }} Library of Things. Built with ❤️ for sharing
-          communities.
+          © {{ currentYear }} {{ t('footer.copyright') }}
         </p>
       </div>
     </div>
@@ -142,9 +140,11 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/store/auth.store';
+import { useI18n } from '@/composables/useI18n';
 
 const authStore = useAuthStore();
 const { isAuthenticated } = storeToRefs(authStore);
+const { t } = useI18n();
 
 const currentYear = new Date().getFullYear();
 </script>

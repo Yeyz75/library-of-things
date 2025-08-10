@@ -1,19 +1,22 @@
 import { ref } from 'vue';
 import { userService } from '@/services/userService';
 import { useUIStore } from '@/store/ui.store';
+import type { User } from '@/types';
 
 export function useUsers() {
-  const users = ref([]);
+  const users = ref<User[]>([]);
   const ui = useUIStore();
 
-  const loadUsers = async () => {
+  const loadUsers = async (): Promise<void> => {
     ui.setLoading(true);
     ui.clearError();
     try {
       const response = await userService.getCurrentUser();
-      users.value = [response]; // Ajusta según la estructura de tu API
+      users.value = [response as unknown as User];
     } catch (err) {
-      ui.setError(err.message || 'Error al cargar los usuarios');
+      const message =
+        err instanceof Error ? err.message : 'Error al cargar los usuarios';
+      ui.setError(message);
     } finally {
       ui.setLoading(false);
     }

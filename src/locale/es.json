@@ -617,5 +617,22 @@
     "confirm": "Confirmar",
     "retry": "Reintentar",
     "refresh": "Actualizar"
+  },
+  "footer": {
+    "description": "Comparte, pide prestado y descubre elementos increíbles en tu comunidad. Construyendo conexiones a través de recursos compartidos.",
+    "quickLinks": {
+      "title": "Enlaces Rápidos",
+      "browseItems": "Explorar Artículos",
+      "categories": "Categorías",
+      "dashboard": "Panel",
+      "signIn": "Iniciar Sesión"
+    },
+    "support": {
+      "title": "Soporte",
+      "helpCenter": "Centro de Ayuda",
+      "communityGuidelines": "Normas de la Comunidad",
+      "contactUs": "Contactanos"
+    },
+    "copyright": "Biblioteca de Cosas. Construido con ❤️ para comunidades que comparten."
   }
 }

@@ -211,7 +211,98 @@
           </div>
         </div>
       </div>
+
+      <!-- Reviews Section -->
+      <div class="mt-12">
+        <div class="border-t border-gray-200 dark:border-gray-700 pt-8">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-50">
+              Reviews & Ratings
+            </h2>
+            <div class="flex items-center space-x-4">
+              <div
+                v-if="currentItem.averageRating"
+                class="flex items-center space-x-2"
+              >
+                <StarRating
+                  :rating="currentItem.averageRating"
+                  :review-count="currentItem.totalReviews"
+                  :show-text="true"
+                />
+              </div>
+              <button
+                v-if="canLeaveReview"
+                @click="showCreateReviewModal = true"
+                class="btn-secondary"
+              >
+                <PlusIcon class="h-4 w-4 mr-2" />
+                Write Review
+              </button>
+            </div>
+          </div>
+
+          <!-- Reviews List -->
+          <div v-if="reviews.length > 0" class="space-y-6">
+            <ReviewCard
+              v-for="review in reviews"
+              :key="review.$id"
+              :review="review"
+            />
+
+            <!-- Load More Button -->
+            <div v-if="hasMoreReviews" class="text-center pt-4">
+              <button
+                @click="loadMoreReviews"
+                :disabled="reviewsLoading"
+                class="btn-secondary"
+              >
+                <BaseLoader v-if="reviewsLoading" size="sm" class="mr-2" />
+                {{ reviewsLoading ? 'Loading...' : 'Load More Reviews' }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div v-else class="text-center py-12">
+            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-8">
+              <h3
+                class="text-lg font-medium text-gray-900 dark:text-gray-50 mb-2"
+              >
+                No reviews yet
+              </h3>
+              <p class="text-gray-600 dark:text-gray-300 mb-4">
+                Be the first to review this item after borrowing it.
+              </p>
+              <button
+                v-if="canLeaveReview"
+                @click="showCreateReviewModal = true"
+                class="btn-primary"
+              >
+                Write First Review
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- Create Review Modal -->
+    <BaseModal
+      :is-open="showCreateReviewModal"
+      title="Write a Review"
+      @close="showCreateReviewModal = false"
+    >
+      <CreateReviewForm
+        v-if="currentItem && userId"
+        :reservation-id="''"
+        :item-id="currentItem.$id"
+        :reviewer-id="userId"
+        :reviewed-user-id="currentItem.ownerId"
+        :review-type="'borrower_to_owner'"
+        @submit="handleReviewCreated"
+        @cancel="showCreateReviewModal = false"
+      />
+    </BaseModal>
 
     <!-- Reserve Modal -->
     <ReserveModal
@@ -258,26 +349,36 @@ import {
   PencilIcon,
   TrashIcon,
   CalendarDaysIcon,
+  PlusIcon,
 } from '@heroicons/vue/24/outline';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import BaseLoader from '@/components/common/BaseLoader.vue';
 import BaseModal from '@/components/common/BaseModal.vue';
 import ReserveModal from '@/components/modals/ReserveModal.vue';
+import ReviewCard from '@/components/reviews/ReviewCard.vue';
+import StarRating from '@/components/reviews/StarRating.vue';
+import CreateReviewForm from '@/components/reviews/CreateReviewForm.vue';
 import { useAuthStore } from '@/store/auth.store';
 import { useItemsStore } from '@/store/items.store';
+import { useReviews } from '@/composables/useReviews';
 import { storeToRefs } from 'pinia';
 
 const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
 const itemsStore = useItemsStore();
+const { loadItemReviews, reviews, isLoading: reviewsLoading } = useReviews();
 
 const { isAuthenticated, userId } = storeToRefs(authStore);
 
 const currentImageIndex = ref(0);
 const showReserveModal = ref(false);
 const showDeleteModal = ref(false);
+const showCreateReviewModal = ref(false);
 const isDeleting = ref(false);
+const reviewsOffset = ref(0);
+const reviewsLimit = ref(5);
+const hasMoreReviews = ref(false);
 
 const currentItem = computed(() => itemsStore.currentItem);
 
@@ -288,6 +389,11 @@ const currentImageUrl = computed(() => {
 
 const isOwner = computed(() => {
   return userId.value && currentItem.value?.ownerId === userId.value;
+});
+
+const canLeaveReview = computed(() => {
+  return isAuthenticated.value && !isOwner.value;
+  // TODO: Add logic to check if user has actually borrowed this item
 });
 
 const categories = {
@@ -336,10 +442,44 @@ function handleReservationCreated() {
   // Could show a success message or redirect to reservations
 }
 
+function handleReviewCreated() {
+  showCreateReviewModal.value = false;
+  // Reload reviews to show the new one
+  loadItemReviewsData();
+}
+
+async function loadItemReviewsData() {
+  if (!currentItem.value) return;
+
+  reviewsOffset.value = 0;
+  const response = await loadItemReviews(
+    currentItem.value.$id,
+    reviewsLimit.value,
+    reviewsOffset.value
+  );
+
+  hasMoreReviews.value = response && response.length === reviewsLimit.value;
+}
+
+async function loadMoreReviews() {
+  if (!currentItem.value) return;
+
+  reviewsOffset.value += reviewsLimit.value;
+  const response = await loadItemReviews(
+    currentItem.value.$id,
+    reviewsLimit.value,
+    reviewsOffset.value
+  );
+
+  hasMoreReviews.value = response && response.length === reviewsLimit.value;
+}
+
 async function loadItem() {
   const itemId = route.params.id as string;
   if (itemId) {
     await itemsStore.fetchItemById(itemId);
+    // Load reviews after item is loaded
+    await loadItemReviewsData();
   }
 }
 
