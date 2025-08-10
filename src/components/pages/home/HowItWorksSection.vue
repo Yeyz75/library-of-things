@@ -78,8 +78,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
-
 // Define la interfaz para los pasos
 interface HowItWorksStep {
   icon: unknown; // Puedes especificar un tipo más estricto si sabes el tipo de los iconos

@@ -65,7 +65,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
 import { useMotion } from '@vueuse/motion';
 import BaseLoader from '@/components/common/BaseLoader.vue';
 import ItemCard from '@/components/common/ItemCard.vue';

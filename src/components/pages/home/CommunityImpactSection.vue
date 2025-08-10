@@ -162,7 +162,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
 import { useMotion } from '@vueuse/motion';
 const props = defineProps<{
   communityStats: any;

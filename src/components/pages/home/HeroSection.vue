@@ -128,7 +128,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useMotion } from '@vueuse/motion';
 
 // Define la interfaz para los stats de la comunidad
