@@ -1,6 +1,5 @@
 <template>
   <section
-    ref="whyItWorksSectionRef"
     class="animated-section py-20 bg-white dark:bg-gray-950"
     v-motion
     :initial="{ opacity: 0, y: 60 }"
@@ -64,14 +63,10 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, Ref } from 'vue';
-import { useMotion } from '@vueuse/motion';
+import { defineProps } from 'vue';
 import { AnyValue } from '@/types';
-const props = defineProps<{
+defineProps<{
   trustFeatures: AnyValue[];
   t: Function;
-  whyItWorksSectionRef: Ref<HTMLElement | null | undefined>;
 }>();
-
-useMotion(props.whyItWorksSectionRef);
 </script>

@@ -1,6 +1,5 @@
 <template>
   <section
-    :ref="howItWorksSectionRef"
     class="animated-section py-20 bg-primary-50 dark:bg-gray-900"
     v-motion
     :initial="{ opacity: 0, y: 60 }"
@@ -80,8 +79,6 @@
 
 <script setup lang="ts">
 import { defineProps } from 'vue';
-import { useMotion } from '@vueuse/motion';
-import type { Ref } from 'vue';
 
 // Define la interfaz para los pasos
 interface HowItWorksStep {
@@ -90,11 +87,8 @@ interface HowItWorksStep {
   description: string;
 }
 
-const props = defineProps<{
+defineProps<{
   howItWorksSteps: HowItWorksStep[];
   t: Function;
-  howItWorksSectionRef: Ref<HTMLElement | null>;
 }>();
-
-useMotion(props.howItWorksSectionRef);
 </script>

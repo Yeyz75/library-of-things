@@ -1,19 +1,20 @@
 <template>
   <AppLayout>
     <HeroSection
+      ref="heroSectionRef"
       :communityStats="communityStats"
       :t="t"
       :scrollToHowItWorks="scrollToHowItWorks"
     />
     <HowItWorksSection
+      ref="howItWorksSectionRef"
       :howItWorksSteps="howItWorksSteps"
       :t="t"
-      :howItWorksSectionRef="howItWorksSectionRef"
     />
     <WhyItWorksSection
+      ref="whyItWorksSectionRef"
       :trustFeatures="trustFeatures"
       :t="t"
-      :whyItWorksSectionRef="whyItWorksSectionRef"
     />
     <CommunityImpactSection
       :communityStats="communityStats"
@@ -83,10 +84,10 @@ const featuredItemsSectionRef = ref<HTMLElement | null>(null);
 const useScrollAnimation = (target: Ref<HTMLElement | null>) => {
   useIntersectionObserver(
     target,
-    ([{ isIntersecting }], observerElement) => {
-      if (isIntersecting && target.value) {
-        target.value.classList.add('is-visible');
-        observerElement.unobserve(target.value);
+    ([{ isIntersecting, target: element }], observer) => {
+      if (isIntersecting) {
+        element.classList.add('is-visible');
+        observer.unobserve(element);
       }
     },
     { threshold: 0.1 }
@@ -187,7 +188,10 @@ const featuredItems = computed(() => {
 });
 
 function scrollToHowItWorks() {
-  howItWorksSectionRef.value?.scrollIntoView({ behavior: 'smooth' });
+  const el = howItWorksSectionRef.value?.$el;
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth' });
+  }
 }
 
 async function loadItems() {
