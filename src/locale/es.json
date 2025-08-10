@@ -121,10 +121,81 @@
   },
   "home": {
     "hero": {
-      "title": "Comparte, Pide Prestado, Descubre",
-      "subtitle": "Bienvenido a la Biblioteca de Cosas - donde las comunidades comparten recursos y construyen conexiones a través de las cosas que poseemos.",
-      "getStarted": "Empezar",
-      "browseItems": "Explorar Artículos"
+      "badge": "Comunidad activa y creciendo",
+      "title": "Comparte, Pide Prestado, Construye Comunidad",
+      "subtitle": "Únete a miles de vecinos que están transformando la forma en que consumimos. Accede a lo que necesitas, comparte lo que tienes, y construye una comunidad más sostenible.",
+      "getStarted": "Únete Gratis",
+      "learnMore": "Cómo Funciona",
+      "stats": {
+        "itemsShared": "Artículos Compartidos",
+        "co2Saved": "CO₂ Ahorrado",
+        "moneySaved": "Ahorrado por la Comunidad"
+      }
+    },
+    "howItWorks": {
+      "title": "Cómo Funciona",
+      "subtitle": "Tres pasos simples para comenzar a compartir y pedir prestado en tu comunidad",
+      "steps": {
+        "discover": {
+          "title": "Descubre",
+          "description": "Explora miles de artículos disponibles en tu área. Desde herramientas hasta libros, encuentra exactamente lo que necesitas."
+        },
+        "connect": {
+          "title": "Conecta",
+          "description": "Contacta directamente con tus vecinos. Coordina la recogida y devolución de manera fácil y segura."
+        },
+        "share": {
+          "title": "Comparte",
+          "description": "Agrega tus propios artículos y ayuda a otros mientras generas ingresos extra y reduces el desperdicio."
+        }
+      }
+    },
+    "whyItWorks": {
+      "title": "Por Qué Confiar en Nosotros",
+      "subtitle": "Construimos confianza a través de transparencia, seguridad y una comunidad comprometida",
+      "features": {
+        "verified": {
+          "title": "Usuarios Verificados",
+          "description": "Todos los miembros pasan por un proceso de verificación para garantizar la seguridad de la comunidad."
+        },
+        "ratings": {
+          "title": "Sistema de Calificaciones",
+          "description": "Califica y revisa cada intercambio para mantener altos estándares de calidad y confianza."
+        },
+        "secure": {
+          "title": "Transacciones Seguras",
+          "description": "Plataforma segura con protección de datos y comunicación encriptada entre usuarios."
+        },
+        "community": {
+          "title": "Comunidad Local",
+          "description": "Conecta con vecinos reales en tu área, construyendo relaciones duraderas y confianza mutua."
+        },
+        "local": {
+          "title": "Impacto Local",
+          "description": "Fortalece tu comunidad local mientras reduces tu huella ambiental y ahorras dinero."
+        },
+        "free": {
+          "title": "Gratis para Usar",
+          "description": "Sin tarifas ocultas ni comisiones. Comparte y pide prestado libremente en tu comunidad."
+        }
+      }
+    },
+    "impact": {
+      "title": "El Impacto de Nuestra Comunidad",
+      "subtitle": "Juntos estamos creando un futuro más sostenible, una transacción a la vez. Cada artículo compartido reduce el desperdicio y fortalece los lazos comunitarios.",
+      "co2Prevented": "CO₂ Evitado",
+      "communitySavings": "Ahorros Comunitarios",
+      "joinCommunity": "Únete a la Comunidad",
+      "testimonial": {
+        "quote": "He ahorrado cientos de euros y conocido a vecinos increíbles. Esta plataforma realmente está cambiando nuestra comunidad.",
+        "author": "María González",
+        "role": "Miembro desde 2023"
+      }
+    },
+    "featuredItems": {
+      "title": "Artículos Destacados",
+      "subtitle": "Algunos de los artículos más populares disponibles ahora en tu comunidad",
+      "browseAll": "Ver Todos los Artículos"
     },
     "categories": {
       "title": "Categorías Populares",

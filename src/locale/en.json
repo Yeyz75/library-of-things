@@ -121,10 +121,81 @@
   },
   "home": {
     "hero": {
-      "title": "Share, Borrow, Discover",
-      "subtitle": "Welcome to the Library of Things - where communities share resources and build connections through the things we own.",
-      "getStarted": "Get Started",
-      "browseItems": "Browse Items"
+      "badge": "Active and growing community",
+      "title": "Share, Borrow, Build Community",
+      "subtitle": "Join thousands of neighbors transforming how we consume. Access what you need, share what you have, and build a more sustainable community.",
+      "getStarted": "Join Free",
+      "learnMore": "How It Works",
+      "stats": {
+        "itemsShared": "Items Shared",
+        "co2Saved": "CO₂ Saved",
+        "moneySaved": "Community Savings"
+      }
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "subtitle": "Three simple steps to start sharing and borrowing in your community",
+      "steps": {
+        "discover": {
+          "title": "Discover",
+          "description": "Browse thousands of items available in your area. From tools to books, find exactly what you need."
+        },
+        "connect": {
+          "title": "Connect",
+          "description": "Contact neighbors directly. Coordinate pickup and return easily and safely."
+        },
+        "share": {
+          "title": "Share",
+          "description": "Add your own items and help others while earning extra income and reducing waste."
+        }
+      }
+    },
+    "whyItWorks": {
+      "title": "Why Trust Us",
+      "subtitle": "We build trust through transparency, security, and a committed community",
+      "features": {
+        "verified": {
+          "title": "Verified Users",
+          "description": "All members go through a verification process to ensure community safety."
+        },
+        "ratings": {
+          "title": "Rating System",
+          "description": "Rate and review every exchange to maintain high standards of quality and trust."
+        },
+        "secure": {
+          "title": "Secure Transactions",
+          "description": "Safe platform with data protection and encrypted communication between users."
+        },
+        "community": {
+          "title": "Local Community",
+          "description": "Connect with real neighbors in your area, building lasting relationships and mutual trust."
+        },
+        "local": {
+          "title": "Local Impact",
+          "description": "Strengthen your local community while reducing your environmental footprint and saving money."
+        },
+        "free": {
+          "title": "Free to Use",
+          "description": "No hidden fees or commissions. Share and borrow freely in your community."
+        }
+      }
+    },
+    "impact": {
+      "title": "Our Community's Impact",
+      "subtitle": "Together we're creating a more sustainable future, one transaction at a time. Every shared item reduces waste and strengthens community bonds.",
+      "co2Prevented": "CO₂ Prevented",
+      "communitySavings": "Community Savings",
+      "joinCommunity": "Join the Community",
+      "testimonial": {
+        "quote": "I've saved hundreds of dollars and met amazing neighbors. This platform is truly changing our community.",
+        "author": "Sarah Johnson",
+        "role": "Member since 2023"
+      }
+    },
+    "featuredItems": {
+      "title": "Featured Items",
+      "subtitle": "Some of the most popular items available now in your community",
+      "browseAll": "Browse All Items"
     },
     "categories": {
       "title": "Popular Categories",
