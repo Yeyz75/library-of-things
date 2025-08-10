@@ -1,0 +1,56 @@
+{
+  "close": "Close",
+  "accept": "Accept",
+  "yes": "Yes",
+  "no": "No",
+  "alert": {
+    "toExit": {
+      "title": "Are you sure you want to exit?",
+      "message": "The changes you have made will not be saved."
+    },
+    "toSave": {
+      "title": "Are you sure you want to save?",
+      "message": "The changes you have made will be saved"
+    }
+  },
+  "browseItems": {
+    "title": "Browse Items",
+    "getStarted": "Get Started"
+  },
+  "app": {
+    "title": "Library of Things"
+  },
+  "home": {
+    "hero": {
+      "title": "Share, Borrow, Discover",
+      "subtitle": "Welcome to the Library of Things - where communities share resources and build connections through the things we own.",
+      "getStarted": "Get Started",
+      "browseItems": "Browse Items"
+    },
+    "categories": {
+      "title": "Popular Categories",
+      "subtitle": "Discover amazing items across different categories",
+      "tools": "Tools",
+      "electronics": "Electronics",
+      "books": "Books",
+      "sports": "Sports",
+      "home": "Home",
+      "garden": "Garden",
+      "games": "Games",
+      "other": "Other"
+    },
+    "items": {
+      "title": "Recent Items",
+      "allCategories": "All Categories",
+      "loading": "Loading items...",
+      "error": "Failed to load items",
+      "tryAgain": "Try Again",
+      "noItems": "No items found",
+      "noItemsInCategory": "No items in this category",
+      "noItemsDescription": "Be the first to share an item with the community!",
+      "noItemsCategoryDescription": "Try selecting a different category or clearing your filters.",
+      "addFirstItem": "Add First Item",
+      "signUpToAdd": "Sign Up to Add Items"
+    }
+  }
+}

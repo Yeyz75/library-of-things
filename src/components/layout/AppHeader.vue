@@ -51,6 +51,9 @@
 
         <!-- User Menu / Auth Buttons -->
         <div class="flex items-center space-x-4">
+          <!-- Language Toggle -->
+          <LanguageToggle />
+
           <!-- Theme Toggle -->
           <ThemeToggle />
 
@@ -198,6 +201,7 @@ import { useAuthStore } from '@/store/auth.store';
 import { useThemeStore } from '@/store/theme.store';
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
 import ThemeToggle from '@/components/common/ThemeToggle.vue';
+import LanguageToggle from '@/components/common/LanguageToggle.vue';
 
 const router = useRouter();
 const authStore = useAuthStore();

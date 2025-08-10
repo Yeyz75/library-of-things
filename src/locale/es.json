@@ -1,0 +1,56 @@
+{
+  "close": "Cerrar",
+  "accept": "Aceptar",
+  "yes": "Sí",
+  "no": "No",
+  "alert": {
+    "toExit": {
+      "title": "¿Está seguro que quiere salir?",
+      "message": "Los cambios que ha realizado no serán guardados."
+    },
+    "toSave": {
+      "title": "¿Está seguro de guardar?",
+      "message": "Los cambios que ha realizado serán guardados"
+    }
+  },
+  "browseItems": {
+    "title": "Explorar artículos",
+    "getStarted": "Empezar"
+  },
+  "app": {
+    "title": "Biblioteca de Cosas"
+  },
+  "home": {
+    "hero": {
+      "title": "Comparte, Pide Prestado, Descubre",
+      "subtitle": "Bienvenido a la Biblioteca de Cosas - donde las comunidades comparten recursos y construyen conexiones a través de las cosas que poseemos.",
+      "getStarted": "Empezar",
+      "browseItems": "Explorar Artículos"
+    },
+    "categories": {
+      "title": "Categorías Populares",
+      "subtitle": "Descubre artículos increíbles en diferentes categorías",
+      "tools": "Herramientas",
+      "electronics": "Electrónicos",
+      "books": "Libros",
+      "sports": "Deportes",
+      "home": "Hogar",
+      "garden": "Jardín",
+      "games": "Juegos",
+      "other": "Otros"
+    },
+    "items": {
+      "title": "Artículos Recientes",
+      "allCategories": "Todas las Categorías",
+      "loading": "Cargando artículos...",
+      "error": "Error al cargar artículos",
+      "tryAgain": "Intentar de nuevo",
+      "noItems": "No se encontraron artículos",
+      "noItemsInCategory": "No hay artículos en esta categoría",
+      "noItemsDescription": "¡Sé el primero en compartir un artículo con la comunidad!",
+      "noItemsCategoryDescription": "Intenta seleccionar una categoría diferente o limpia tus filtros.",
+      "addFirstItem": "Agregar Primer Artículo",
+      "signUpToAdd": "Regístrate para Agregar Artículos"
+    }
+  }
+}

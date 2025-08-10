@@ -8,18 +8,12 @@
         <div class="text-center max-w-4xl mx-auto">
           <h1
             class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-gray-100 mb-6 animate-fade-in"
-          >
-            Share, Borrow,
-            <span
-              class="text-primary-600 dark:text-primary-400 gradient-primary bg-clip-text text-transparent"
-              >Discover</span
-            >
-          </h1>
+            v-html="t('home.hero.title')"
+          ></h1>
           <p
             class="text-xl text-gray-600 dark:text-gray-300 mb-8 animate-slide-up"
           >
-            Welcome to the Library of Things - where communities share resources
-            and build connections through the things we own.
+            {{ t('home.hero.subtitle') }}
           </p>
           <div
             class="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up"
@@ -28,13 +22,13 @@
               to="/register"
               class="btn-primary text-lg px-8 py-3 hover-lift"
             >
-              Get Started
+              {{ t('home.hero.getStarted') }}
             </router-link>
             <button
               @click="scrollToItems"
               class="btn-secondary text-lg px-8 py-3 hover-lift"
             >
-              Browse Items
+              {{ t('home.hero.browseItems') }}
             </button>
           </div>
         </div>
@@ -48,10 +42,10 @@
       <div class="container">
         <div class="text-center mb-12">
           <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-            Popular Categories
+            {{ t('home.categories.title') }}
           </h2>
           <p class="text-lg text-gray-600 dark:text-gray-300">
-            Discover amazing items across different categories
+            {{ t('home.categories.subtitle') }}
           </p>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -87,7 +81,7 @@
       <div class="container">
         <div class="flex items-center justify-between mb-8">
           <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100">
-            Recent Items
+            {{ t('home.items.title') }}
           </h2>
           <div class="flex items-center space-x-4">
             <select
@@ -95,7 +89,7 @@
               @change="handleCategoryFilter"
               class="input max-w-xs"
             >
-              <option value="">All Categories</option>
+              <option value="">{{ t('home.items.allCategories') }}</option>
               <option
                 v-for="category in categories"
                 :key="category.key"
@@ -109,7 +103,7 @@
 
         <!-- Loading State -->
         <div v-if="itemsStore.isLoading" class="text-center py-12">
-          <BaseLoader size="lg" text="Loading items..." />
+          <BaseLoader size="lg" :text="t('home.items.loading')" />
         </div>
 
         <!-- Error State -->
@@ -117,10 +111,10 @@
           <div
             class="bg-error-50 dark:bg-error-900/20 text-error-600 dark:text-error-400 p-6 rounded-lg max-w-md mx-auto border border-error-200 dark:border-error-800"
           >
-            <p class="font-medium">Failed to load items</p>
+            <p class="font-medium">{{ t('home.items.error') }}</p>
             <p class="text-sm mt-1">{{ itemsStore.error }}</p>
             <button @click="loadItems" class="btn-primary mt-4">
-              Try Again
+              {{ t('home.items.tryAgain') }}
             </button>
           </div>
         </div>
@@ -146,15 +140,19 @@
           v-else
           type="no-items"
           :title="
-            selectedCategory ? 'No items in this category' : 'No items found'
+            selectedCategory
+              ? t('home.items.noItemsInCategory')
+              : t('home.items.noItems')
           "
           :description="
             selectedCategory
-              ? 'Try selecting a different category or clearing your filters.'
-              : 'Be the first to share an item with the community!'
+              ? t('home.items.noItemsCategoryDescription')
+              : t('home.items.noItemsDescription')
           "
           :action-text="
-            isAuthenticated ? 'Add First Item' : 'Sign Up to Add Items'
+            isAuthenticated
+              ? t('home.items.addFirstItem')
+              : t('home.items.signUpToAdd')
           "
           @action="
             isAuthenticated
@@ -185,27 +183,37 @@ import EmptyState from '@/components/common/EmptyState.vue';
 import { useItemsStore } from '@/store/items.store';
 import { useAuthStore } from '@/store/auth.store';
 import { useToast } from '@/composables/useToast';
+import { useI18n } from '@/composables/useI18n';
 import { Item } from '@/types';
 
 const itemsStore = useItemsStore();
 const authStore = useAuthStore();
 const toast = useToast();
+const { t } = useI18n();
 
 const { isAuthenticated } = storeToRefs(authStore);
 
 const selectedCategory = ref('');
 const itemsSection = ref<HTMLElement>();
 
-const categories = [
-  { key: 'tools', name: 'Tools', icon: WrenchScrewdriverIcon },
-  { key: 'electronics', name: 'Electronics', icon: ComputerDesktopIcon },
-  { key: 'books', name: 'Books', icon: BookOpenIcon },
-  { key: 'sports', name: 'Sports', icon: PlayIcon },
-  { key: 'home', name: 'Home', icon: HomeIcon },
-  { key: 'garden', name: 'Garden', icon: HomeIcon },
-  { key: 'games', name: 'Games', icon: PlayIcon },
-  { key: 'other', name: 'Other', icon: PhotoIcon },
-];
+const categories = computed(() => [
+  {
+    key: 'tools',
+    name: t('home.categories.tools'),
+    icon: WrenchScrewdriverIcon,
+  },
+  {
+    key: 'electronics',
+    name: t('home.categories.electronics'),
+    icon: ComputerDesktopIcon,
+  },
+  { key: 'books', name: t('home.categories.books'), icon: BookOpenIcon },
+  { key: 'sports', name: t('home.categories.sports'), icon: PlayIcon },
+  { key: 'home', name: t('home.categories.home'), icon: HomeIcon },
+  { key: 'garden', name: t('home.categories.garden'), icon: HomeIcon },
+  { key: 'games', name: t('home.categories.games'), icon: PlayIcon },
+  { key: 'other', name: t('home.categories.other'), icon: PhotoIcon },
+]);
 
 const displayedItems = computed(() => {
   if (!selectedCategory.value) {
