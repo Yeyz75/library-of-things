@@ -130,78 +130,38 @@
           v-else-if="displayedItems.length > 0"
           class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
         >
-          <div
+          <ItemCard
             v-for="item in displayedItems"
             :key="item.$id"
-            class="card hover:shadow-lg dark:hover:shadow-2xl transition-all duration-300 cursor-pointer hover-lift hover-glow"
+            :item="item"
+            :categories="categories"
             @click="$router.push(`/items/${item.$id}`)"
-          >
-            <div
-              class="aspect-square bg-gray-200 dark:bg-gray-700 rounded-lg mb-4 overflow-hidden"
-            >
-              <img
-                v-if="item.imageUrls?.[0]"
-                :src="item.imageUrls[0]"
-                :alt="item.title"
-                class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-              />
-              <div
-                v-else
-                class="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-500"
-              >
-                <PhotoIcon class="h-16 w-16" />
-              </div>
-            </div>
-            <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">
-              {{ item.title }}
-            </h3>
-            <p
-              class="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2"
-            >
-              {{ item.description }}
-            </p>
-            <div class="flex items-center justify-between">
-              <span
-                class="inline-block bg-primary-100 dark:bg-primary-900/20 text-primary-800 dark:text-primary-300 text-xs font-medium px-2.5 py-0.5 rounded"
-              >
-                {{ getCategoryName(item.category) }}
-              </span>
-              <span
-                class="status-badge text-xs font-medium px-2.5 py-0.5 rounded"
-                :class="item.isAvailable ? 'success' : 'neutral'"
-              >
-                {{ item.isAvailable ? 'Available' : 'Borrowed' }}
-              </span>
-            </div>
-          </div>
+            @reserve="handleReserve"
+            @share="handleShare"
+          />
         </div>
 
         <!-- Empty State -->
-        <div v-else class="text-center py-12">
-          <PhotoIcon
-            class="h-24 w-24 mx-auto text-gray-300 dark:text-gray-600 mb-4"
-          />
-          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
-            No items found
-          </h3>
-          <p class="text-gray-600 dark:text-gray-300 mb-6">
-            {{
-              selectedCategory
-                ? 'No items in this category yet.'
-                : 'Be the first to share an item!'
-            }}
-          </p>
-          <router-link
-            v-if="isAuthenticated"
-            to="/items/new"
-            class="btn-primary hover-lift"
-          >
-            Add First Item
-          </router-link>
-          <router-link v-else to="/register" class="btn-primary hover-lift">
-            Sign Up to Add Items
-          </router-link>
-        </div>
+        <EmptyState
+          v-else
+          type="no-items"
+          :title="
+            selectedCategory ? 'No items in this category' : 'No items found'
+          "
+          :description="
+            selectedCategory
+              ? 'Try selecting a different category or clearing your filters.'
+              : 'Be the first to share an item with the community!'
+          "
+          :action-text="
+            isAuthenticated ? 'Add First Item' : 'Sign Up to Add Items'
+          "
+          @action="
+            isAuthenticated
+              ? $router.push('/items/new')
+              : $router.push('/register')
+          "
+        />
       </div>
     </section>
   </AppLayout>
@@ -220,11 +180,16 @@ import {
 } from '@heroicons/vue/24/outline';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import BaseLoader from '@/components/common/BaseLoader.vue';
+import ItemCard from '@/components/common/ItemCard.vue';
+import EmptyState from '@/components/common/EmptyState.vue';
 import { useItemsStore } from '@/store/items.store';
 import { useAuthStore } from '@/store/auth.store';
+import { useToast } from '@/composables/useToast';
+import { Item } from '@/types';
 
 const itemsStore = useItemsStore();
 const authStore = useAuthStore();
+const toast = useToast();
 
 const { isAuthenticated } = storeToRefs(authStore);
 
@@ -251,11 +216,6 @@ const displayedItems = computed(() => {
   );
 });
 
-function getCategoryName(categoryKey: string): string {
-  const category = categories.find((c) => c.key === categoryKey);
-  return category?.name || categoryKey;
-}
-
 function scrollToItems() {
   itemsSection.value?.scrollIntoView({ behavior: 'smooth' });
 }
@@ -270,7 +230,39 @@ function handleCategoryFilter() {
 }
 
 async function loadItems() {
-  await itemsStore.fetchItems({ limit: 20 });
+  try {
+    await itemsStore.fetchItems({ limit: 20 });
+  } catch {
+    toast.error('Failed to load items. Please try again.');
+  }
+}
+
+function handleReserve(item: Item) {
+  if (!isAuthenticated.value) {
+    toast.warning('Please sign in to reserve items', 'Authentication Required');
+    return;
+  }
+  // TODO: Implement reservation logic
+  toast.success(
+    `Reservation request sent for "${item.title}"`,
+    'Reservation Requested'
+  );
+}
+
+function handleShare(item: Item) {
+  if (navigator.share) {
+    navigator.share({
+      title: item.title,
+      text: item.description,
+      url: `${window.location.origin}/items/${item.$id}`,
+    });
+  } else {
+    // Fallback: copy to clipboard
+    navigator.clipboard.writeText(
+      `${window.location.origin}/items/${item.$id}`
+    );
+    toast.success('Link copied to clipboard!', 'Shared');
+  }
 }
 
 onMounted(() => {

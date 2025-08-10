@@ -1,4 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Global types and interfaces
+
+export interface AnyValue {
+  [key: string]: any;
+}
 
 export interface User {
   $id: string;
@@ -24,6 +29,10 @@ export interface Item {
   tags: string[];
   $createdAt: string;
   $updatedAt: string;
+  // Optional properties for search/display
+  distance?: number;
+  rating?: number;
+  reviewCount?: number;
 }
 
 export interface Reservation {
@@ -67,3 +76,14 @@ export type ItemCategory =
   | 'other';
 
 export type ReservationStatus = Reservation['status'];
+
+export interface FilterOptions {
+  categories: string[];
+  availableOnly: boolean;
+  maxDistance: number;
+  minRating: number | null;
+  availableFrom: string;
+  availableTo: string;
+  tags: string[];
+  sortBy: string;
+}
