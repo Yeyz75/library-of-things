@@ -1,6 +1,6 @@
 <template>
   <header
-    class="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-800 transition-colors duration-300"
+    class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-800 transition-colors duration-300"
   >
     <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
@@ -22,30 +22,52 @@
           </router-link>
         </div>
 
+        <!-- Search Bar - Always visible -->
+        <div class="flex-1 max-w-lg mx-8 hidden md:block">
+          <SearchBar
+            :placeholder="t('searchBar.placeholder')"
+            @search="handleSearch"
+            class="w-full"
+          />
+        </div>
+
         <!-- Desktop Navigation -->
-        <div class="hidden md:flex items-center space-x-8">
+        <div class="hidden md:flex items-center space-x-6">
           <router-link
             to="/"
             class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
           >
-            {{ t('header.browseItems') }}
+            {{ t('header.home') }}
           </router-link>
           <router-link
-            v-if="isAuthenticated"
-            to="/dashboard"
+            to="/categories"
             class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
           >
-            {{ t('header.dashboard') }}
+            {{ t('header.catalog') }}
           </router-link>
           <router-link
             v-if="isAuthenticated"
-            to="/items/new"
+            to="/reservations"
             class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
           >
-            {{ t('header.addItem') }}
+            {{ t('header.myReservations') }}
+          </router-link>
+          <router-link
+            to="/donations"
+            class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
+          >
+            {{ t('header.donations') }}
+          </router-link>
+          <router-link
+            to="/help"
+            class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
+          >
+            {{ t('header.help') }}
           </router-link>
         </div>
 
@@ -159,6 +181,15 @@
           v-if="showMobileMenu"
           class="md:hidden py-3 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900"
         >
+          <!-- Mobile Search Bar -->
+          <div class="px-3 pb-3">
+            <SearchBar
+              :placeholder="t('searchBar.placeholder')"
+              @search="handleSearch"
+              class="w-full"
+            />
+          </div>
+
           <div class="space-y-1">
             <router-link
               to="/"
@@ -166,25 +197,40 @@
               active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
               @click="showMobileMenu = false"
             >
-              {{ t('header.browseItems') }}
+              {{ t('header.home') }}
             </router-link>
             <router-link
-              v-if="isAuthenticated"
-              to="/dashboard"
+              to="/categories"
               class="block px-3 py-2 text-base font-medium text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-colors"
               active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
               @click="showMobileMenu = false"
             >
-              {{ t('header.dashboard') }}
+              {{ t('header.catalog') }}
             </router-link>
             <router-link
               v-if="isAuthenticated"
-              to="/items/new"
+              to="/reservations"
               class="block px-3 py-2 text-base font-medium text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-colors"
               active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
               @click="showMobileMenu = false"
             >
-              {{ t('header.addItem') }}
+              {{ t('header.myReservations') }}
+            </router-link>
+            <router-link
+              to="/donations"
+              class="block px-3 py-2 text-base font-medium text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-colors"
+              active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
+              @click="showMobileMenu = false"
+            >
+              {{ t('header.donations') }}
+            </router-link>
+            <router-link
+              to="/help"
+              class="block px-3 py-2 text-base font-medium text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-colors"
+              active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
+              @click="showMobileMenu = false"
+            >
+              {{ t('header.help') }}
             </router-link>
           </div>
         </div>
@@ -203,6 +249,7 @@ import { useI18n } from '@/composables/useI18n';
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
 import ThemeToggle from '@/components/common/ThemeToggle.vue';
 import LanguageToggle from '@/components/common/LanguageToggle.vue';
+import SearchBar from '@/components/common/SearchBar.vue';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -227,5 +274,26 @@ async function handleSignOut() {
   } catch (error) {
     console.error('Error signing out:', error);
   }
+}
+
+function handleSearch(query: string, filters: any) {
+  // Close mobile menu if open
+  showMobileMenu.value = false;
+
+  // Navigate to search results or home page with search params
+  const queryParams: Record<string, string> = { search: query };
+
+  if (filters && typeof filters === 'object') {
+    Object.keys(filters).forEach((key) => {
+      if (filters[key]) {
+        queryParams[key] = filters[key];
+      }
+    });
+  }
+
+  router.push({
+    path: '/',
+    query: queryParams,
+  });
 }
 </script>

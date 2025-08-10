@@ -1,12 +1,34 @@
 <template>
   <AppLayout>
-    <div class="container py-8">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="mb-6">
+        <button
+          @click="$router.go(-1)"
+          class="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+        >
+          <svg
+            class="h-5 w-5 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            ></path>
+          </svg>
+          {{ t('common.back') }}
+        </button>
+      </div>
+
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-50">
-          Browse by Category
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">
+          {{ t('categories.title') }}
         </h1>
-        <p class="text-gray-600 dark:text-gray-300 mt-2">
-          Find exactly what you're looking for
+        <p class="text-gray-600 dark:text-gray-400 mt-2">
+          {{ t('categories.subtitle') }}
         </p>
       </div>
 
@@ -18,25 +40,29 @@
           v-for="category in categories"
           :key="category.key"
           :to="`/?category=${category.key}`"
-          class="card hover:shadow-md transition-all duration-200 hover:-translate-y-1 cursor-pointer group"
+          class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-all duration-200 hover:-translate-y-1 cursor-pointer group"
         >
           <div class="text-center">
             <div
-              class="bg-gray-100 dark:bg-gray-700 rounded-full p-6 mb-4 group-hover:bg-primary-100 transition-colors"
+              class="bg-gray-100 dark:bg-gray-700 rounded-full p-6 mb-4 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/20 transition-colors"
             >
               <component
                 :is="category.icon"
-                class="h-12 w-12 mx-auto text-gray-600 group-hover:text-primary-600 transition-colors"
+                class="h-12 w-12 mx-auto text-gray-600 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors"
               />
             </div>
             <h3
-              class="font-semibold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors"
+              class="font-semibold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors"
             >
-              {{ category.name }}
+              {{ t(`items.categories.${category.key}`) }}
             </h3>
-            <p class="text-gray-600 text-sm mb-4">{{ category.description }}</p>
-            <div class="text-sm text-primary-600 font-medium">
-              {{ category.count }} items →
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+              {{ t(`categories.descriptions.${category.key}`) }}
+            </p>
+            <div
+              class="text-sm text-primary-600 dark:text-primary-400 font-medium"
+            >
+              {{ t('categories.itemCount', { count: category.count }) }}
             </div>
           </div>
         </router-link>
@@ -57,64 +83,48 @@ import {
   SparklesIcon,
   EllipsisHorizontalIcon,
 } from '@heroicons/vue/24/outline';
-import AppLayout from '@/components/layout/AppLayout.vue';
 import { useItemsStore } from '@/store/items.store';
+import { useI18n } from '@/composables/useI18n';
+import AppLayout from '@/components/layout/AppLayout.vue';
 
 const itemsStore = useItemsStore();
+const { t } = useI18n();
 
 const categoriesData = [
   {
     key: 'tools',
-    name: 'Tools',
-    description: 'Power tools, hand tools, and workshop equipment',
     icon: WrenchScrewdriverIcon,
   },
   {
     key: 'electronics',
-    name: 'Electronics',
-    description: 'Gadgets, cameras, audio equipment, and tech gear',
     icon: ComputerDesktopIcon,
   },
   {
     key: 'books',
-    name: 'Books',
-    description: 'Educational, fiction, cookbooks, and reference materials',
     icon: BookOpenIcon,
   },
   {
     key: 'sports',
-    name: 'Sports & Recreation',
-    description: 'Sports equipment, outdoor gear, and fitness accessories',
     icon: PlayIcon,
   },
   {
     key: 'home',
-    name: 'Home & Kitchen',
-    description: 'Appliances, cookware, and household items',
     icon: HomeIcon,
   },
   {
     key: 'garden',
-    name: 'Garden & Outdoor',
-    description: 'Gardening tools, outdoor furniture, and yard equipment',
     icon: BeakerIcon,
   },
   {
     key: 'clothing',
-    name: 'Clothing & Accessories',
-    description: 'Fashion items, special occasion wear, and accessories',
     icon: SparklesIcon,
   },
   {
     key: 'games',
-    name: 'Games & Toys',
-    description: 'Board games, video games, toys, and entertainment',
     icon: PlayIcon,
   },
   {
     key: 'other',
-    name: 'Other',
-    description: 'Everything else you can imagine sharing',
     icon: EllipsisHorizontalIcon,
   },
 ];

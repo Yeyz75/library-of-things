@@ -106,11 +106,15 @@
     "goToDashboard": "Ir al Panel"
   },
   "header": {
+    "home": "Inicio",
+    "catalog": "Catálogo",
     "browseItems": "Explorar Artículos",
     "dashboard": "Panel",
     "addItem": "Agregar Artículo",
     "profile": "Perfil",
-    "myReservations": "Mis Reservas",
+    "myReservations": "Mis Préstamos/Reserva",
+    "donations": "Donaciones",
+    "help": "Ayuda/FAQ",
     "signOut": "Cerrar Sesión",
     "signIn": "Iniciar Sesión",
     "signUp": "Registrarse"
@@ -404,6 +408,118 @@
     "noReservations": {
       "title": "No hay reservas",
       "description": "Tus reservas y artículos prestados aparecerán aquí."
+    }
+  },
+  "donations": {
+    "title": "Donaciones",
+    "subtitle": "Apoya nuestra comunidad y ayuda a que la Biblioteca de Cosas siga creciendo",
+    "donateItems": {
+      "title": "Donar Artículos",
+      "description": "Comparte artículos que ya no uses con la comunidad",
+      "action": "Agregar Artículo"
+    },
+    "monetary": {
+      "title": "Donación Monetaria",
+      "description": "Ayuda a mantener la plataforma y apoyar a la comunidad",
+      "action": "Hacer Donación"
+    },
+    "impact": {
+      "title": "Tu Impacto",
+      "itemsShared": "Artículos Compartidos",
+      "membersHelped": "Miembros Ayudados",
+      "moneySaved": "Dinero Ahorrado por la Comunidad"
+    },
+    "howItWorks": {
+      "title": "Cómo Funciona",
+      "step1": {
+        "title": "Elige Qué Donar",
+        "description": "Decide si quieres donar artículos físicos o hacer una contribución monetaria"
+      },
+      "step2": {
+        "title": "Comparte con la Comunidad",
+        "description": "Tus donaciones ayudan a otros miembros a acceder a recursos que necesitan"
+      },
+      "step3": {
+        "title": "Ve el Impacto",
+        "description": "Observa cómo tus contribuciones fortalecen nuestra comunidad"
+      }
+    },
+    "modal": {
+      "title": "Hacer Donación",
+      "description": "Tu donación nos ayuda a mantener la plataforma y apoyar a nuestra comunidad.",
+      "customAmount": "Cantidad Personalizada",
+      "customAmountPlaceholder": "Ingresa una cantidad",
+      "donate": "Donar",
+      "success": "¡Gracias por tu donación! Tu apoyo significa mucho para nuestra comunidad."
+    }
+  },
+  "help": {
+    "title": "Ayuda y Preguntas Frecuentes",
+    "subtitle": "Encuentra respuestas a tus preguntas o contacta a nuestro equipo de soporte",
+    "searchPlaceholder": "Buscar en las preguntas frecuentes...",
+    "categories": {
+      "borrowing": {
+        "title": "Pedir Prestado",
+        "description": "Cómo solicitar y usar artículos de otros miembros"
+      },
+      "lending": {
+        "title": "Prestar",
+        "description": "Compartir tus artículos con la comunidad"
+      },
+      "account": {
+        "title": "Cuenta",
+        "description": "Gestionar tu perfil y configuración"
+      }
+    },
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "items": {
+        "howToBorrow": {
+          "question": "¿Cómo puedo pedir prestado un artículo?",
+          "answer": "Para pedir prestado un artículo, busca el artículo que necesitas, haz clic en 'Solicitar Préstamo' y espera la aprobación del propietario. Una vez aprobado, podrás coordinar la recogida."
+        },
+        "howToLend": {
+          "question": "¿Cómo puedo prestar mis artículos?",
+          "answer": "Puedes agregar artículos haciendo clic en 'Agregar Artículo' en tu panel. Agrega fotos, descripción y detalles. Los miembros podrán solicitar prestados tus artículos."
+        },
+        "safety": {
+          "question": "¿Es seguro prestar mis artículos?",
+          "answer": "Todos los miembros están verificados y tenemos un sistema de calificaciones. También recomendamos conocer a los prestatarios en persona y establecer expectativas claras."
+        },
+        "pricing": {
+          "question": "¿Cuánto cuesta usar la plataforma?",
+          "answer": "La plataforma es gratuita para usar. No cobramos por prestar o pedir prestado artículos. Las donaciones voluntarias ayudan a mantener el servicio."
+        },
+        "disputes": {
+          "question": "¿Qué pasa si hay un problema con un préstamo?",
+          "answer": "Si hay algún problema, contacta a nuestro equipo de soporte. Mediamos disputas y ayudamos a resolver problemas entre miembros."
+        },
+        "insurance": {
+          "question": "¿Están asegurados los artículos?",
+          "answer": "Recomendamos que los propietarios verifiquen su seguro personal. La plataforma no proporciona cobertura de seguro para artículos prestados."
+        },
+        "deleteAccount": {
+          "question": "¿Cómo puedo eliminar mi cuenta?",
+          "answer": "Puedes eliminar tu cuenta desde la configuración de tu perfil. Ten en cuenta que esto eliminará permanentemente todos tus datos."
+        },
+        "privacy": {
+          "question": "¿Cómo protegen mi privacidad?",
+          "answer": "Tomamos la privacidad en serio. Solo compartimos la información necesaria para facilitar los préstamos. Lee nuestra política de privacidad para más detalles."
+        }
+      }
+    },
+    "contact": {
+      "title": "¿Aún necesitas ayuda?",
+      "description": "Nuestro equipo de soporte está aquí para ayudarte con cualquier pregunta o problema.",
+      "email": "Enviar Email",
+      "chat": "Chat en Vivo"
+    },
+    "contactModal": {
+      "title": "Contactar Soporte",
+      "subject": "Asunto",
+      "message": "Mensaje",
+      "send": "Enviar",
+      "success": "Tu mensaje ha sido enviado. Nos pondremos en contacto contigo pronto."
     }
   },
   "common": {

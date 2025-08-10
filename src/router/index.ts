@@ -70,6 +70,18 @@ const router = createRouter({
       meta: { layout: 'app' },
     },
     {
+      path: '/donations',
+      name: 'Donations',
+      component: () => import('@/pages/DonationsPage.vue'),
+      meta: { layout: 'app' },
+    },
+    {
+      path: '/help',
+      name: 'Help',
+      component: () => import('@/pages/HelpPage.vue'),
+      meta: { layout: 'app' },
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
       component: () => import('@/pages/NotFoundPage.vue'),

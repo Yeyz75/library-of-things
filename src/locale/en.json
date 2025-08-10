@@ -106,11 +106,15 @@
     "goToDashboard": "Go to Dashboard"
   },
   "header": {
+    "home": "Home",
+    "catalog": "Catalog",
     "browseItems": "Browse Items",
     "dashboard": "Dashboard",
     "addItem": "Add Item",
     "profile": "Profile",
-    "myReservations": "My Reservations",
+    "myReservations": "My Loans/Reservations",
+    "donations": "Donations",
+    "help": "Help/FAQ",
     "signOut": "Sign Out",
     "signIn": "Sign In",
     "signUp": "Sign Up"
@@ -404,6 +408,118 @@
     "noReservations": {
       "title": "No reservations",
       "description": "Your reservations and borrowed items will appear here."
+    }
+  },
+  "donations": {
+    "title": "Donations",
+    "subtitle": "Support our community and help the Library of Things continue to grow",
+    "donateItems": {
+      "title": "Donate Items",
+      "description": "Share items you no longer use with the community",
+      "action": "Add Item"
+    },
+    "monetary": {
+      "title": "Monetary Donation",
+      "description": "Help maintain the platform and support the community",
+      "action": "Make Donation"
+    },
+    "impact": {
+      "title": "Your Impact",
+      "itemsShared": "Items Shared",
+      "membersHelped": "Members Helped",
+      "moneySaved": "Money Saved by Community"
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "step1": {
+        "title": "Choose What to Donate",
+        "description": "Decide whether you want to donate physical items or make a monetary contribution"
+      },
+      "step2": {
+        "title": "Share with Community",
+        "description": "Your donations help other members access resources they need"
+      },
+      "step3": {
+        "title": "See the Impact",
+        "description": "Watch how your contributions strengthen our community"
+      }
+    },
+    "modal": {
+      "title": "Make Donation",
+      "description": "Your donation helps us maintain the platform and support our community.",
+      "customAmount": "Custom Amount",
+      "customAmountPlaceholder": "Enter an amount",
+      "donate": "Donate",
+      "success": "Thank you for your donation! Your support means a lot to our community."
+    }
+  },
+  "help": {
+    "title": "Help & FAQ",
+    "subtitle": "Find answers to your questions or contact our support team",
+    "searchPlaceholder": "Search frequently asked questions...",
+    "categories": {
+      "borrowing": {
+        "title": "Borrowing",
+        "description": "How to request and use items from other members"
+      },
+      "lending": {
+        "title": "Lending",
+        "description": "Sharing your items with the community"
+      },
+      "account": {
+        "title": "Account",
+        "description": "Managing your profile and settings"
+      }
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "items": {
+        "howToBorrow": {
+          "question": "How can I borrow an item?",
+          "answer": "To borrow an item, search for the item you need, click 'Request to Borrow' and wait for the owner's approval. Once approved, you can coordinate pickup."
+        },
+        "howToLend": {
+          "question": "How can I lend my items?",
+          "answer": "You can add items by clicking 'Add Item' in your dashboard. Add photos, description, and details. Members will be able to request to borrow your items."
+        },
+        "safety": {
+          "question": "Is it safe to lend my items?",
+          "answer": "All members are verified and we have a rating system. We also recommend meeting borrowers in person and setting clear expectations."
+        },
+        "pricing": {
+          "question": "How much does it cost to use the platform?",
+          "answer": "The platform is free to use. We don't charge for lending or borrowing items. Voluntary donations help keep the service running."
+        },
+        "disputes": {
+          "question": "What if there's a problem with a loan?",
+          "answer": "If there are any issues, contact our support team. We mediate disputes and help resolve problems between members."
+        },
+        "insurance": {
+          "question": "Are items insured?",
+          "answer": "We recommend that owners check their personal insurance. The platform does not provide insurance coverage for borrowed items."
+        },
+        "deleteAccount": {
+          "question": "How can I delete my account?",
+          "answer": "You can delete your account from your profile settings. Note that this will permanently remove all your data."
+        },
+        "privacy": {
+          "question": "How do you protect my privacy?",
+          "answer": "We take privacy seriously. We only share information necessary to facilitate loans. Read our privacy policy for more details."
+        }
+      }
+    },
+    "contact": {
+      "title": "Still need help?",
+      "description": "Our support team is here to help you with any questions or issues.",
+      "email": "Send Email",
+      "chat": "Live Chat"
+    },
+    "contactModal": {
+      "title": "Contact Support",
+      "subject": "Subject",
+      "message": "Message",
+      "send": "Send",
+      "success": "Your message has been sent. We'll get back to you soon."
     }
   },
   "common": {
