@@ -2,7 +2,8 @@
   <AppLayout>
     <!-- Hero Section - Storytelling + Impacto Social -->
     <section
-      class="relative overflow-hidden bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-20 lg:py-32"
+      ref="heroSectionRef"
+      class="animated-section relative overflow-hidden bg-gradient-to-br from-primary-100 via-primary-50 to-white dark:from-primary-900 dark:via-primary-800 dark:to-gray-900 py-20 lg:py-32"
     >
       <!-- Background Pattern -->
       <div class="absolute inset-0 opacity-5 dark:opacity-10">
@@ -13,7 +14,7 @@
         <div class="text-center max-w-5xl mx-auto">
           <!-- Badge -->
           <div
-            class="inline-flex items-center px-4 py-2 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-sm font-medium mb-6 animate-fade-in"
+            class="inline-flex items-center px-4 py-2 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-sm font-medium mb-6"
           >
             <span
               class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"
@@ -23,25 +24,23 @@
 
           <!-- Main Title -->
           <h1
-            class="text-5xl md:text-7xl font-bold text-gray-900 dark:text-gray-100 mb-6 leading-tight animate-fade-in"
+            class="text-5xl md:text-7xl font-bold text-gray-900 dark:text-gray-100 mb-6 leading-tight"
           >
             {{ t('home.hero.title') }}
           </h1>
 
           <!-- Subtitle -->
           <p
-            class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed animate-slide-up"
+            class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed"
           >
             {{ t('home.hero.subtitle') }}
           </p>
 
           <!-- Impact Stats -->
-          <div
-            class="grid grid-cols-3 gap-8 max-w-2xl mx-auto mb-12 animate-slide-up"
-          >
+          <div class="grid grid-cols-3 gap-8 max-w-2xl mx-auto mb-12">
             <div class="text-center">
               <div
-                class="text-3xl md:text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2"
+                class="text-3xl md:text-4xl font-bold text-accent-600 dark:text-accent-400 mb-2"
               >
                 {{ communityStats.itemsShared }}+
               </div>
@@ -72,12 +71,10 @@
           </div>
 
           <!-- CTA Buttons -->
-          <div
-            class="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up"
-          >
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <router-link
               to="/register"
-              class="btn-primary text-lg px-8 py-4 hover-lift shadow-lg hover:shadow-xl transition-all duration-300"
+              class="btn-accent text-lg px-8 py-4 hover-lift shadow-lg hover:shadow-xl transition-all duration-300"
             >
               {{ t('home.hero.getStarted') }}
             </router-link>
@@ -93,7 +90,10 @@
     </section>
 
     <!-- How It Works Section -->
-    <section ref="howItWorksSection" class="py-20 bg-white dark:bg-gray-950">
+    <section
+      ref="howItWorksSectionRef"
+      class="animated-section py-20 bg-primary-50 dark:bg-gray-900"
+    >
       <div class="container">
         <div class="text-center mb-16">
           <h2 class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
@@ -113,10 +113,10 @@
             <!-- Step Number -->
             <div class="relative mb-8">
               <div
-                class="w-20 h-20 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto group-hover:bg-primary-200 dark:group-hover:bg-primary-900/50 transition-all duration-300"
+                class="w-20 h-20 bg-primary-100 dark:bg-primary-800/30 rounded-full flex items-center justify-center mx-auto group-hover:bg-primary-200 dark:group-hover:bg-primary-800/50 transition-all duration-300"
               >
                 <span
-                  class="text-2xl font-bold text-primary-600 dark:text-primary-400"
+                  class="text-2xl font-bold text-accent-600 dark:text-accent-400"
                   >{{ index + 1 }}</span
                 >
               </div>
@@ -131,7 +131,7 @@
             <div class="mb-6">
               <component
                 :is="step.icon"
-                class="h-16 w-16 mx-auto text-gray-400 dark:text-gray-500 group-hover:text-primary-500 transition-colors duration-300"
+                class="h-16 w-16 mx-auto text-gray-400 dark:text-gray-500 group-hover:text-accent-500 transition-colors duration-300"
               />
             </div>
 
@@ -150,7 +150,10 @@
     </section>
 
     <!-- Why It Works - Trust & Safety -->
-    <section class="py-20 bg-gray-50 dark:bg-gray-900">
+    <section
+      ref="whyItWorksSectionRef"
+      class="animated-section py-20 bg-white dark:bg-gray-950"
+    >
       <div class="container">
         <div class="text-center mb-16">
           <h2 class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
@@ -172,7 +175,7 @@
             >
               <component
                 :is="feature.icon"
-                class="h-6 w-6 text-primary-600 dark:text-primary-400"
+                class="h-6 w-6 text-accent-600 dark:text-accent-400"
               />
             </div>
             <h3
@@ -189,7 +192,10 @@
     </section>
 
     <!-- Community Impact -->
-    <section class="py-20 bg-white dark:bg-gray-950">
+    <section
+      ref="communityImpactSectionRef"
+      class="animated-section py-20 bg-primary-50 dark:bg-gray-900"
+    >
       <div class="container">
         <div class="grid lg:grid-cols-2 gap-16 items-center">
           <!-- Content -->
@@ -231,7 +237,7 @@
 
             <router-link
               to="/register"
-              class="btn-primary inline-flex items-center"
+              class="btn-accent inline-flex items-center"
             >
               {{ t('home.impact.joinCommunity') }}
               <svg
@@ -259,7 +265,7 @@
                 class="w-20 h-20 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-6"
               >
                 <svg
-                  class="h-10 w-10 text-primary-600 dark:text-primary-400"
+                  class="h-10 w-10 text-accent-600 dark:text-accent-400"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
@@ -286,7 +292,10 @@
     </section>
 
     <!-- Featured Items - Reduced prominence -->
-    <section class="py-16 bg-gray-50 dark:bg-gray-900">
+    <section
+      ref="featuredItemsSectionRef"
+      class="animated-section py-16 bg-white dark:bg-gray-950"
+    >
       <div class="container">
         <div class="text-center mb-12">
           <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
@@ -330,8 +339,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, Ref } from 'vue';
 import { storeToRefs } from 'pinia';
+import { useIntersectionObserver } from '@vueuse/core';
 import {
   WrenchScrewdriverIcon,
   ComputerDesktopIcon,
@@ -365,7 +375,35 @@ const { t } = useI18n();
 
 const { isAuthenticated } = storeToRefs(authStore);
 
-const howItWorksSection = ref<HTMLElement>();
+// Refs for sections to animate
+const heroSectionRef = ref<HTMLElement>();
+const howItWorksSectionRef = ref<HTMLElement>();
+const whyItWorksSectionRef = ref<HTMLElement>();
+const communityImpactSectionRef = ref<HTMLElement>();
+const featuredItemsSectionRef = ref<HTMLElement>();
+
+// Animation function
+const useScrollAnimation = (target: Ref<HTMLElement | undefined>) => {
+  useIntersectionObserver(
+    target,
+    ([{ isIntersecting }], observerElement) => {
+      if (isIntersecting && target.value) {
+        target.value.classList.add('is-visible');
+        observerElement.unobserve(target.value);
+      }
+    },
+    { threshold: 0.1 }
+  );
+};
+
+onMounted(() => {
+  useScrollAnimation(heroSectionRef);
+  useScrollAnimation(howItWorksSectionRef);
+  useScrollAnimation(whyItWorksSectionRef);
+  useScrollAnimation(communityImpactSectionRef);
+  useScrollAnimation(featuredItemsSectionRef);
+  loadItems();
+});
 
 // Community stats (these would come from your backend in a real app)
 const communityStats = ref({
@@ -452,7 +490,7 @@ const featuredItems = computed(() => {
 });
 
 function scrollToHowItWorks() {
-  howItWorksSection.value?.scrollIntoView({ behavior: 'smooth' });
+  howItWorksSectionRef.value?.scrollIntoView({ behavior: 'smooth' });
 }
 
 async function loadItems() {
@@ -490,43 +528,21 @@ function handleShare(item: Item) {
     toast.success('Link copied to clipboard!', 'Shared');
   }
 }
-
-onMounted(() => {
-  loadItems();
-});
 </script>
 
 <style scoped>
-/* Animations */
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in {
-  animation: fade-in 0.8s ease-out forwards;
-}
-
-.animate-slide-up {
-  animation: slide-up 0.8s ease-out 0.2s forwards;
+/* Scroll Animation */
+.animated-section {
   opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.animated-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Hover effects */
@@ -549,8 +565,8 @@ html {
 }
 
 /* Custom button styles for better visual hierarchy */
-.btn-primary {
-  @apply bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl px-6 py-3 transition-all duration-300 shadow-lg hover:shadow-xl;
+.btn-accent {
+  @apply bg-accent-600 hover:bg-accent-700 text-white font-semibold rounded-xl px-6 py-3 transition-all duration-300 shadow-lg hover:shadow-xl;
 }
 
 .btn-secondary {

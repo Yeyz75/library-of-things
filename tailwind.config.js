@@ -5,19 +5,19 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Primary - Electric Blue (Tendencia 2025) - Más neutro
+        // Primary - Warm Grays (Tendencia 2025) - Neutro y Sofisticado
         primary: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
-          950: '#172554',
+          50: '#fafaf9',
+          100: '#f5f5f4',
+          200: '#e7e5e4',
+          300: '#d6d3d1',
+          400: '#a8a29e',
+          500: '#78716c',
+          600: '#57534e',
+          700: '#44403c',
+          800: '#292524',
+          900: '#1c1917',
+          950: '#0c0a09',
         },
         // Secondary - Soft Lavender (Tendencia 2025) - Complementario
         secondary: {
@@ -33,19 +33,19 @@ export default {
           900: '#581cb0',
           950: '#3b0f7a',
         },
-        // Accent - Warm Terracotta (Tendencia 2025) - Para acentos cálidos
+        // Accent - Electric Blue (Tendencia 2025) - Para acciones y links
         accent: {
-          50: '#fef7f0',
-          100: '#feecdc',
-          200: '#fcd9bd',
-          300: '#fdba8c',
-          400: '#ff8a4c',
-          500: '#ff5a1f',
-          600: '#d03801',
-          700: '#b43403',
-          800: '#8a2c0d',
-          900: '#73230d',
-          950: '#3e0a03',
+          50: '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#60a5fa',
+          500: '#3b82f6',
+          600: '#2563eb',
+          700: '#1d4ed8',
+          800: '#1e40af',
+          900: '#1e3a8a',
+          950: '#172554',
         },
         // Success - Digital Lime (Tendencia 2025) - Solo para success states
         success: {
@@ -102,34 +102,6 @@ export default {
           800: '#155e75',
           900: '#164e63',
           950: '#083344',
-        },
-        // Neutral - Warm Grays (Tendencia 2025)
-        gray: {
-          50: '#fafaf9',
-          100: '#f5f5f4',
-          200: '#e7e5e4',
-          300: '#d6d3d1',
-          400: '#a8a29e',
-          500: '#78716c',
-          600: '#57534e',
-          700: '#44403c',
-          800: '#292524',
-          900: '#1c1917',
-          950: '#0c0a09',
-        },
-        // Brand Green - Para mantener consistencia con la marca existente
-        brand: {
-          50: '#ecfdf5',
-          100: '#d1fae5',
-          200: '#a7f3d0',
-          300: '#6ee7b7',
-          400: '#34d399',
-          500: '#10b981',
-          600: '#059669',
-          700: '#047857',
-          800: '#065f46',
-          900: '#064e3b',
-          950: '#022c22',
         },
       },
       fontFamily: {
