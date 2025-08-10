@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8"
+    class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8"
   >
     <div class="max-w-md w-full space-y-8">
       <div class="text-center">
@@ -15,17 +15,19 @@
           </div>
           <span class="font-bold text-xl">Library of Things</span>
         </router-link>
-        <h2 class="text-3xl font-bold text-gray-900 mb-2">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
           {{ t('auth.register.title') }}
         </h2>
-        <p class="text-gray-600">{{ t('auth.register.subtitle') }}</p>
+        <p class="text-gray-600 dark:text-gray-300">
+          {{ t('auth.register.subtitle') }}
+        </p>
       </div>
 
       <form @submit.prevent="handleSubmit" class="space-y-6">
         <div>
           <label
             for="displayName"
-            class="block text-sm font-medium text-gray-700 mb-1"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
           >
             {{ t('auth.register.fullName') }}
           </label>
@@ -47,7 +49,7 @@
         <div>
           <label
             for="email"
-            class="block text-sm font-medium text-gray-700 mb-1"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
           >
             {{ t('auth.register.email') }}
           </label>
@@ -69,7 +71,7 @@
         <div>
           <label
             for="password"
-            class="block text-sm font-medium text-gray-700 mb-1"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
           >
             {{ t('auth.register.password') }}
           </label>
@@ -91,7 +93,7 @@
         <div>
           <label
             for="confirmPassword"
-            class="block text-sm font-medium text-gray-700 mb-1"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
           >
             {{ t('auth.register.confirmPassword') }}
           </label>
@@ -112,7 +114,7 @@
 
         <div
           v-if="authStore.error"
-          class="bg-error-50 border border-error-200 text-error-600 px-4 py-3 rounded-md"
+          class="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 text-error-600 dark:text-error-400 px-4 py-3 rounded-md"
         >
           <p class="text-sm">{{ authStore.error }}</p>
         </div>
@@ -133,12 +135,15 @@
 
           <div class="relative">
             <div class="absolute inset-0 flex items-center">
-              <div class="w-full border-t border-gray-300" />
+              <div
+                class="w-full border-t border-gray-300 dark:border-gray-600"
+              />
             </div>
             <div class="relative flex justify-center text-sm">
-              <span class="px-2 bg-gray-50 text-gray-500">{{
-                t('auth.register.or')
-              }}</span>
+              <span
+                class="px-2 bg-gray-50 dark:bg-gray-900 text-gray-500 dark:text-gray-400"
+                >{{ t('auth.register.or') }}</span
+              >
             </div>
           </div>
 
@@ -171,12 +176,12 @@
         </div>
 
         <div class="text-center">
-          <span class="text-sm text-gray-600"
+          <span class="text-sm text-gray-600 dark:text-gray-400"
             >{{ t('auth.register.hasAccount') }}
           </span>
           <router-link
             to="/login"
-            class="text-sm font-medium text-primary-600 hover:text-primary-500"
+            class="text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-500 dark:hover:text-primary-300"
           >
             {{ t('auth.register.signInHere') }}
           </router-link>
