@@ -66,16 +66,19 @@
 
 <script setup lang="ts">
 import { useMotion } from '@vueuse/motion';
-import BaseLoader from '@/components/common/BaseLoader.vue';
-import ItemCard from '@/components/common/ItemCard.vue';
+import type { Item } from '@/types/index';
+import type { Ref } from 'vue';
+
+type CategoryObj = { key: string; name: string };
+
 const props = defineProps<{
-  featuredItems: any[];
+  featuredItems: Item[];
   isLoading: boolean;
-  categories: any[];
-  t: Function;
-  handleReserve: Function;
-  handleShare: Function;
-  featuredItemsSectionRef: any;
+  categories: CategoryObj[];
+  t: (_key: string) => string;
+  handleReserve: (_item: Item) => void;
+  handleShare: (_item: Item) => void;
+  featuredItemsSectionRef: Ref<HTMLElement | null>;
 }>();
 
 useMotion(props.featuredItemsSectionRef);

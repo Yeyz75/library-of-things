@@ -163,10 +163,17 @@
 
 <script setup lang="ts">
 import { useMotion } from '@vueuse/motion';
+import type { Ref } from 'vue';
+
+type CommunityStats = {
+  co2Saved: number;
+  moneySaved: number;
+};
+
 const props = defineProps<{
-  communityStats: any;
-  t: Function;
-  communityImpactSectionRef: any;
+  communityStats: CommunityStats;
+  t: (_key: string) => string;
+  communityImpactSectionRef: Ref<HTMLElement | null>;
 }>();
 
 useMotion(props.communityImpactSectionRef);
