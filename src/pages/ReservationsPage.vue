@@ -3,10 +3,10 @@
     <div class="container py-8">
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-50">
-          My Reservations
+          {{ t('reservations.title') }}
         </h1>
         <p class="text-gray-600 dark:text-gray-300 mt-2">
-          Manage your borrowing requests and lent items
+          {{ t('reservations.subtitle') }}
         </p>
       </div>
 
@@ -22,7 +22,11 @@
                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
             "
           >
-            Items I'm Borrowing ({{ borrowedReservations.length }})
+            {{
+              t('reservations.tabs.borrowed', {
+                count: borrowedReservations.length,
+              })
+            }}
           </button>
           <button
             @click="activeTab = 'lent'"
@@ -33,23 +37,25 @@
                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
             "
           >
-            Items I'm Lending ({{ lentReservations.length }})
+            {{
+              t('reservations.tabs.lent', { count: lentReservations.length })
+            }}
           </button>
         </nav>
       </div>
 
       <!-- Loading State -->
       <div v-if="reservationsStore.isLoading" class="text-center py-12">
-        <BaseLoader size="lg" text="Loading reservations..." />
+        <BaseLoader size="lg" :text="t('reservations.loading')" />
       </div>
 
       <!-- Error State -->
       <div v-else-if="reservationsStore.error" class="text-center py-12">
         <div class="bg-error-50 text-error-600 p-6 rounded-lg max-w-md mx-auto">
-          <p class="font-medium">Failed to load reservations</p>
+          <p class="font-medium">{{ t('reservations.error') }}</p>
           <p class="text-sm mt-1">{{ reservationsStore.error }}</p>
           <button @click="loadReservations" class="btn-primary mt-4">
-            Try Again
+            {{ t('reservations.tryAgain') }}
           </button>
         </div>
       </div>
@@ -66,12 +72,14 @@
             <h3
               class="text-lg font-medium text-gray-900 dark:text-gray-50 mb-2"
             >
-              No borrowed items
+              {{ t('reservations.borrowed.noItems') }}
             </h3>
             <p class="text-gray-600 dark:text-gray-300 mb-6">
-              You haven't borrowed any items yet.
+              {{ t('reservations.borrowed.noItemsDescription') }}
             </p>
-            <router-link to="/" class="btn-primary">Browse Items</router-link>
+            <router-link to="/" class="btn-primary">{{
+              t('reservations.borrowed.browseItems')
+            }}</router-link>
           </div>
 
           <div v-else class="space-y-4">
@@ -98,13 +106,25 @@
                     {{ reservation.itemTitle }}
                   </h3>
                   <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                    Owned by {{ reservation.ownerName }}
+                    {{
+                      t('reservations.borrowed.ownedBy', {
+                        name: reservation.ownerName,
+                      })
+                    }}
                   </p>
                   <div
                     class="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400"
                   >
-                    <span>From {{ formatDate(reservation.startDate) }}</span>
-                    <span>To {{ formatDate(reservation.endDate) }}</span>
+                    <span>{{
+                      t('reservations.borrowed.from', {
+                        date: formatDate(reservation.startDate),
+                      })
+                    }}</span>
+                    <span>{{
+                      t('reservations.borrowed.to', {
+                        date: formatDate(reservation.endDate),
+                      })
+                    }}</span>
                   </div>
                   <p
                     v-if="reservation.message"
@@ -128,14 +148,14 @@
                       @click="returnItem(reservation.$id)"
                       class="btn btn-sm bg-success-600 text-white hover:bg-success-700"
                     >
-                      Mark as Returned
+                      {{ t('reservations.borrowed.markReturned') }}
                     </button>
                     <button
                       v-if="reservation.status === 'pending'"
                       @click="cancelReservation(reservation.$id)"
                       class="btn btn-sm bg-error-600 text-white hover:bg-error-700"
                     >
-                      Cancel
+                      {{ t('reservations.borrowed.cancel') }}
                     </button>
                   </div>
                 </div>
@@ -151,14 +171,14 @@
             <h3
               class="text-lg font-medium text-gray-900 dark:text-gray-50 mb-2"
             >
-              No lending history
+              {{ t('reservations.lent.noItems') }}
             </h3>
             <p class="text-gray-600 dark:text-gray-300 mb-6">
-              No one has requested your items yet.
+              {{ t('reservations.lent.noItemsDescription') }}
             </p>
-            <router-link to="/items/new" class="btn-primary"
-              >Add an Item</router-link
-            >
+            <router-link to="/items/new" class="btn-primary">{{
+              t('reservations.lent.addItem')
+            }}</router-link>
           </div>
 
           <div v-else class="space-y-4">
@@ -185,7 +205,11 @@
                     {{ reservation.itemTitle }}
                   </h3>
                   <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                    Requested by {{ reservation.borrowerName }}
+                    {{
+                      t('reservations.lent.requestedBy', {
+                        name: reservation.borrowerName,
+                      })
+                    }}
                   </p>
                   <div
                     class="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400"
@@ -215,14 +239,14 @@
                       @click="approveReservation(reservation.$id)"
                       class="btn btn-sm bg-success-600 text-white hover:bg-success-700"
                     >
-                      Approve
+                      {{ t('reservations.lent.approve') }}
                     </button>
                     <button
                       v-if="reservation.status === 'pending'"
                       @click="rejectReservation(reservation.$id)"
                       class="btn btn-sm bg-error-600 text-white hover:bg-error-700"
                     >
-                      Decline
+                      {{ t('reservations.lent.decline') }}
                     </button>
                   </div>
                 </div>
@@ -247,10 +271,12 @@ import AppLayout from '@/components/layout/AppLayout.vue';
 import BaseLoader from '@/components/common/BaseLoader.vue';
 import { useAuthStore } from '@/store/auth.store';
 import { useReservationsStore } from '@/store/reservations.store';
+import { useI18n } from '@/composables/useI18n';
 import type { ReservationStatus } from '@/types';
 
 const authStore = useAuthStore();
 const reservationsStore = useReservationsStore();
+const { t } = useI18n();
 
 const { userId } = storeToRefs(authStore);
 
@@ -289,14 +315,7 @@ function getStatusClass(status: ReservationStatus): string {
 }
 
 function getStatusText(status: ReservationStatus): string {
-  const texts = {
-    pending: 'Pending',
-    approved: 'Approved',
-    active: 'Active',
-    returned: 'Returned',
-    cancelled: 'Cancelled',
-  };
-  return texts[status] || status;
+  return t(`reservations.status.${status}`) || status;
 }
 
 function formatDate(date: string): string {

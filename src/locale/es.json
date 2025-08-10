@@ -147,5 +147,288 @@
       "addFirstItem": "Agregar Primer Artículo",
       "signUpToAdd": "Regístrate para Agregar Artículos"
     }
+  },
+  "profile": {
+    "title": "Configuración del Perfil",
+    "memberSince": "Miembro desde {date}",
+    "stats": {
+      "itemsShared": "Artículos Compartidos",
+      "itemsBorrowed": "Artículos Prestados",
+      "completedExchanges": "Intercambios Completados"
+    },
+    "accountInfo": {
+      "title": "Información de la Cuenta",
+      "displayName": "Nombre para Mostrar",
+      "emailAddress": "Dirección de Correo",
+      "memberSince": "Miembro Desde"
+    },
+    "actions": {
+      "signOut": "Cerrar Sesión",
+      "signingOut": "Cerrando sesión...",
+      "backToDashboard": "Volver al Panel"
+    }
+  },
+  "reservations": {
+    "title": "Mis Reservas",
+    "subtitle": "Administra tus solicitudes de préstamo y artículos prestados",
+    "tabs": {
+      "borrowed": "Artículos que Estoy Pidiendo Prestado ({count})",
+      "lent": "Artículos que Estoy Prestando ({count})"
+    },
+    "loading": "Cargando reservas...",
+    "error": "Error al cargar reservas",
+    "tryAgain": "Intentar de Nuevo",
+    "borrowed": {
+      "noItems": "No hay artículos prestados",
+      "noItemsDescription": "Aún no has pedido prestado ningún artículo.",
+      "browseItems": "Explorar Artículos",
+      "ownedBy": "Propiedad de {name}",
+      "from": "Desde {date}",
+      "to": "Hasta {date}",
+      "markReturned": "Marcar como Devuelto",
+      "cancel": "Cancelar"
+    },
+    "lent": {
+      "noItems": "No hay historial de préstamos",
+      "noItemsDescription": "Nadie ha solicitado tus artículos aún.",
+      "addItem": "Agregar un Artículo",
+      "requestedBy": "Solicitado por {name}",
+      "approve": "Aprobar",
+      "decline": "Rechazar"
+    },
+    "status": {
+      "pending": "Pendiente",
+      "approved": "Aprobado",
+      "active": "Activo",
+      "returned": "Devuelto",
+      "cancelled": "Cancelado"
+    }
+  },
+  "items": {
+    "create": {
+      "title": "Agregar Nuevo Artículo",
+      "subtitle": "Comparte algo increíble con tu comunidad",
+      "photos": "Fotos (Opcional)",
+      "photosUpload": "Haz clic para subir",
+      "photosDragDrop": "o arrastra y suelta",
+      "photosFormat": "PNG, JPG, GIF hasta 10MB cada una",
+      "titleAlternative": "Título del Artículo",
+      "titlePlaceholder": "¿Qué estás compartiendo?",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Describe tu artículo, su condición e instrucciones especiales...",
+      "category": "Categoría",
+      "categoryPlaceholder": "Selecciona una categoría",
+      "condition": "Condición",
+      "conditionPlaceholder": "Selecciona la condición",
+      "location": "Ubicación",
+      "locationPlaceholder": "Ciudad, Estado o área general",
+      "tags": "Etiquetas (Opcional)",
+      "tagsPlaceholder": "Separa las etiquetas con comas (ej: herramientas eléctricas, construcción, bricolaje)",
+      "tagsHelp": "Agrega etiquetas relevantes para ayudar a otros a encontrar tu artículo",
+      "addItem": "Agregar Artículo",
+      "addingItem": "Agregando Artículo...",
+      "cancel": "Cancelar",
+      "required": "*",
+      "errors": {
+        "titleRequired": "El título del artículo es requerido",
+        "titleTooShort": "El título debe tener al menos 3 caracteres",
+        "descriptionRequired": "La descripción es requerida",
+        "descriptionTooShort": "La descripción debe tener al menos 10 caracteres",
+        "categoryRequired": "Por favor selecciona una categoría",
+        "conditionRequired": "Por favor selecciona la condición del artículo",
+        "locationRequired": "La ubicación es requerida"
+      }
+    },
+    "edit": {
+      "title": "Editar Artículo",
+      "subtitle": "Actualiza los detalles de tu artículo",
+      "currentImages": "Imágenes actuales:",
+      "newImages": "Nuevas imágenes para agregar:",
+      "updateItem": "Actualizar Artículo",
+      "updatingItem": "Actualizando Artículo...",
+      "cancel": "Cancelar",
+      "available": "El artículo está disponible para préstamo"
+    },
+    "detail": {
+      "available": "Disponible",
+      "borrowed": "Actualmente Prestado",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "description": "Descripción",
+      "condition": "Condición",
+      "location": "Ubicación",
+      "tags": "Etiquetas",
+      "sharedBy": "Compartido por",
+      "memberSince": "Miembro desde",
+      "requestToBorrow": "Solicitar Préstamo",
+      "notAvailable": "No Disponible",
+      "signInToRequest": "Inicia sesión para solicitar este artículo",
+      "deleteConfirm": {
+        "title": "Eliminar Artículo",
+        "message": "¿Estás seguro de que quieres eliminar \"{title}\"? Esta acción no se puede deshacer.",
+        "cancel": "Cancelar",
+        "delete": "Eliminar",
+        "deleting": "Eliminando..."
+      }
+    },
+    "categories": {
+      "tools": "Herramientas",
+      "electronics": "Electrónicos",
+      "books": "Libros",
+      "sports": "Deportes y Recreación",
+      "home": "Hogar y Cocina",
+      "garden": "Jardín y Exterior",
+      "clothing": "Ropa y Accesorios",
+      "games": "Juegos y Juguetes",
+      "other": "Otros"
+    },
+    "conditions": {
+      "excellent": "Excelente",
+      "good": "Bueno",
+      "fair": "Regular",
+      "poor": "Malo"
+    }
+  },
+  "categories": {
+    "title": "Explorar por Categoría",
+    "subtitle": "Encuentra exactamente lo que estás buscando",
+    "descriptions": {
+      "tools": "Herramientas eléctricas, herramientas manuales y equipo de taller",
+      "electronics": "Gadgets, cámaras, equipo de audio y tecnología",
+      "books": "Educativos, ficción, libros de cocina y materiales de referencia",
+      "sports": "Equipo deportivo, equipo al aire libre y accesorios de fitness",
+      "home": "Electrodomésticos, utensilios de cocina y artículos del hogar",
+      "garden": "Herramientas de jardinería, muebles de exterior y equipo de jardín",
+      "clothing": "Artículos de moda, ropa para ocasiones especiales y accesorios",
+      "games": "Juegos de mesa, videojuegos, juguetes y entretenimiento",
+      "other": "Todo lo demás que puedas imaginar compartir"
+    },
+    "itemCount": "{count} artículos"
+  },
+  "search": {
+    "title": "Buscar Artículos",
+    "placeholder": "Buscar artículos para pedir prestado...",
+    "results": "Resultados de Búsqueda",
+    "resultsCount": "{count} artículos encontrados",
+    "resultsFor": "para \"{query}\"",
+    "searching": "Buscando artículos...",
+    "noResults": "No se encontraron artículos",
+    "noResultsDescription": "Intenta ajustar tus términos de búsqueda o filtros para encontrar lo que buscas.",
+    "clearFilters": "Limpiar Filtros",
+    "reserve": "Reservar",
+    "viewDetails": "Ver Detalles",
+    "notAvailable": "No Disponible"
+  },
+  "filters": {
+    "title": "Filtros",
+    "active": "{count} activos",
+    "clearAll": "Limpiar todo",
+    "category": "Categoría",
+    "availability": "Disponibilidad",
+    "availableOnly": "Solo disponibles",
+    "distance": "Distancia",
+    "minRating": "Calificación Mínima",
+    "availableFrom": "Disponible Desde",
+    "tags": "Etiquetas",
+    "sortBy": "Ordenar por",
+    "sortOptions": {
+      "newest": "Más recientes primero",
+      "oldest": "Más antiguos primero",
+      "title": "Título A-Z",
+      "titleDesc": "Título Z-A",
+      "distance": "Distancia",
+      "rating": "Calificación"
+    },
+    "reset": "Restablecer valores predeterminados",
+    "apply": "Aplicar Filtros",
+    "showLess": "Mostrar menos",
+    "showMore": "+{count} más"
+  },
+  "searchBar": {
+    "placeholder": "Buscar artículos...",
+    "recentSearches": "Búsquedas Recientes",
+    "suggestions": "Sugerencias",
+    "allCategories": "Todas las Categorías",
+    "allItems": "Todos los Artículos",
+    "availableOnly": "Solo Disponibles",
+    "borrowedOnly": "Solo Prestados",
+    "anyDistance": "Cualquier Distancia",
+    "within1km": "Dentro de 1 km",
+    "within5km": "Dentro de 5 km",
+    "within10km": "Dentro de 10 km",
+    "within25km": "Dentro de 25 km",
+    "clearFilters": "Limpiar Filtros",
+    "cancel": "Cancelar",
+    "applyFilters": "Aplicar Filtros"
+  },
+  "itemCard": {
+    "available": "Disponible",
+    "borrowed": "Prestado",
+    "reserve": "Reservar",
+    "notAvailable": "No Disponible",
+    "details": "Detalles"
+  },
+  "emptyState": {
+    "default": {
+      "title": "No hay datos disponibles",
+      "description": "No hay datos para mostrar en este momento."
+    },
+    "search": {
+      "title": "No se encontraron resultados",
+      "description": "Intenta ajustar tus términos de búsqueda o filtros."
+    },
+    "error": {
+      "title": "Algo salió mal",
+      "description": "Encontramos un error al cargar los datos. Por favor intenta de nuevo."
+    },
+    "empty": {
+      "title": "Nada aquí aún",
+      "description": "Esta sección se llenará una vez que haya datos disponibles."
+    },
+    "loading": {
+      "title": "Cargando...",
+      "description": "Por favor espera mientras cargamos tus datos."
+    },
+    "noResults": {
+      "title": "No hay resultados de búsqueda",
+      "description": "No pudimos encontrar nada que coincida con tus criterios de búsqueda."
+    },
+    "noItems": {
+      "title": "No se encontraron artículos",
+      "description": "Ningún artículo coincide con tus filtros actuales. Intenta ajustar tu búsqueda."
+    },
+    "noFavorites": {
+      "title": "Aún no hay favoritos",
+      "description": "Los artículos que marques como favoritos aparecerán aquí para acceso rápido."
+    },
+    "noReservations": {
+      "title": "No hay reservas",
+      "description": "Tus reservas y artículos prestados aparecerán aquí."
+    }
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "warning": "Advertencia",
+    "info": "Información",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "view": "Ver",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "clear": "Limpiar",
+    "apply": "Aplicar",
+    "reset": "Restablecer",
+    "submit": "Enviar",
+    "confirm": "Confirmar",
+    "retry": "Reintentar",
+    "refresh": "Actualizar"
   }
 }

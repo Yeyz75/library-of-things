@@ -3,7 +3,7 @@
     <div class="container py-8">
       <div class="max-w-2xl mx-auto">
         <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-50 mb-8">
-          Profile Settings
+          {{ t('profile.title') }}
         </h1>
 
         <div class="card">
@@ -38,7 +38,11 @@
                 {{ currentUser?.email }}
               </p>
               <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                Member since {{ formatDate(currentUser?.$createdAt) }}
+                {{
+                  t('profile.memberSince', {
+                    date: formatDate(currentUser?.$createdAt),
+                  })
+                }}
               </p>
             </div>
           </div>
@@ -52,7 +56,7 @@
                 {{ userItemsCount }}
               </div>
               <div class="text-sm text-gray-600 dark:text-gray-300">
-                Items Shared
+                {{ t('profile.stats.itemsShared') }}
               </div>
             </div>
             <div class="text-center">
@@ -60,7 +64,7 @@
                 {{ totalBorrowedCount }}
               </div>
               <div class="text-sm text-gray-600 dark:text-gray-300">
-                Items Borrowed
+                {{ t('profile.stats.itemsBorrowed') }}
               </div>
             </div>
             <div class="text-center">
@@ -68,7 +72,7 @@
                 {{ completedReservationsCount }}
               </div>
               <div class="text-sm text-gray-600 dark:text-gray-300">
-                Completed Exchanges
+                {{ t('profile.stats.completedExchanges') }}
               </div>
             </div>
           </div>
@@ -78,13 +82,13 @@
             <h3
               class="text-lg font-medium text-gray-900 dark:text-gray-50 mb-4"
             >
-              Account Information
+              {{ t('profile.accountInfo.title') }}
             </h3>
             <div class="space-y-4">
               <div>
                 <label
                   class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                  >Display Name</label
+                  >{{ t('profile.accountInfo.displayName') }}</label
                 >
                 <input
                   type="text"
@@ -96,7 +100,7 @@
               <div>
                 <label
                   class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                  >Email Address</label
+                  >{{ t('profile.accountInfo.emailAddress') }}</label
                 >
                 <input
                   type="email"
@@ -108,7 +112,7 @@
               <div>
                 <label
                   class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                  >Member Since</label
+                  >{{ t('profile.accountInfo.memberSince') }}</label
                 >
                 <input
                   type="text"
@@ -129,10 +133,14 @@
                 class="btn-danger flex items-center justify-center"
               >
                 <BaseLoader v-if="isSigningOut" size="sm" class="mr-2" />
-                {{ isSigningOut ? 'Signing out...' : 'Sign Out' }}
+                {{
+                  isSigningOut
+                    ? t('profile.actions.signingOut')
+                    : t('profile.actions.signOut')
+                }}
               </button>
               <router-link to="/dashboard" class="btn-secondary">
-                Back to Dashboard
+                {{ t('profile.actions.backToDashboard') }}
               </router-link>
             </div>
           </div>
@@ -151,11 +159,13 @@ import BaseLoader from '@/components/common/BaseLoader.vue';
 import { useAuthStore } from '@/store/auth.store';
 import { useItemsStore } from '@/store/items.store';
 import { useReservationsStore } from '@/store/reservations.store';
+import { useI18n } from '@/composables/useI18n';
 
 const router = useRouter();
 const authStore = useAuthStore();
 const itemsStore = useItemsStore();
 const reservationsStore = useReservationsStore();
+const { t } = useI18n();
 
 const { currentUser, userId } = storeToRefs(authStore);
 

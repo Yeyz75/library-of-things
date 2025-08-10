@@ -147,5 +147,288 @@
       "addFirstItem": "Add First Item",
       "signUpToAdd": "Sign Up to Add Items"
     }
+  },
+  "profile": {
+    "title": "Profile Settings",
+    "memberSince": "Member since {date}",
+    "stats": {
+      "itemsShared": "Items Shared",
+      "itemsBorrowed": "Items Borrowed",
+      "completedExchanges": "Completed Exchanges"
+    },
+    "accountInfo": {
+      "title": "Account Information",
+      "displayName": "Display Name",
+      "emailAddress": "Email Address",
+      "memberSince": "Member Since"
+    },
+    "actions": {
+      "signOut": "Sign Out",
+      "signingOut": "Signing out...",
+      "backToDashboard": "Back to Dashboard"
+    }
+  },
+  "reservations": {
+    "title": "My Reservations",
+    "subtitle": "Manage your borrowing requests and lent items",
+    "tabs": {
+      "borrowed": "Items I'm Borrowing ({count})",
+      "lent": "Items I'm Lending ({count})"
+    },
+    "loading": "Loading reservations...",
+    "error": "Failed to load reservations",
+    "tryAgain": "Try Again",
+    "borrowed": {
+      "noItems": "No borrowed items",
+      "noItemsDescription": "You haven't borrowed any items yet.",
+      "browseItems": "Browse Items",
+      "ownedBy": "Owned by {name}",
+      "from": "From {date}",
+      "to": "To {date}",
+      "markReturned": "Mark as Returned",
+      "cancel": "Cancel"
+    },
+    "lent": {
+      "noItems": "No lending history",
+      "noItemsDescription": "No one has requested your items yet.",
+      "addItem": "Add an Item",
+      "requestedBy": "Requested by {name}",
+      "approve": "Approve",
+      "decline": "Decline"
+    },
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "active": "Active",
+      "returned": "Returned",
+      "cancelled": "Cancelled"
+    }
+  },
+  "items": {
+    "create": {
+      "title": "Add New Item",
+      "subtitle": "Share something amazing with your community",
+      "photos": "Photos (Optional)",
+      "photosUpload": "Click to upload",
+      "photosDragDrop": "or drag and drop",
+      "photosFormat": "PNG, JPG, GIF up to 10MB each",
+      "titleAlternative": "Item Title",
+      "titlePlaceholder": "What are you sharing?",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe your item, its condition, and any special instructions...",
+      "category": "Category",
+      "categoryPlaceholder": "Select a category",
+      "condition": "Condition",
+      "conditionPlaceholder": "Select condition",
+      "location": "Location",
+      "locationPlaceholder": "City, State or general area",
+      "tags": "Tags (Optional)",
+      "tagsPlaceholder": "Separate tags with commas (e.g., power tools, construction, DIY)",
+      "tagsHelp": "Add relevant tags to help others find your item",
+      "addItem": "Add Item",
+      "addingItem": "Adding Item...",
+      "cancel": "Cancel",
+      "required": "*",
+      "errors": {
+        "titleRequired": "Item title is required",
+        "titleTooShort": "Title must be at least 3 characters",
+        "descriptionRequired": "Description is required",
+        "descriptionTooShort": "Description must be at least 10 characters",
+        "categoryRequired": "Please select a category",
+        "conditionRequired": "Please select item condition",
+        "locationRequired": "Location is required"
+      }
+    },
+    "edit": {
+      "title": "Edit Item",
+      "subtitle": "Update your item details",
+      "currentImages": "Current images:",
+      "newImages": "New images to add:",
+      "updateItem": "Update Item",
+      "updatingItem": "Updating Item...",
+      "cancel": "Cancel",
+      "available": "Item is available for borrowing"
+    },
+    "detail": {
+      "available": "Available",
+      "borrowed": "Currently Borrowed",
+      "edit": "Edit",
+      "delete": "Delete",
+      "description": "Description",
+      "condition": "Condition",
+      "location": "Location",
+      "tags": "Tags",
+      "sharedBy": "Shared by",
+      "memberSince": "Member since",
+      "requestToBorrow": "Request to Borrow",
+      "notAvailable": "Not Available",
+      "signInToRequest": "Sign in to request this item",
+      "deleteConfirm": {
+        "title": "Delete Item",
+        "message": "Are you sure you want to delete \"{title}\"? This action cannot be undone.",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "deleting": "Deleting..."
+      }
+    },
+    "categories": {
+      "tools": "Tools",
+      "electronics": "Electronics",
+      "books": "Books",
+      "sports": "Sports & Recreation",
+      "home": "Home & Kitchen",
+      "garden": "Garden & Outdoor",
+      "clothing": "Clothing & Accessories",
+      "games": "Games & Toys",
+      "other": "Other"
+    },
+    "conditions": {
+      "excellent": "Excellent",
+      "good": "Good",
+      "fair": "Fair",
+      "poor": "Poor"
+    }
+  },
+  "categories": {
+    "title": "Browse by Category",
+    "subtitle": "Find exactly what you're looking for",
+    "descriptions": {
+      "tools": "Power tools, hand tools, and workshop equipment",
+      "electronics": "Gadgets, cameras, audio equipment, and tech gear",
+      "books": "Educational, fiction, cookbooks, and reference materials",
+      "sports": "Sports equipment, outdoor gear, and fitness accessories",
+      "home": "Appliances, cookware, and household items",
+      "garden": "Gardening tools, outdoor furniture, and yard equipment",
+      "clothing": "Fashion items, special occasion wear, and accessories",
+      "games": "Board games, video games, toys, and entertainment",
+      "other": "Everything else you can imagine sharing"
+    },
+    "itemCount": "{count} items"
+  },
+  "search": {
+    "title": "Search Items",
+    "placeholder": "Search for items to borrow...",
+    "results": "Search Results",
+    "resultsCount": "{count} items found",
+    "resultsFor": "for \"{query}\"",
+    "searching": "Searching items...",
+    "noResults": "No items found",
+    "noResultsDescription": "Try adjusting your search terms or filters to find what you're looking for.",
+    "clearFilters": "Clear Filters",
+    "reserve": "Reserve",
+    "viewDetails": "View Details",
+    "notAvailable": "Not Available"
+  },
+  "filters": {
+    "title": "Filters",
+    "active": "{count} active",
+    "clearAll": "Clear all",
+    "category": "Category",
+    "availability": "Availability",
+    "availableOnly": "Available only",
+    "distance": "Distance",
+    "minRating": "Minimum Rating",
+    "availableFrom": "Available From",
+    "tags": "Tags",
+    "sortBy": "Sort by",
+    "sortOptions": {
+      "newest": "Newest first",
+      "oldest": "Oldest first",
+      "title": "Title A-Z",
+      "titleDesc": "Title Z-A",
+      "distance": "Distance",
+      "rating": "Rating"
+    },
+    "reset": "Reset to defaults",
+    "apply": "Apply Filters",
+    "showLess": "Show less",
+    "showMore": "+{count} more"
+  },
+  "searchBar": {
+    "placeholder": "Search items...",
+    "recentSearches": "Recent Searches",
+    "suggestions": "Suggestions",
+    "allCategories": "All Categories",
+    "allItems": "All Items",
+    "availableOnly": "Available Only",
+    "borrowedOnly": "Borrowed Only",
+    "anyDistance": "Any Distance",
+    "within1km": "Within 1 km",
+    "within5km": "Within 5 km",
+    "within10km": "Within 10 km",
+    "within25km": "Within 25 km",
+    "clearFilters": "Clear Filters",
+    "cancel": "Cancel",
+    "applyFilters": "Apply Filters"
+  },
+  "itemCard": {
+    "available": "Available",
+    "borrowed": "Borrowed",
+    "reserve": "Reserve",
+    "notAvailable": "Not Available",
+    "details": "Details"
+  },
+  "emptyState": {
+    "default": {
+      "title": "No data available",
+      "description": "There is no data to display at the moment."
+    },
+    "search": {
+      "title": "No results found",
+      "description": "Try adjusting your search terms or filters."
+    },
+    "error": {
+      "title": "Something went wrong",
+      "description": "We encountered an error while loading the data. Please try again."
+    },
+    "empty": {
+      "title": "Nothing here yet",
+      "description": "This section will populate once data is available."
+    },
+    "loading": {
+      "title": "Loading...",
+      "description": "Please wait while we load your data."
+    },
+    "noResults": {
+      "title": "No search results",
+      "description": "We couldn't find anything matching your search criteria."
+    },
+    "noItems": {
+      "title": "No items found",
+      "description": "No items match your current filters. Try adjusting your search."
+    },
+    "noFavorites": {
+      "title": "No favorites yet",
+      "description": "Items you favorite will appear here for quick access."
+    },
+    "noReservations": {
+      "title": "No reservations",
+      "description": "Your reservations and borrowed items will appear here."
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Info",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "clear": "Clear",
+    "apply": "Apply",
+    "reset": "Reset",
+    "submit": "Submit",
+    "confirm": "Confirm",
+    "retry": "Retry",
+    "refresh": "Refresh"
   }
 }

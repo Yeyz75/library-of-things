@@ -4,10 +4,10 @@
       <div class="max-w-2xl mx-auto">
         <div class="mb-8">
           <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-50">
-            Add New Item
+            {{ t('items.create.title') }}
           </h1>
           <p class="text-gray-600 dark:text-gray-300 mt-2">
-            Share something amazing with your community
+            {{ t('items.create.subtitle') }}
           </p>
         </div>
 
@@ -18,7 +18,7 @@
               <label
                 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
               >
-                Photos (Optional)
+                {{ t('items.create.photos') }}
               </label>
               <div class="mt-2">
                 <div
@@ -29,13 +29,13 @@
                 >
                   <PhotoIcon class="h-12 w-12 mx-auto text-gray-400 mb-4" />
                   <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                    <span class="font-medium text-primary-600"
-                      >Click to upload</span
-                    >
-                    or drag and drop
+                    <span class="font-medium text-primary-600">{{
+                      t('items.create.photosUpload')
+                    }}</span>
+                    {{ t('items.create.photosDragDrop') }}
                   </p>
                   <p class="text-xs text-gray-500">
-                    PNG, JPG, GIF up to 10MB each
+                    {{ t('items.create.photosFormat') }}
                   </p>
                 </div>
                 <input
@@ -81,7 +81,10 @@
                   for="title"
                   class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                 >
-                  Item Title <span class="text-error-500">*</span>
+                  {{ t('items.create.titleAlternative') }}
+                  <span class="text-error-500">{{
+                    t('items.create.required')
+                  }}</span>
                 </label>
                 <input
                   id="title"
@@ -90,7 +93,7 @@
                   required
                   class="input"
                   :class="{ 'border-error-500': errors.title }"
-                  placeholder="What are you sharing?"
+                  :placeholder="t('items.create.titlePlaceholder')"
                 />
                 <p v-if="errors.title" class="mt-1 text-sm text-error-600">
                   {{ errors.title }}
@@ -102,7 +105,10 @@
                   for="description"
                   class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                 >
-                  Description <span class="text-error-500">*</span>
+                  {{ t('items.create.description') }}
+                  <span class="text-error-500">{{
+                    t('items.create.required')
+                  }}</span>
                 </label>
                 <textarea
                   id="description"
@@ -111,7 +117,7 @@
                   rows="4"
                   class="input resize-none"
                   :class="{ 'border-error-500': errors.description }"
-                  placeholder="Describe your item, its condition, and any special instructions..."
+                  :placeholder="t('items.create.descriptionPlaceholder')"
                 ></textarea>
                 <p
                   v-if="errors.description"
@@ -261,12 +267,14 @@ import AppLayout from '@/components/layout/AppLayout.vue';
 import BaseLoader from '@/components/common/BaseLoader.vue';
 import { useAuthStore } from '@/store/auth.store';
 import { useItemsStore } from '@/store/items.store';
+import { useI18n } from '@/composables/useI18n';
 import type { Item, ItemCategory } from '@/types';
 import { storeToRefs } from 'pinia';
 
 const router = useRouter();
 const authStore = useAuthStore();
 const itemsStore = useItemsStore();
+const { t } = useI18n();
 
 const { currentUser, userId } = storeToRefs(authStore);
 
@@ -302,37 +310,37 @@ function validateForm(): boolean {
 
   // Validate title
   if (!form.title.trim()) {
-    errors.title = 'Item title is required';
+    errors.title = t('items.create.errors.titleRequired');
     isValid = false;
   } else if (form.title.trim().length < 3) {
-    errors.title = 'Title must be at least 3 characters';
+    errors.title = t('items.create.errors.titleTooShort');
     isValid = false;
   }
 
   // Validate description
   if (!form.description.trim()) {
-    errors.description = 'Description is required';
+    errors.description = t('items.create.errors.descriptionRequired');
     isValid = false;
   } else if (form.description.trim().length < 10) {
-    errors.description = 'Description must be at least 10 characters';
+    errors.description = t('items.create.errors.descriptionTooShort');
     isValid = false;
   }
 
   // Validate category
   if (!form.category) {
-    errors.category = 'Please select a category';
+    errors.category = t('items.create.errors.categoryRequired');
     isValid = false;
   }
 
   // Validate condition
   if (!form.condition) {
-    errors.condition = 'Please select item condition';
+    errors.condition = t('items.create.errors.conditionRequired');
     isValid = false;
   }
 
   // Validate location
   if (!form.location.trim()) {
-    errors.location = 'Location is required';
+    errors.location = t('items.create.errors.locationRequired');
     isValid = false;
   }
 
