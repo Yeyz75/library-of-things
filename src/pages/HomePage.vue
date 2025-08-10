@@ -73,14 +73,14 @@ const { t } = useI18n();
 const { isAuthenticated } = storeToRefs(authStore);
 
 // Refs for sections to animate
-const heroSectionRef = ref<HTMLElement>();
-const howItWorksSectionRef = ref<HTMLElement>();
-const whyItWorksSectionRef = ref<HTMLElement>();
-const communityImpactSectionRef = ref<HTMLElement>();
-const featuredItemsSectionRef = ref<HTMLElement>();
+const heroSectionRef = ref<HTMLElement | null>(null);
+const howItWorksSectionRef = ref<HTMLElement | null>(null);
+const whyItWorksSectionRef = ref<HTMLElement | null>(null);
+const communityImpactSectionRef = ref<HTMLElement | null>(null);
+const featuredItemsSectionRef = ref<HTMLElement | null>(null);
 
 // Animation function
-const useScrollAnimation = (target: Ref<HTMLElement | undefined>) => {
+const useScrollAnimation = (target: Ref<HTMLElement | null>) => {
   useIntersectionObserver(
     target,
     ([{ isIntersecting }], observerElement) => {

@@ -1,6 +1,6 @@
 <template>
   <section
-    ref="howItWorksSectionRef"
+    :ref="howItWorksSectionRef"
     class="animated-section py-20 bg-primary-50 dark:bg-gray-900"
     v-motion
     :initial="{ opacity: 0, y: 60 }"
@@ -93,7 +93,7 @@ interface HowItWorksStep {
 const props = defineProps<{
   howItWorksSteps: HowItWorksStep[];
   t: Function;
-  howItWorksSectionRef: Ref<HTMLElement | undefined>;
+  howItWorksSectionRef: Ref<HTMLElement | null>;
 }>();
 
 useMotion(props.howItWorksSectionRef);

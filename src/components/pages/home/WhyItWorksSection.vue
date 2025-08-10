@@ -70,7 +70,7 @@ import { AnyValue } from '@/types';
 const props = defineProps<{
   trustFeatures: AnyValue[];
   t: Function;
-  whyItWorksSectionRef: Ref<HTMLElement | undefined>;
+  whyItWorksSectionRef: Ref<HTMLElement | null | undefined>;
 }>();
 
 useMotion(props.whyItWorksSectionRef);
