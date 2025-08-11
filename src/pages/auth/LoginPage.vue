@@ -131,7 +131,7 @@
           </button>
         </div>
 
-        <div class="text-center">
+        <div class="text-center space-x-2">
           <span class="text-sm text-gray-600 dark:text-gray-400"
             >{{ t('auth.login.noAccount') }}
           </span>
