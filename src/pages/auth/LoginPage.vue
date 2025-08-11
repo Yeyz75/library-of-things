@@ -4,17 +4,38 @@
   >
     <div class="max-w-md w-full space-y-8">
       <div class="text-center">
-        <router-link
-          to="/"
-          class="flex items-center justify-center space-x-2 text-primary-600 mb-6"
-        >
-          <div
-            class="h-10 w-10 bg-primary-600 rounded-lg flex items-center justify-center"
+        <div class="flex justify-between items-center mb-6">
+          <router-link
+            to="/"
+            class="flex items-center justify-center space-x-2 text-primary-600"
           >
-            <span class="text-white font-bold">LoT</span>
-          </div>
-          <span class="font-bold text-xl">Library of Things</span>
-        </router-link>
+            <div
+              class="h-10 w-10 bg-primary-600 rounded-lg flex items-center justify-center"
+            >
+              <span class="text-white font-bold">LoT</span>
+            </div>
+            <span class="font-bold text-xl">Library of Things</span>
+          </router-link>
+          <router-link
+            to="/"
+            class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
+            </svg>
+          </router-link>
+        </div>
         <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
           {{ t('auth.login.title') }}
         </h2>

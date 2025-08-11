@@ -68,6 +68,10 @@
         "confirmPasswordRequired": "Please confirm your password",
         "passwordsDoNotMatch": "Passwords do not match"
       }
+    },
+    "callback": {
+      "processing": "Processing authentication...",
+      "pleaseWait": "Please wait while we complete your sign in"
     }
   },
   "dashboard": {

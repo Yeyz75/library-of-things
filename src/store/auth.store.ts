@@ -40,6 +40,25 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  async function signInWithGoogle() {
+    isLoading.value = true;
+    error.value = null;
+
+    try {
+      // Create OAuth2 token for Google
+      const successUrl = `${window.location.origin}/auth/callback`;
+      const failureUrl = `${window.location.origin}/login?error=oauth_failed`;
+
+      await account.createOAuth2Token('google', successUrl, failureUrl);
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to sign in with Google';
+      error.value = errorMessage;
+      isLoading.value = false;
+      throw err;
+    }
+  }
+
   async function signUpWithEmail(
     email: string,
     password: string,
@@ -177,6 +196,7 @@ export const useAuthStore = defineStore('auth', () => {
     userId,
     // Actions
     signInWithEmail,
+    signInWithGoogle,
     signUpWithEmail,
     signOut,
     getCurrentUser,
