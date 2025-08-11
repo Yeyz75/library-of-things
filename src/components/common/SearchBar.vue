@@ -207,21 +207,16 @@ import {
 } from '@heroicons/vue/24/outline';
 
 interface SearchFilters {
-  category: string;
-  availability: string;
-  distance: string;
+  category?: string;
+  availability?: string;
+  distance?: string;
 }
 
 interface Props {
   placeholder?: string;
-  categories?: Array<{ key: string; name: string }>;
+  categories?: Array<{ key?: string; name?: string }>;
   suggestions?: string[];
   modelValue?: string;
-}
-
-interface Emits {
-  search: [query: string, filters: SearchFilters];
-  'update:modelValue': [value: string];
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -231,7 +226,14 @@ const props = withDefaults(defineProps<Props>(), {
   modelValue: '',
 });
 
-const emit = defineEmits<Emits>();
+const emit = defineEmits<{
+  (
+    _e: 'search',
+    _query: string,
+    _filters: Record<string, string | undefined>
+  ): void;
+  (_e: 'update:modelValue', _value: string): void;
+}>();
 
 const searchInput = ref<HTMLInputElement>();
 const searchQuery = ref(props.modelValue);

@@ -89,7 +89,7 @@
         <!-- CTA Buttons -->
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <router-link
-            to="/register"
+            to="/search"
             class="btn-accent text-lg px-8 py-4 hover-lift shadow-lg hover:shadow-xl transition-all duration-300"
             v-motion
             :initial="{ opacity: 0, y: 20, scale: 0.95 }"

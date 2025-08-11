@@ -64,9 +64,9 @@ const router = createRouter({
       meta: { layout: 'app', requiresAuth: true },
     },
     {
-      path: '/categories',
-      name: 'Categories',
-      component: () => import('@/pages/CategoriesPage.vue'),
+      path: '/search',
+      name: 'Search',
+      component: () => import('@/pages/ExplorePage.vue'),
       meta: { layout: 'app' },
     },
     {

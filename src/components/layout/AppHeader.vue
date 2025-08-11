@@ -22,17 +22,8 @@
           </router-link>
         </div>
 
-        <!-- Search Bar - Always visible -->
-        <div class="flex-1 max-w-lg mx-8 hidden md:block">
-          <SearchBar
-            :placeholder="t('searchBar.placeholder')"
-            @search="handleSearch"
-            class="w-full"
-          />
-        </div>
-
         <!-- Desktop Navigation -->
-        <div class="hidden md:flex items-center space-x-6">
+        <div class="hidden md:flex items-center space-x-1">
           <router-link
             to="/"
             class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
@@ -41,38 +32,23 @@
             {{ t('header.home') }}
           </router-link>
           <router-link
-            to="/categories"
+            to="/search"
             class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
           >
-            {{ t('header.catalog') }}
+            {{ t('header.browseItems') }}
           </router-link>
-          <router-link
-            v-if="isAuthenticated"
-            to="/reservations"
-            class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
+          <button
+            @click="showSearchModal = true"
+            class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center"
           >
-            {{ t('header.myReservations') }}
-          </router-link>
-          <router-link
-            to="/donations"
-            class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
-          >
-            {{ t('header.donations') }}
-          </router-link>
-          <router-link
-            to="/help"
-            class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
-          >
-            {{ t('header.help') }}
-          </router-link>
+            <MagnifyingGlassIcon class="h-5 w-5 mr-1" />
+            {{ t('common.search') }}
+          </button>
         </div>
 
         <!-- User Menu / Auth Buttons -->
-        <div class="flex items-center space-x-4">
+        <div class="flex items-center space-x-3">
           <!-- Language Toggle -->
           <LanguageToggle />
 
@@ -117,8 +93,25 @@
               <div
                 v-if="showUserMenu"
                 v-click-outside="() => (showUserMenu = false)"
-                class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-gray-700 py-1 z-50 border border-gray-200 dark:border-gray-700"
+                class="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-gray-700 py-1 z-50 border border-gray-200 dark:border-gray-700"
               >
+                <div
+                  class="px-4 py-2 border-b border-gray-200 dark:border-gray-700"
+                >
+                  <p class="text-sm font-medium text-gray-900 dark:text-white">
+                    {{ currentUser?.name || currentUser?.email }}
+                  </p>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">
+                    {{ t('header.dashboard') }}
+                  </p>
+                </div>
+                <router-link
+                  to="/dashboard"
+                  class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  @click="showUserMenu = false"
+                >
+                  {{ t('header.dashboard') }}
+                </router-link>
                 <router-link
                   to="/profile"
                   class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -132,6 +125,21 @@
                   @click="showUserMenu = false"
                 >
                   {{ t('header.myReservations') }}
+                </router-link>
+                <hr class="border-gray-200 dark:border-gray-700 my-1" />
+                <router-link
+                  to="/help"
+                  class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  @click="showUserMenu = false"
+                >
+                  {{ t('header.help') }}
+                </router-link>
+                <router-link
+                  to="/donations"
+                  class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  @click="showUserMenu = false"
+                >
+                  {{ t('header.donations') }}
                 </router-link>
                 <hr class="border-gray-200 dark:border-gray-700 my-1" />
                 <button
@@ -181,15 +189,6 @@
           v-if="showMobileMenu"
           class="md:hidden py-3 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900"
         >
-          <!-- Mobile Search Bar -->
-          <div class="px-3 pb-3">
-            <SearchBar
-              :placeholder="t('searchBar.placeholder')"
-              @search="handleSearch"
-              class="w-full"
-            />
-          </div>
-
           <div class="space-y-1">
             <router-link
               to="/"
@@ -200,12 +199,31 @@
               {{ t('header.home') }}
             </router-link>
             <router-link
-              to="/categories"
+              to="/search"
               class="block px-3 py-2 text-base font-medium text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-colors"
               active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
               @click="showMobileMenu = false"
             >
-              {{ t('header.catalog') }}
+              {{ t('header.browseItems') }}
+            </router-link>
+            <button
+              @click="
+                showSearchModal = true;
+                showMobileMenu = false;
+              "
+              class="block w-full text-left px-3 py-2 text-base font-medium text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-colors"
+            >
+              {{ t('common.search') }}
+            </button>
+            <hr class="border-gray-200 dark:border-gray-700 my-1" />
+            <router-link
+              v-if="isAuthenticated"
+              to="/dashboard"
+              class="block px-3 py-2 text-base font-medium text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-colors"
+              active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
+              @click="showMobileMenu = false"
+            >
+              {{ t('header.dashboard') }}
             </router-link>
             <router-link
               v-if="isAuthenticated"
@@ -217,14 +235,6 @@
               {{ t('header.myReservations') }}
             </router-link>
             <router-link
-              to="/donations"
-              class="block px-3 py-2 text-base font-medium text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-colors"
-              active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
-              @click="showMobileMenu = false"
-            >
-              {{ t('header.donations') }}
-            </router-link>
-            <router-link
               to="/help"
               class="block px-3 py-2 text-base font-medium text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-colors"
               active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
@@ -232,24 +242,93 @@
             >
               {{ t('header.help') }}
             </router-link>
+            <router-link
+              to="/donations"
+              class="block px-3 py-2 text-base font-medium text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-colors"
+              active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
+              @click="showMobileMenu = false"
+            >
+              {{ t('header.donations') }}
+            </router-link>
           </div>
         </div>
       </transition>
     </nav>
+
+    <!-- Search Modal -->
+    <transition
+      enter-active-class="transition ease-out duration-200"
+      enter-from-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+      enter-to-class="opacity-100 translate-y-0 sm:scale-100"
+      leave-active-class="transition ease-in duration-150"
+      leave-from-class="opacity-100 translate-y-0 sm:scale-100"
+      leave-to-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+    >
+      <div v-if="showSearchModal" class="fixed inset-0 z-50 overflow-y-auto">
+        <div
+          class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+        >
+          <div
+            class="fixed inset-0 transition-opacity"
+            @click="showSearchModal = false"
+          >
+            <div class="absolute inset-0 bg-black opacity-50"></div>
+          </div>
+
+          <div
+            class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+          >
+            <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <div class="sm:flex sm:items-start">
+                <div
+                  class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
+                >
+                  <h3
+                    class="text-lg leading-6 font-medium text-gray-900 dark:text-white mb-4"
+                  >
+                    {{ t('common.search') }}
+                  </h3>
+                  <SearchBar
+                    ref="searchModalBar"
+                    :placeholder="t('searchBar.placeholder')"
+                    @search="handleSearchModalWrapper"
+                    class="w-full"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+              <button
+                type="button"
+                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                @click="showSearchModal = false"
+              >
+                {{ t('common.cancel') }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
   </header>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, nextTick, watch, Ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/store/auth.store';
 import { useThemeStore } from '@/store/theme.store';
 import { useI18n } from '@/composables/useI18n';
-import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
+import {
+  Bars3Icon,
+  XMarkIcon,
+  MagnifyingGlassIcon,
+} from '@heroicons/vue/24/outline';
 import ThemeToggle from '@/components/common/ThemeToggle.vue';
 import LanguageToggle from '@/components/common/LanguageToggle.vue';
 import SearchBar from '@/components/common/SearchBar.vue';
+import type { User } from '@/types';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -258,8 +337,13 @@ const { t } = useI18n();
 
 const showUserMenu = ref(false);
 const showMobileMenu = ref(false);
+const showSearchModal = ref(false);
+const searchModalBar = ref<typeof SearchBar | null>(null);
 
-const { isAuthenticated, currentUser } = storeToRefs(authStore);
+const { isAuthenticated, currentUser } = storeToRefs(authStore) as {
+  isAuthenticated: Ref<boolean>;
+  currentUser: Ref<User | null>;
+};
 
 // Initialize theme on component mount
 onMounted(() => {
@@ -276,9 +360,13 @@ async function handleSignOut() {
   }
 }
 
-function handleSearch(query: string, filters: any) {
+function handleSearch(
+  query: string,
+  filters: Record<string, string | undefined>
+) {
   // Close mobile menu if open
   showMobileMenu.value = false;
+  showSearchModal.value = false;
 
   // Navigate to search results or home page with search params
   const queryParams: Record<string, string> = { search: query };
@@ -286,14 +374,50 @@ function handleSearch(query: string, filters: any) {
   if (filters && typeof filters === 'object') {
     Object.keys(filters).forEach((key) => {
       if (filters[key]) {
-        queryParams[key] = filters[key];
+        queryParams[key] = filters[key] as string;
       }
     });
   }
 
   router.push({
-    path: '/',
+    path: '/search',
     query: queryParams,
   });
 }
+
+function handleSearchModal(
+  query: string,
+  filters: Record<string, string | undefined>
+) {
+  handleSearch(query, filters);
+}
+
+function handleSearchModalWrapper() {
+  // Obtener los valores del SearchBar usando la referencia
+  const searchBar = searchModalBar.value;
+  if (searchBar && searchBar.query && searchBar.filters) {
+    // Filtrar solo los pares clave-valor donde el valor sea string o undefined
+    const validFilters: Record<string, string | undefined> = {};
+    Object.entries(searchBar.filters).forEach(([key, value]) => {
+      if (typeof value === 'string' || typeof value === 'undefined') {
+        validFilters[key] = value;
+      }
+    });
+    handleSearchModal(searchBar.query, validFilters);
+  }
+}
+
+// Focus the search bar when the modal opens
+watch(showSearchModal, (newVal) => {
+  if (newVal) {
+    nextTick(() => {
+      if (searchModalBar.value) {
+        const input = searchModalBar.value.$el.querySelector('input');
+        if (input) {
+          input.focus();
+        }
+      }
+    });
+  }
+});
 </script>

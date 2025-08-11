@@ -441,7 +441,10 @@
     "borrowed": "Prestado",
     "reserve": "Reservar",
     "notAvailable": "No Disponible",
-    "details": "Detalles"
+    "details": "Detalles",
+    "itemCard": "Tarjeta de Artículo",
+    "signInToRequest": "Iniciar sesión para solicitar",
+    "share": "Compartir"
   },
   "emptyState": {
     "default": {

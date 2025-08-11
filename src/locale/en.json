@@ -441,7 +441,10 @@
     "borrowed": "Borrowed",
     "reserve": "Reserve",
     "notAvailable": "Not Available",
-    "details": "Details"
+    "details": "Details",
+    "itemCard": "Item Card",
+    "signInToRequest": "Sign in to request",
+    "share": "Share"
   },
   "emptyState": {
     "default": {

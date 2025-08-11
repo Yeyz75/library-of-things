@@ -67,7 +67,7 @@
             </li>
             <li>
               <router-link
-                to="/categories"
+                to="/search"
                 class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
                 {{ t('footer.quickLinks.categories') }}
