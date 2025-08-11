@@ -45,30 +45,11 @@ import {
   HeartIcon,
   ClockIcon,
 } from '@heroicons/vue/24/outline';
-import { AnyValue } from '@/types';
+import type { EmptyStatePropsModel, EmptyStateEmitsModel } from '@/types';
 
-interface Props {
-  type?:
-    | 'default'
-    | 'search'
-    | 'error'
-    | 'empty'
-    | 'loading'
-    | 'no-results'
-    | 'no-items'
-    | 'no-favorites'
-    | 'no-reservations';
-  title?: string;
-  description?: string;
-  actionText?: string;
-  actionIcon?: AnyValue;
-  size?: 'sm' | 'md' | 'lg';
-  icon?: AnyValue;
-}
+interface Props extends EmptyStatePropsModel {}
 
-interface Emits {
-  action: [];
-}
+interface Emits extends EmptyStateEmitsModel {}
 
 const props = withDefaults(defineProps<Props>(), {
   type: 'default',

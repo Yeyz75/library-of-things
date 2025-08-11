@@ -130,13 +130,10 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useMotion } from '@vueuse/motion';
+import type { HeroSectionCommunityStatsModel } from '@/types';
 
 // Define la interfaz para los stats de la comunidad
-interface CommunityStats {
-  itemsShared: number;
-  co2Saved: number;
-  moneySaved: number;
-}
+interface CommunityStats extends HeroSectionCommunityStatsModel {}
 
 const props = defineProps<{
   communityStats: CommunityStats;
@@ -160,7 +157,7 @@ const statsArr = computed(() => [
     color: 'text-green-600 dark:text-green-400',
   },
   {
-    value: `$${props.communityStats.moneySaved}`,
+    value: `${props.communityStats.moneySaved}`,
     label: props.t('home.hero.stats.moneySaved'),
     color: 'text-blue-600 dark:text-blue-400',
   },

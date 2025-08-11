@@ -88,7 +88,7 @@
         <span
           class="inline-block bg-primary-100 dark:bg-primary-900/20 text-primary-800 dark:text-primary-300 text-xs font-medium px-2.5 py-0.5 rounded-full"
         >
-          {{ getCategoryName(item.category) }}
+          {{ getCategoryName(item.category ?? '') }}
         </span>
       </div>
 
@@ -206,28 +206,11 @@ import {
   StarIcon,
 } from '@heroicons/vue/24/outline';
 import BaseLoader from './BaseLoader.vue';
-import { Item } from '@/types';
+import type { ItemCardPropsModel, ItemCardEmitsModel } from '@/types';
 
-interface Props {
-  item: Item;
-  clickable?: boolean;
-  showFavorite?: boolean;
-  showQuickActions?: boolean;
-  showDistance?: boolean;
-  showRating?: boolean;
-  showActions?: boolean;
-  loading?: boolean;
-  categories?: Array<{ key: string; name: string }>;
-  isFavorite?: boolean;
-}
+interface Props extends ItemCardPropsModel {}
 
-interface Emits {
-  click: [item: Item];
-  reserve: [item: Item];
-  share: [item: Item];
-  viewDetails: [item: Item];
-  toggleFavorite: [item: Item];
-}
+interface Emits extends ItemCardEmitsModel {}
 
 const props = withDefaults(defineProps<Props>(), {
   clickable: true,

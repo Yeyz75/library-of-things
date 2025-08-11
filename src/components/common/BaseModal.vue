@@ -75,18 +75,11 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted } from 'vue';
 import { XMarkIcon } from '@heroicons/vue/24/outline';
+import type { BaseModalPropsModel, BaseModalEmitsModel } from '@/types';
 
-interface Props {
-  isOpen: boolean;
-  title?: string;
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  closable?: boolean;
-  closeOnBackdrop?: boolean;
-}
+interface Props extends BaseModalPropsModel {}
 
-interface Emits {
-  close: [];
-}
+interface Emits extends BaseModalEmitsModel {}
 
 const props = withDefaults(defineProps<Props>(), {
   size: 'md',

@@ -11,43 +11,19 @@ import {
   ID,
 } from '@/lib/appwrite';
 import type { User, Item, Reservation } from '@/types';
-
-interface AppwriteState {
-  users: User[];
-  items: Item[];
-  reservations: Reservation[];
-  currentUser: User | null;
-}
-
-interface CreateUserData {
-  email: string;
-  password: string;
-  name: string;
-}
-
-interface CreateItemData {
-  title: string;
-  description: string;
-  category: string;
-  condition: 'excellent' | 'good' | 'fair' | 'poor';
-  imageUrls: string[];
-  location: string;
-  tags: string[];
-}
-
-interface CreateReservationData {
-  itemId: string;
-  startDate: string;
-  endDate: string;
-  message?: string;
-}
+import type {
+  UseAppwriteAppwriteStateModel,
+  UseAppwriteCreateUserDataModel,
+  UseAppwriteCreateItemDataModel,
+  UseAppwriteCreateReservationDataModel,
+} from '@/types';
 
 export function useAppwrite() {
   const loading = ref<boolean>(false);
   const error = ref<string | null>(null);
 
   // Estado reactivo para datos
-  const state = reactive<AppwriteState>({
+  const state = reactive<UseAppwriteAppwriteStateModel>({
     users: [],
     items: [],
     reservations: [],
@@ -78,7 +54,9 @@ export function useAppwrite() {
     }
   };
 
-  const createUser = async (userData: CreateUserData): Promise<User> => {
+  const createUser = async (
+    userData: UseAppwriteCreateUserDataModel
+  ): Promise<User> => {
     loading.value = true;
     error.value = null;
     try {
@@ -112,7 +90,9 @@ export function useAppwrite() {
     }
   };
 
-  const createItem = async (itemData: CreateItemData): Promise<Item> => {
+  const createItem = async (
+    itemData: UseAppwriteCreateItemDataModel
+  ): Promise<Item> => {
     loading.value = true;
     error.value = null;
     try {
@@ -147,7 +127,7 @@ export function useAppwrite() {
   };
 
   const createReservation = async (
-    reservationData: CreateReservationData
+    reservationData: UseAppwriteCreateReservationDataModel
   ): Promise<Reservation> => {
     loading.value = true;
     error.value = null;

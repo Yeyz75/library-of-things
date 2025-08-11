@@ -15,12 +15,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import type { BaseLoaderPropsModel } from '@/types';
 
-interface Props {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  text?: string;
-  center?: boolean;
-}
+interface Props extends BaseLoaderPropsModel {}
 
 const props = withDefaults(defineProps<Props>(), {
   size: 'md',

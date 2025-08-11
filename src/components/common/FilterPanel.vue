@@ -192,7 +192,7 @@
             @click="toggleTag(tag.name)"
             class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium transition-all duration-200"
             :class="
-              localFilters.tags.includes(tag.name)
+              (localFilters.tags || []).includes(tag.name)
                 ? 'bg-primary-100 dark:bg-primary-900/20 text-primary-800 dark:text-primary-300 border border-primary-300 dark:border-primary-600'
                 : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600'
             "
@@ -257,32 +257,11 @@
 import { ref, computed, watch } from 'vue';
 import { StarIcon } from '@heroicons/vue/24/solid';
 import { FilterOptions } from '@/types';
+import type { FilterPanelPropsModel, FilterPanelEmitsModel } from '@/types';
 
-interface Category {
-  key: string;
-  name: string;
-  count?: number;
-}
+interface Props extends FilterPanelPropsModel {}
 
-interface Tag {
-  name: string;
-  count: number;
-}
-
-interface Props {
-  filters: FilterOptions;
-  categories: Category[];
-  availableTags?: Tag[];
-  showLocationFilter?: boolean;
-  showRatingFilter?: boolean;
-  showDateFilter?: boolean;
-  showTagsFilter?: boolean;
-}
-
-interface Emits {
-  'update:filters': [filters: FilterOptions];
-  'apply-filters': [filters: FilterOptions];
-}
+interface Emits extends FilterPanelEmitsModel {}
 
 const props = withDefaults(defineProps<Props>(), {
   availableTags: () => [],
@@ -299,13 +278,13 @@ const showAllTags = ref(false);
 
 const activeFiltersCount = computed(() => {
   let count = 0;
-  if (localFilters.value.categories.length > 0) count++;
+  if ((localFilters.value.categories ?? []).length > 0) count++;
   if (localFilters.value.availableOnly) count++;
-  if (localFilters.value.maxDistance < 50) count++;
+  if ((localFilters.value.maxDistance ?? 0) < 50) count++;
   if (localFilters.value.minRating !== null) count++;
   if (localFilters.value.availableFrom) count++;
   if (localFilters.value.availableTo) count++;
-  if (localFilters.value.tags.length > 0) count++;
+  if ((localFilters.value.tags ?? []).length > 0) count++;
   if (localFilters.value.sortBy !== 'newest') count++;
   return count;
 });
@@ -327,6 +306,10 @@ watch(
 );
 
 function toggleTag(tagName: string) {
+  // Asegura que tags siempre sea un array antes de operar sobre él
+  if (!localFilters.value.tags) {
+    localFilters.value.tags = [];
+  }
   const index = localFilters.value.tags.indexOf(tagName);
   if (index > -1) {
     localFilters.value.tags.splice(index, 1);

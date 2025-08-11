@@ -4,11 +4,17 @@
     <div class="reviewer-header">
       <div class="reviewer-info">
         <div class="reviewer-avatar">
-          {{ review.reviewerName.charAt(0).toUpperCase() }}
+          {{
+            review.reviewerName
+              ? review.reviewerName.charAt(0).toUpperCase()
+              : ''
+          }}
         </div>
         <div class="reviewer-details">
           <h4 class="reviewer-name">{{ review.reviewerName }}</h4>
-          <p class="review-date">{{ formatDate(review.$createdAt) }}</p>
+          <p class="review-date">
+            {{ formatDate(review.$createdAt ? review.$createdAt : '') }}
+          </p>
         </div>
       </div>
 
@@ -67,13 +73,10 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { Review } from '../../types';
+import type { ReviewCardPropsModel } from '@/types';
 import StarRating from './StarRating.vue';
 
-interface Props {
-  review: Review;
-  showItemInfo?: boolean;
-}
+interface Props extends ReviewCardPropsModel {}
 
 const props = withDefaults(defineProps<Props>(), {
   showItemInfo: false,
@@ -99,31 +102,31 @@ const aspectRatings = computed(() => {
   const aspects = [];
   const ratings = props.review.aspectRatings;
 
-  if (ratings.itemCondition !== undefined) {
+  if (ratings?.itemCondition !== undefined) {
     aspects.push({
       key: 'itemCondition',
       label: 'Estado del artículo',
-      value: ratings.itemCondition,
+      value: ratings?.itemCondition,
     });
   }
 
-  if (ratings.communication !== undefined) {
+  if (ratings?.communication !== undefined) {
     aspects.push({
       key: 'communication',
       label: 'Comunicación',
-      value: ratings.communication,
+      value: ratings?.communication,
     });
   }
 
-  if (ratings.punctuality !== undefined) {
+  if (ratings?.punctuality !== undefined) {
     aspects.push({
       key: 'punctuality',
       label: 'Puntualidad',
-      value: ratings.punctuality,
+      value: ratings?.punctuality,
     });
   }
 
-  if (ratings.reliability !== undefined) {
+  if (ratings?.reliability !== undefined) {
     aspects.push({
       key: 'reliability',
       label: 'Confiabilidad',

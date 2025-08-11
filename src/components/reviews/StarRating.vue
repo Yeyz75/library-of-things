@@ -42,14 +42,9 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import type { StarRatingPropsModel } from '@/types';
 
-interface Props {
-  rating?: number;
-  reviewCount?: number;
-  showText?: boolean;
-  interactive?: boolean;
-  size?: 'small' | 'medium' | 'large';
-}
+interface Props extends StarRatingPropsModel {}
 
 const props = withDefaults(defineProps<Props>(), {
   rating: 0,

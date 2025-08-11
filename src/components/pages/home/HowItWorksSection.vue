@@ -78,15 +78,10 @@
 </template>
 
 <script setup lang="ts">
-// Define la interfaz para los pasos
-interface HowItWorksStep {
-  icon: unknown; // Puedes especificar un tipo más estricto si sabes el tipo de los iconos
-  title: string;
-  description: string;
-}
+import { HowItWorksStepModel } from '@/types';
 
 defineProps<{
-  howItWorksSteps: HowItWorksStep[];
+  howItWorksSteps: HowItWorksStepModel[];
   t: Function;
 }>();
 </script>

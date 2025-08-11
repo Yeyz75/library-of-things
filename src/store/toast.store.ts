@@ -1,29 +1,18 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-
-type TimerId = ReturnType<typeof setInterval>;
-
-export interface Toast {
-  id: string;
-  type: 'success' | 'error' | 'warning' | 'info';
-  title?: string;
-  message: string;
-  duration: number;
-  progress: number;
-  timer?: TimerId;
-}
+import type { ToastModel } from '@/types';
 
 export const useToastStore = defineStore('toast', () => {
-  const toasts = ref<Toast[]>([]);
+  const toasts = ref<ToastModel[]>([]);
 
   function addToast(
-    type: Toast['type'],
+    type: ToastModel['type'],
     message: string,
     title?: string,
     duration = 5000
   ) {
     const id = Math.random().toString(36).substr(2, 9);
-    const toast: Toast = {
+    const toast: ToastModel = {
       id,
       type,
       title,

@@ -122,18 +122,13 @@ import BaseModal from '@/components/common/BaseModal.vue';
 import BaseLoader from '@/components/common/BaseLoader.vue';
 import { useAuthStore } from '@/store/auth.store';
 import { useReservationsStore } from '@/store/reservations.store';
-import type { Item, Reservation } from '@/types';
+import type { Reservation } from '@/types';
+import type { ReserveModalPropsModel, ReserveModalEmitsModel } from '@/types';
 import { storeToRefs } from 'pinia';
 
-interface Props {
-  isOpen: boolean;
-  item: Item;
-}
+interface Props extends ReserveModalPropsModel {}
 
-interface Emits {
-  close: [];
-  reserved: [];
-}
+interface Emits extends ReserveModalEmitsModel {}
 
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
@@ -225,7 +220,7 @@ async function handleSubmit() {
     > = {
       itemId: props.item.$id,
       itemTitle: props.item.title,
-      itemImageUrl: props.item.imageUrls[0] || undefined,
+      itemImageUrl: props.item.imageUrls?.[0] || undefined,
       borrowerId: userId.value,
       borrowerName:
         currentUser.value.name || currentUser.value.email || 'Unknown',

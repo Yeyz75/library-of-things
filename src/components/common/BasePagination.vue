@@ -106,21 +106,14 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline';
+import type {
+  BasePaginationPropsModel,
+  BasePaginationEmitsModel,
+} from '@/types';
 
-interface Props {
-  currentPage: number;
-  totalPages: number;
-  total: number;
-  pageSize: number;
-  showPageSize?: boolean;
-  pageSizeOptions?: number[];
-  maxVisiblePages?: number;
-}
+interface Props extends BasePaginationPropsModel {}
 
-interface Emits {
-  'page-change': [page: number];
-  'page-size-change': [pageSize: number];
-}
+interface Emits extends BasePaginationEmitsModel {}
 
 const props = withDefaults(defineProps<Props>(), {
   showPageSize: true,

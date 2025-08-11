@@ -205,19 +205,11 @@ import {
   AdjustmentsHorizontalIcon,
   ClockIcon,
 } from '@heroicons/vue/24/outline';
+import type { SearchBarSearchFiltersModel, SearchBarPropsModel } from '@/types';
 
-interface SearchFilters {
-  category?: string;
-  availability?: string;
-  distance?: string;
-}
+interface SearchFilters extends SearchBarSearchFiltersModel {}
 
-interface Props {
-  placeholder?: string;
-  categories?: Array<{ key?: string; name?: string }>;
-  suggestions?: string[];
-  modelValue?: string;
-}
+interface Props extends SearchBarPropsModel {}
 
 const props = withDefaults(defineProps<Props>(), {
   placeholder: 'Search items...',

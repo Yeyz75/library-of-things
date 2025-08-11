@@ -1,13 +1,10 @@
 // src/directives/clickOutside.ts
 import type { Directive } from 'vue';
-
-interface ClickOutsideElement extends HTMLElement {
-  _clickOutsideHandler?: (event: MouseEvent) => void;
-}
+import type { ClickOutsideElementModel } from '@/types';
 
 const clickOutside: Directive = {
   beforeMount(el, binding) {
-    const element = el as ClickOutsideElement;
+    const element = el as ClickOutsideElementModel;
     element._clickOutsideHandler = (event: MouseEvent) => {
       if (!element.contains(event.target as Node)) {
         setTimeout(() => {
@@ -18,7 +15,7 @@ const clickOutside: Directive = {
     document.addEventListener('mousedown', element._clickOutsideHandler);
   },
   unmounted(el) {
-    const element = el as ClickOutsideElement;
+    const element = el as ClickOutsideElementModel;
     if (element._clickOutsideHandler) {
       document.removeEventListener('mousedown', element._clickOutsideHandler);
       delete element._clickOutsideHandler;

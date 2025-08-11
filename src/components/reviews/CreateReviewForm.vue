@@ -184,31 +184,24 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
-import type { CreateReviewData, ReviewType } from '../../types';
+import type { CreateReviewData } from '../../types';
+import type {
+  CreateReviewFormPhotoPreviewModel,
+  CreateReviewFormPropsModel,
+  CreateReviewFormEmitsModel,
+} from '@/types';
 import StarRating from './StarRating.vue';
 
-interface Props {
-  reservationId: string;
-  itemId: string;
-  reviewerId: string;
-  reviewedUserId: string;
-  reviewType: ReviewType;
-}
+interface Props extends CreateReviewFormPropsModel {}
 
 const props = defineProps<Props>();
 
-const emit = defineEmits<{
-  submit: [reviewData: CreateReviewData];
-  cancel: [];
-}>();
+const emit = defineEmits<CreateReviewFormEmitsModel>();
 
 const fileInput = ref<HTMLInputElement>();
 const isSubmitting = ref(false);
 
-interface PhotoPreview {
-  file: File;
-  preview: string;
-}
+interface PhotoPreview extends CreateReviewFormPhotoPreviewModel {}
 
 const selectedPhotos = ref<PhotoPreview[]>([]);
 
