@@ -117,12 +117,12 @@
                   >
                     <span>{{
                       t('reservations.borrowed.from', {
-                        date: formatDate(reservation.startDate),
+                        date: formatDate(reservation.startDate ?? ''),
                       })
                     }}</span>
                     <span>{{
                       t('reservations.borrowed.to', {
-                        date: formatDate(reservation.endDate),
+                        date: formatDate(reservation.endDate ?? ''),
                       })
                     }}</span>
                   </div>
@@ -145,14 +145,14 @@
                   <div class="flex space-x-2">
                     <button
                       v-if="reservation.status === 'active'"
-                      @click="returnItem(reservation.$id)"
+                      @click="returnItem(reservation.$id ?? '')"
                       class="btn btn-sm bg-success-600 text-white hover:bg-success-700"
                     >
                       {{ t('reservations.borrowed.markReturned') }}
                     </button>
                     <button
                       v-if="reservation.status === 'pending'"
-                      @click="cancelReservation(reservation.$id)"
+                      @click="cancelReservation(reservation.$id ?? '')"
                       class="btn btn-sm bg-error-600 text-white hover:bg-error-700"
                     >
                       {{ t('reservations.borrowed.cancel') }}
@@ -214,8 +214,10 @@
                   <div
                     class="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400"
                   >
-                    <span>From {{ formatDate(reservation.startDate) }}</span>
-                    <span>To {{ formatDate(reservation.endDate) }}</span>
+                    <span
+                      >From {{ formatDate(reservation.startDate ?? '') }}</span
+                    >
+                    <span>To {{ formatDate(reservation.endDate ?? '') }}</span>
                   </div>
                   <p
                     v-if="reservation.message"
@@ -236,14 +238,14 @@
                   <div class="flex space-x-2">
                     <button
                       v-if="reservation.status === 'pending'"
-                      @click="approveReservation(reservation.$id)"
+                      @click="approveReservation(reservation.$id ?? '')"
                       class="btn btn-sm bg-success-600 text-white hover:bg-success-700"
                     >
                       {{ t('reservations.lent.approve') }}
                     </button>
                     <button
                       v-if="reservation.status === 'pending'"
-                      @click="rejectReservation(reservation.$id)"
+                      @click="rejectReservation(reservation.$id ?? '')"
                       class="btn btn-sm bg-error-600 text-white hover:bg-error-700"
                     >
                       {{ t('reservations.lent.decline') }}
@@ -272,7 +274,7 @@ import BaseLoader from '@/components/common/BaseLoader.vue';
 import { useAuthStore } from '@/store/auth.store';
 import { useReservationsStore } from '@/store/reservations.store';
 import { useI18n } from '@/composables/useI18n';
-import type { ReservationStatus } from '@/types';
+import type { ReservationStatusModel } from '@/types/models';
 
 const authStore = useAuthStore();
 const reservationsStore = useReservationsStore();
@@ -300,7 +302,7 @@ const lentReservations = computed(() =>
     )
 );
 
-function getStatusClass(status: ReservationStatus): string {
+function getStatusClass(status: ReservationStatusModel): string {
   const classes = {
     pending: 'bg-warning-100 text-warning-800',
     approved: 'bg-primary-100 text-primary-800',
@@ -308,14 +310,15 @@ function getStatusClass(status: ReservationStatus): string {
     returned: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
     cancelled: 'bg-error-100 text-error-800',
   };
+  // Asegura que status sea una clave válida del objeto classes
   return (
-    classes[status] ||
+    classes[status as keyof typeof classes] ||
     'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
   );
 }
 
-function getStatusText(status: ReservationStatus): string {
-  return t(`reservations.status.${status}`) || status;
+function getStatusText(status: ReservationStatusModel): string {
+  return t(`reservations.status.${status}`) ?? status;
 }
 
 function formatDate(date: string): string {

@@ -206,7 +206,7 @@ import {
   StarIcon,
 } from '@heroicons/vue/24/outline';
 import BaseLoader from './BaseLoader.vue';
-import type { ItemCardPropsModel, ItemCardEmitsModel } from '@/types';
+import type { ItemCardPropsModel, ItemCardEmitsModel } from '@/types/models';
 
 interface Props extends ItemCardPropsModel {}
 

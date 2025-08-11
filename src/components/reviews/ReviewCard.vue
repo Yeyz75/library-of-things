@@ -73,7 +73,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { ReviewCardPropsModel } from '@/types';
+import type { ReviewCardPropsModel } from '@/types/models';
 import StarRating from './StarRating.vue';
 
 interface Props extends ReviewCardPropsModel {}

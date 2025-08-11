@@ -153,7 +153,7 @@
                           <span
                             class="inline-block bg-primary-100 dark:bg-primary-900/20 text-primary-800 dark:text-primary-300 text-xs font-medium px-2.5 py-0.5 rounded-full"
                           >
-                            {{ getCategoryName(item.category) }}
+                            {{ getCategoryName(item.category ?? '') }}
                           </span>
                           <span v-if="item.distance" class="flex items-center">
                             <MapPinIcon class="h-4 w-4 mr-1" />
@@ -237,7 +237,8 @@ import BaseLoader from '@/components/common/BaseLoader.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import { useAuthStore } from '@/store/auth.store';
 import { useToast } from '@/composables/useToast';
-import { AnyValue, FilterOptions } from '@/types';
+import { FilterOptionsModel, ItemModel } from '@/types/models';
+import { Item } from '@/types';
 
 const route = useRoute();
 const router = useRouter();
@@ -251,13 +252,13 @@ const searchQuery = ref((route.query.q as string) || '');
 const viewMode = ref<'grid' | 'list'>('grid');
 const isLoading = ref(false);
 const error = ref('');
-const searchResults = ref<AnyValue[]>([]);
+const searchResults = ref<Item[]>([]);
 const currentPage = ref(1);
 const pageSize = ref(12);
 const totalResults = ref(0);
 const totalPages = ref(0);
 
-const filters = ref<FilterOptions>({
+const filters = ref<FilterOptionsModel>({
   categories: [],
   availableOnly: false,
   maxDistance: 50,
@@ -329,6 +330,8 @@ async function performSearch() {
     // Mock results
     const mockResults = Array.from({ length: pageSize.value }, (_, i) => ({
       $id: `item-${i}`,
+      $createdAt: new Date().toISOString(), // <-- Añadido
+      $updatedAt: new Date().toISOString(), // <-- Añadido
       title: `Sample Item ${i + 1}`,
       description: `This is a sample item description for item ${i + 1}`,
       category: categories[Math.floor(Math.random() * categories.length)].key,
@@ -355,7 +358,10 @@ async function performSearch() {
   }
 }
 
-function handleSearch(query: string, searchFilters: Partial<FilterOptions>) {
+function handleSearch(
+  query: string,
+  searchFilters: Partial<FilterOptionsModel>
+) {
   searchQuery.value = query;
   filters.value = { ...filters.value, ...searchFilters };
   currentPage.value = 1;
@@ -372,7 +378,7 @@ function handleSearch(query: string, searchFilters: Partial<FilterOptions>) {
   performSearch();
 }
 
-function handleFiltersApply(newFilters: FilterOptions) {
+function handleFiltersApply(newFilters: FilterOptionsModel) {
   filters.value = newFilters;
   currentPage.value = 1;
   performSearch();
@@ -389,7 +395,7 @@ function handlePageSizeChange(size: number) {
   performSearch();
 }
 
-function handleReserve(item: AnyValue) {
+function handleReserve(item: ItemModel) {
   if (!isAuthenticated.value) {
     toast.warning('Please sign in to reserve items', 'Authentication Required');
     return;
@@ -400,7 +406,7 @@ function handleReserve(item: AnyValue) {
   );
 }
 
-function handleShare(item: AnyValue) {
+function handleShare(item: ItemModel) {
   if (navigator.share) {
     navigator.share({
       title: item.title,
@@ -415,7 +421,7 @@ function handleShare(item: AnyValue) {
   }
 }
 
-function handleToggleFavorite(item: AnyValue) {
+function handleToggleFavorite(item: ItemModel) {
   if (!isAuthenticated.value) {
     toast.warning(
       'Please sign in to save favorites',

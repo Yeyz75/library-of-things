@@ -78,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import { HowItWorksStepModel } from '@/types';
+import { HowItWorksStepModel } from '@/types/models';
 
 defineProps<{
   howItWorksSteps: HowItWorksStepModel[];

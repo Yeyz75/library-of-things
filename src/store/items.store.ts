@@ -8,12 +8,12 @@ import {
   ID,
   Query,
 } from '@/lib/appwrite';
-import type { Item } from '@/types';
+import type { ItemModel } from '@/types/models';
 
 export const useItemsStore = defineStore('items', () => {
   // State
-  const items = ref<Item[]>([]);
-  const currentItem = ref<Item | null>(null);
+  const items = ref<ItemModel[]>([]);
+  const currentItem = ref<ItemModel | null>(null);
   const isLoading = ref(false);
   const error = ref<string | null>(null);
 
@@ -25,24 +25,24 @@ export const useItemsStore = defineStore('items', () => {
   const itemsByCategory = computed(() => {
     return items.value.reduce(
       (acc, item) => {
-        if (!acc[item.category]) {
-          acc[item.category] = [];
+        if (!acc[item.category ?? '']) {
+          acc[item.category ?? ''] = [];
         }
-        acc[item.category].push(item);
+        acc[item.category ?? ''].push(item);
         return acc;
       },
-      {} as Record<string, Item[]>
+      {} as Record<string, ItemModel[]>
     );
   });
 
-  async function getItemById(id: string): Promise<Item | null> {
+  async function getItemById(id: string): Promise<ItemModel | null> {
     try {
       const response = await databases.getDocument(
         DATABASE_ID,
         COLLECTIONS.ITEMS,
         id
       );
-      return response as unknown as Item;
+      return response as unknown as ItemModel;
     } catch {
       return null;
     }
@@ -80,7 +80,7 @@ export const useItemsStore = defineStore('items', () => {
         queries
       );
 
-      items.value = response.documents as unknown as Item[];
+      items.value = response.documents as unknown as ItemModel[];
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : 'Failed to fetch items';
@@ -100,7 +100,7 @@ export const useItemsStore = defineStore('items', () => {
         COLLECTIONS.ITEMS,
         id
       );
-      currentItem.value = response as unknown as Item;
+      currentItem.value = response as unknown as ItemModel;
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : 'Item not found';
@@ -111,7 +111,7 @@ export const useItemsStore = defineStore('items', () => {
   }
 
   async function createItem(
-    itemData: Omit<Item, '$id' | '$createdAt' | '$updatedAt'>
+    itemData: Omit<ItemModel, '$id' | '$createdAt' | '$updatedAt'>
   ) {
     isLoading.value = true;
     error.value = null;
@@ -124,7 +124,7 @@ export const useItemsStore = defineStore('items', () => {
         itemData
       );
 
-      const newItem = response as unknown as Item;
+      const newItem = response as unknown as ItemModel;
       items.value.unshift(newItem);
       return newItem.$id;
     } catch (err: unknown) {
@@ -139,7 +139,7 @@ export const useItemsStore = defineStore('items', () => {
 
   async function updateItem(
     id: string,
-    updates: Partial<Omit<Item, '$id' | '$createdAt'>>
+    updates: Partial<Omit<ItemModel, '$id' | '$createdAt'>>
   ) {
     isLoading.value = true;
     error.value = null;
@@ -152,7 +152,7 @@ export const useItemsStore = defineStore('items', () => {
         updates
       );
 
-      const updatedItem = response as unknown as Item;
+      const updatedItem = response as unknown as ItemModel;
 
       // Update local state
       const index = items.value.findIndex((item) => item.$id === id);

@@ -268,7 +268,7 @@ export interface ItemModel {
 }
 
 export interface ReservationModel {
-  $id: string;
+  $id?: string;
   itemId?: string;
   itemTitle?: string;
   itemImageUrl?: string;

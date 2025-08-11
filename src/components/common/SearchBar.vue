@@ -205,7 +205,10 @@ import {
   AdjustmentsHorizontalIcon,
   ClockIcon,
 } from '@heroicons/vue/24/outline';
-import type { SearchBarSearchFiltersModel, SearchBarPropsModel } from '@/types';
+import type {
+  SearchBarSearchFiltersModel,
+  SearchBarPropsModel,
+} from '@/types/models';
 
 interface SearchFilters extends SearchBarSearchFiltersModel {}
 

@@ -256,8 +256,11 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import { StarIcon } from '@heroicons/vue/24/solid';
-import { FilterOptions } from '@/types';
-import type { FilterPanelPropsModel, FilterPanelEmitsModel } from '@/types';
+import { FilterOptionsModel as FilterOptions } from '@/types/models';
+import type {
+  FilterPanelPropsModel,
+  FilterPanelEmitsModel,
+} from '@/types/models';
 
 interface Props extends FilterPanelPropsModel {}
 

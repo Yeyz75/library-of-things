@@ -1,10 +1,10 @@
 import { ref } from 'vue';
 import { reservationService } from '@/services/reservationService';
 import { useUIStore } from '@/store/ui.store';
-import type { Reservation } from '@/types';
+import type { ReservationModel } from '@/types/models';
 
 export function useReservations() {
-  const reservations = ref<Reservation[]>([]);
+  const reservations = ref<ReservationModel[]>([]);
   const ui = useUIStore();
 
   const loadReservations = async (): Promise<void> => {
@@ -12,7 +12,7 @@ export function useReservations() {
     ui.clearError();
     try {
       const response = await reservationService.getAllReservations();
-      reservations.value = response.documents as unknown as Reservation[];
+      reservations.value = response.documents as unknown as ReservationModel[];
     } catch (err) {
       const message =
         err instanceof Error ? err.message : 'Error al cargar las reservas';

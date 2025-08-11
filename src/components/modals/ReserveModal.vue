@@ -122,8 +122,11 @@ import BaseModal from '@/components/common/BaseModal.vue';
 import BaseLoader from '@/components/common/BaseLoader.vue';
 import { useAuthStore } from '@/store/auth.store';
 import { useReservationsStore } from '@/store/reservations.store';
-import type { Reservation } from '@/types';
-import type { ReserveModalPropsModel, ReserveModalEmitsModel } from '@/types';
+import type { ReservationModel } from '@/types/models';
+import type {
+  ReserveModalPropsModel,
+  ReserveModalEmitsModel,
+} from '@/types/models';
 import { storeToRefs } from 'pinia';
 
 interface Props extends ReserveModalPropsModel {}
@@ -215,7 +218,7 @@ async function handleSubmit() {
 
   try {
     const reservationData: Omit<
-      Reservation,
+      ReservationModel,
       'id' | '$id' | 'createdAt' | '$createdAt' | 'updatedAt' | '$updatedAt'
     > = {
       itemId: props.item.$id,

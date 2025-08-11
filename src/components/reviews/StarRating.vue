@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import type { StarRatingPropsModel } from '@/types';
+import type { StarRatingPropsModel } from '@/types/models';
 
 interface Props extends StarRatingPropsModel {}
 

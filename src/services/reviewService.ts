@@ -8,20 +8,29 @@ import {
   Query,
 } from '../lib/appwrite';
 import type {
-  Review,
-  CreateReviewData,
-  ReviewSummary,
-  UserStats,
-  User,
-  Item,
-  Reservation,
-} from '../types';
+  ReviewModel as Review,
+  CreateReviewDataModel as CreateReviewData,
+  ReviewSummaryModel as ReviewSummary,
+  UserStatsModel as UserStats,
+  UserModel as User,
+  ItemModel as Item,
+  ReservationModel as Reservation,
+} from '@/types/models';
 import type { Models } from 'appwrite';
 
 export const reviewService = {
   // Create a new review
   async createReview(reviewData: CreateReviewData): Promise<Review> {
     try {
+      // Validación de campos obligatorios
+      if (
+        !reviewData.reviewerId ||
+        !reviewData.reviewedUserId ||
+        !reviewData.itemId
+      ) {
+        throw new Error('Faltan campos obligatorios para crear la reseña');
+      }
+
       // Upload photos if provided
       let photoUrls: string[] = [];
       if (reviewData.photos && reviewData.photos.length > 0) {
@@ -41,12 +50,12 @@ export const reviewService = {
         databases.getDocument(
           DATABASE_ID,
           COLLECTIONS.USERS,
-          reviewData.reviewerId
+          reviewData.reviewerId // Ahora garantizado como string
         ) as Promise<Models.Document & User>,
         databases.getDocument(
           DATABASE_ID,
           COLLECTIONS.USERS,
-          reviewData.reviewedUserId
+          reviewData.reviewedUserId // Ahora garantizado como string
         ) as Promise<Models.Document & User>,
       ]);
 
@@ -54,8 +63,17 @@ export const reviewService = {
       const item = (await databases.getDocument(
         DATABASE_ID,
         COLLECTIONS.ITEMS,
-        reviewData.itemId
+        reviewData.itemId // Ahora garantizado como string
       )) as Models.Document & Item;
+
+      // Validar que reservationId no sea undefined
+      if (!reviewData.reservationId) {
+        throw new Error('Falta reservationId para crear la reseña');
+      }
+      // Validar que reviewType no sea undefined
+      if (!reviewData.reviewType) {
+        throw new Error('Falta reviewType para crear la reseña');
+      }
 
       const review = await databases.createDocument(
         DATABASE_ID,
@@ -256,7 +274,9 @@ export const reviewService = {
       reviews.forEach((review) => {
         const rating = review.overallRating;
         ratingDistribution[rating as keyof typeof ratingDistribution]++;
-        totalRating += rating;
+        if (typeof rating === 'number') {
+          totalRating += rating;
+        }
       });
 
       const averageRating =
@@ -387,7 +407,9 @@ export const reviewService = {
       reviews.forEach((review) => {
         const rating = review.overallRating;
         ratingDistribution[rating as keyof typeof ratingDistribution]++;
-        totalRating += rating;
+        if (typeof rating === 'number') {
+          totalRating += rating;
+        }
       });
 
       const averageRating = totalReviews > 0 ? totalRating / totalReviews : 0;
@@ -488,7 +510,9 @@ export const reviewService = {
       reviews.forEach((review) => {
         const rating = review.overallRating;
         ratingDistribution[rating as keyof typeof ratingDistribution]++;
-        totalRating += rating;
+        if (typeof rating === 'number') {
+          totalRating += rating;
+        }
       });
 
       const averageRating =

@@ -153,7 +153,7 @@ import { useItemsStore } from '@/store/items.store';
 import { useAuthStore } from '@/store/auth.store';
 import { useToast } from '@/composables/useToast';
 import { useI18n } from '@/composables/useI18n';
-import { Item } from '@/types';
+import { ItemModel } from '@/types/models';
 
 const router = useRouter();
 const itemsStore = useItemsStore();
@@ -260,7 +260,7 @@ function handleSearch(
   });
 }
 
-function handleReserve(item: Item) {
+function handleReserve(item: ItemModel) {
   if (!isAuthenticated.value) {
     toast.warning(t('itemCard.signInToRequest'), t('auth.login.title'));
     return;
@@ -272,7 +272,7 @@ function handleReserve(item: Item) {
   );
 }
 
-function handleShare(item: Item) {
+function handleShare(item: ItemModel) {
   if (navigator.share) {
     navigator.share({
       title: item.title,

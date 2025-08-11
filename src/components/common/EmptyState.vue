@@ -45,7 +45,10 @@ import {
   HeartIcon,
   ClockIcon,
 } from '@heroicons/vue/24/outline';
-import type { EmptyStatePropsModel, EmptyStateEmitsModel } from '@/types';
+import type {
+  EmptyStatePropsModel,
+  EmptyStateEmitsModel,
+} from '@/types/models';
 
 interface Props extends EmptyStatePropsModel {}
 

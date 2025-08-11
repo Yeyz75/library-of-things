@@ -109,7 +109,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline';
 import type {
   BasePaginationPropsModel,
   BasePaginationEmitsModel,
-} from '@/types';
+} from '@/types/models';
 
 interface Props extends BasePaginationPropsModel {}
 

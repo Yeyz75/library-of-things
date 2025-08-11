@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { BaseLoaderPropsModel } from '@/types';
+import type { BaseLoaderPropsModel } from '@/types/models';
 
 interface Props extends BaseLoaderPropsModel {}
 

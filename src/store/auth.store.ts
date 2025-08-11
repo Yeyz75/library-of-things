@@ -7,13 +7,13 @@ import {
   COLLECTIONS,
   ID,
 } from '@/lib/appwrite';
-import type { User } from '@/types';
+import type { UserModel } from '@/types/models';
 import type { Models } from 'appwrite';
 
 export const useAuthStore = defineStore('auth', () => {
   // State
   const appwriteUser = ref<Models.User<Models.Preferences> | null>(null);
-  const userData = ref<User | null>(null);
+  const userData = ref<UserModel | null>(null);
   const isLoading = ref(false);
   const error = ref<string | null>(null);
 
@@ -103,7 +103,7 @@ export const useAuthStore = defineStore('auth', () => {
           COLLECTIONS.USERS,
           user.$id
         );
-        userData.value = userDoc as unknown as User;
+        userData.value = userDoc as unknown as UserModel;
       } catch {
         // If user document doesn't exist, create it
         const newUserDoc = await databases.createDocument(
@@ -116,7 +116,7 @@ export const useAuthStore = defineStore('auth', () => {
             avatarUrl: '',
           }
         );
-        userData.value = newUserDoc as unknown as User;
+        userData.value = newUserDoc as unknown as UserModel;
       }
     } catch (err: unknown) {
       // Clear user data on any error (including 401 Unauthorized)

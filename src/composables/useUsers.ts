@@ -1,10 +1,10 @@
 import { ref } from 'vue';
 import { userService } from '@/services/userService';
 import { useUIStore } from '@/store/ui.store';
-import type { User } from '@/types';
+import type { UserModel } from '@/types/models';
 
 export function useUsers() {
-  const users = ref<User[]>([]);
+  const users = ref<UserModel[]>([]);
   const ui = useUIStore();
 
   const loadUsers = async (): Promise<void> => {
@@ -12,7 +12,7 @@ export function useUsers() {
     ui.clearError();
     try {
       const response = await userService.getCurrentUser();
-      users.value = [response as unknown as User];
+      users.value = [response as unknown as UserModel];
     } catch (err) {
       const message =
         err instanceof Error ? err.message : 'Error al cargar los usuarios';

@@ -10,13 +10,13 @@ import {
   COLLECTIONS,
   ID,
 } from '@/lib/appwrite';
-import type { User, Item, Reservation } from '@/types';
+import type { UserModel, ItemModel, ReservationModel } from '@/types/models';
 import type {
   UseAppwriteAppwriteStateModel,
   UseAppwriteCreateUserDataModel,
   UseAppwriteCreateItemDataModel,
   UseAppwriteCreateReservationDataModel,
-} from '@/types';
+} from '@/types/models';
 
 export function useAppwrite() {
   const loading = ref<boolean>(false);
@@ -46,7 +46,7 @@ export function useAppwrite() {
         DATABASE_ID,
         COLLECTIONS.USERS
       );
-      state.users = response.documents as unknown as User[];
+      state.users = response.documents as unknown as UserModel[];
     } catch (err) {
       handleError(err);
     } finally {
@@ -56,7 +56,7 @@ export function useAppwrite() {
 
   const createUser = async (
     userData: UseAppwriteCreateUserDataModel
-  ): Promise<User> => {
+  ): Promise<UserModel> => {
     loading.value = true;
     error.value = null;
     try {
@@ -65,7 +65,7 @@ export function useAppwrite() {
         COLLECTIONS.USERS,
         ID.unique(),
         userData
-      )) as unknown as User;
+      )) as unknown as UserModel;
       state.users.push(newUser);
       return newUser;
     } catch (err) {
@@ -82,7 +82,7 @@ export function useAppwrite() {
     error.value = null;
     try {
       const response = await itemService.getAllItems();
-      state.items = response.documents as unknown as Item[];
+      state.items = response.documents as unknown as ItemModel[];
     } catch (err) {
       handleError(err);
     } finally {
@@ -92,7 +92,7 @@ export function useAppwrite() {
 
   const createItem = async (
     itemData: UseAppwriteCreateItemDataModel
-  ): Promise<Item> => {
+  ): Promise<ItemModel> => {
     loading.value = true;
     error.value = null;
     try {
@@ -101,7 +101,7 @@ export function useAppwrite() {
         COLLECTIONS.ITEMS,
         ID.unique(),
         itemData
-      )) as unknown as Item;
+      )) as unknown as ItemModel;
       state.items.push(newItem);
       return newItem;
     } catch (err) {
@@ -118,7 +118,7 @@ export function useAppwrite() {
     error.value = null;
     try {
       const response = await reservationService.getAllReservations();
-      state.reservations = response.documents as unknown as Reservation[];
+      state.reservations = response.documents as unknown as ReservationModel[];
     } catch (err) {
       handleError(err);
     } finally {
@@ -128,7 +128,7 @@ export function useAppwrite() {
 
   const createReservation = async (
     reservationData: UseAppwriteCreateReservationDataModel
-  ): Promise<Reservation> => {
+  ): Promise<ReservationModel> => {
     loading.value = true;
     error.value = null;
     try {
@@ -137,7 +137,7 @@ export function useAppwrite() {
         COLLECTIONS.RESERVATIONS,
         ID.unique(),
         reservationData
-      )) as unknown as Reservation;
+      )) as unknown as ReservationModel;
       state.reservations.push(newReservation);
       return newReservation;
     } catch (err) {
@@ -152,7 +152,7 @@ export function useAppwrite() {
   const loadCurrentUser = async (): Promise<void> => {
     try {
       state.currentUser =
-        (await userService.getCurrentUser()) as unknown as User;
+        (await userService.getCurrentUser()) as unknown as UserModel;
     } catch {
       state.currentUser = null;
     }

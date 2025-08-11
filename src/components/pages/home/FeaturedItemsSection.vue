@@ -66,7 +66,7 @@
 
 <script setup lang="ts">
 import { useMotion } from '@vueuse/motion';
-import type { Item } from '@/types/index';
+import type { ItemModel as Item } from '@/types/models';
 import type { Ref } from 'vue';
 
 type CategoryObj = { key: string; name: string };

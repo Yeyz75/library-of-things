@@ -184,12 +184,12 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
-import type { CreateReviewData } from '../../types';
+import type { CreateReviewDataModel as CreateReviewData } from '@/types/models';
 import type {
   CreateReviewFormPhotoPreviewModel,
   CreateReviewFormPropsModel,
   CreateReviewFormEmitsModel,
-} from '@/types';
+} from '@/types/models';
 import StarRating from './StarRating.vue';
 
 interface Props extends CreateReviewFormPropsModel {}

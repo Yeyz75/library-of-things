@@ -63,9 +63,13 @@
 </template>
 
 <script setup lang="ts">
-import { AnyValue } from '@/types';
+type TrustFeature = {
+  icon: unknown; // Puedes reemplazar 'any' por el tipo específico si lo tienes
+  title: string;
+  description: string;
+};
 defineProps<{
-  trustFeatures: AnyValue[];
+  trustFeatures: TrustFeature[];
   t: Function;
 }>();
 </script>

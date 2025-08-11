@@ -75,7 +75,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted } from 'vue';
 import { XMarkIcon } from '@heroicons/vue/24/outline';
-import type { BaseModalPropsModel, BaseModalEmitsModel } from '@/types';
+import type { BaseModalPropsModel, BaseModalEmitsModel } from '@/types/models';
 
 interface Props extends BaseModalPropsModel {}
 

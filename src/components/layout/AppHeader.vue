@@ -328,7 +328,7 @@ import {
 import ThemeToggle from '@/components/common/ThemeToggle.vue';
 import LanguageToggle from '@/components/common/LanguageToggle.vue';
 import SearchBar from '@/components/common/SearchBar.vue';
-import type { User } from '@/types';
+import type { UserModel as User } from '@/types/models';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -340,7 +340,7 @@ const showMobileMenu = ref(false);
 const showSearchModal = ref(false);
 const searchModalBar = ref<typeof SearchBar | null>(null);
 
-const { isAuthenticated, currentUser } = storeToRefs(authStore) as {
+const { isAuthenticated, currentUser } = storeToRefs(authStore) as unknown as {
   isAuthenticated: Ref<boolean>;
   currentUser: Ref<User | null>;
 };

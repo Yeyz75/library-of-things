@@ -212,8 +212,8 @@
                   {{ reservation.borrowerName }}
                 </p>
                 <p class="text-xs text-gray-500 dark:text-gray-400">
-                  {{ formatDate(new Date(reservation.startDate)) }} -
-                  {{ formatDate(new Date(reservation.endDate)) }}
+                  {{ formatDate(new Date(reservation.startDate ?? '')) }} -
+                  {{ formatDate(new Date(reservation.endDate ?? '')) }}
                 </p>
               </div>
               <span
@@ -246,7 +246,7 @@ import { useAuthStore } from '@/store/auth.store';
 import { useItemsStore } from '@/store/items.store';
 import { useReservationsStore } from '@/store/reservations.store';
 import { useI18n } from '@/composables/useI18n';
-import type { ReservationStatus } from '@/types';
+import type { ReservationStatusModel } from '@/types/models';
 import { storeToRefs } from 'pinia';
 
 const authStore = useAuthStore();
@@ -290,7 +290,7 @@ const recentReservations = computed(() =>
     .slice(0, 5)
 );
 
-function getStatusClass(status: ReservationStatus): string {
+function getStatusClass(status: ReservationStatusModel): string {
   const classes = {
     pending: 'bg-warning-100 text-warning-800',
     approved: 'bg-primary-100 text-primary-800',
@@ -299,7 +299,7 @@ function getStatusClass(status: ReservationStatus): string {
     cancelled: 'bg-error-100 text-error-800',
   };
   return (
-    classes[status] ||
+    classes[status as keyof typeof classes] ||
     'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
   );
 }

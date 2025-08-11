@@ -316,7 +316,7 @@ import AppLayout from '@/components/layout/AppLayout.vue';
 import BaseLoader from '@/components/common/BaseLoader.vue';
 import { useAuthStore } from '@/store/auth.store';
 import { useItemsStore } from '@/store/items.store';
-import type { Item, ItemCategory } from '@/types';
+import type { ItemModel, ItemCategoryModel } from '@/types/models';
 
 const router = useRouter();
 const route = useRoute();
@@ -337,8 +337,8 @@ const tagsInput = ref('');
 const form = reactive({
   title: '',
   description: '',
-  category: '' as ItemCategory | '',
-  condition: '' as Item['condition'] | '',
+  category: '' as ItemCategoryModel | '',
+  condition: '' as ItemModel['condition'] | '',
   location: '',
   isAvailable: true,
 });
@@ -516,11 +516,11 @@ async function handleSubmit() {
     const allImageUrls = [...existingImages.value, ...newImageUrls];
 
     // Prepare update data
-    const updateData: Partial<Item> = {
+    const updateData: Partial<ItemModel> = {
       title: form.title.trim(),
       description: form.description.trim(),
-      category: form.category as ItemCategory,
-      condition: form.condition as Item['condition'],
+      category: form.category as ItemCategoryModel,
+      condition: form.condition as ItemModel['condition'],
       location: form.location.trim(),
       isAvailable: form.isAvailable,
       imageUrls: allImageUrls,

@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { databases, DATABASE_ID, COLLECTIONS, ID, Query } from '@/lib/appwrite';
-import type { Reservation, ReservationStatus } from '@/types';
+import type { ReservationModel, ReservationStatusModel } from '@/types/models';
 
 export const useReservationsStore = defineStore('reservations', () => {
   // State
-  const reservations = ref<Reservation[]>([]);
-  const currentReservation = ref<Reservation | null>(null);
+  const reservations = ref<ReservationModel[]>([]);
+  const currentReservation = ref<ReservationModel | null>(null);
   const isLoading = ref(false);
   const error = ref<string | null>(null);
 
@@ -22,13 +22,16 @@ export const useReservationsStore = defineStore('reservations', () => {
   const reservationsByStatus = computed(() => {
     return reservations.value.reduce(
       (acc, reservation) => {
-        if (!acc[reservation.status]) {
-          acc[reservation.status] = [];
+        const status = reservation.status as ReservationStatusModel | undefined;
+        if (typeof status !== 'undefined') {
+          if (!acc[status]) {
+            acc[status] = [];
+          }
+          acc[status].push(reservation);
         }
-        acc[reservation.status].push(reservation);
         return acc;
       },
-      {} as Record<ReservationStatus, Reservation[]>
+      {} as Record<string, ReservationModel[]>
     );
   });
 
@@ -36,7 +39,7 @@ export const useReservationsStore = defineStore('reservations', () => {
   async function fetchReservations(filters?: {
     borrowerId?: string;
     ownerId?: string;
-    status?: ReservationStatus;
+    status?: ReservationStatusModel;
   }) {
     isLoading.value = true;
     error.value = null;
@@ -64,7 +67,7 @@ export const useReservationsStore = defineStore('reservations', () => {
         queries
       );
 
-      reservations.value = response.documents as unknown as Reservation[];
+      reservations.value = response.documents as unknown as ReservationModel[];
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : 'Failed to fetch reservations';
@@ -84,7 +87,7 @@ export const useReservationsStore = defineStore('reservations', () => {
         COLLECTIONS.RESERVATIONS,
         id
       );
-      currentReservation.value = response as unknown as Reservation;
+      currentReservation.value = response as unknown as ReservationModel;
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : 'Reservation not found';
@@ -95,7 +98,7 @@ export const useReservationsStore = defineStore('reservations', () => {
   }
 
   async function createReservation(
-    reservationData: Omit<Reservation, '$id' | '$createdAt' | '$updatedAt'>
+    reservationData: Omit<ReservationModel, '$id' | '$createdAt' | '$updatedAt'>
   ) {
     isLoading.value = true;
     error.value = null;
@@ -108,7 +111,7 @@ export const useReservationsStore = defineStore('reservations', () => {
         reservationData
       );
 
-      const newReservation = response as unknown as Reservation;
+      const newReservation = response as unknown as ReservationModel;
       reservations.value.unshift(newReservation);
       return newReservation;
     } catch (err: unknown) {
@@ -123,7 +126,7 @@ export const useReservationsStore = defineStore('reservations', () => {
 
   async function updateReservationStatus(
     id: string,
-    status: ReservationStatus
+    status: ReservationStatusModel
   ) {
     isLoading.value = true;
     error.value = null;
@@ -136,7 +139,7 @@ export const useReservationsStore = defineStore('reservations', () => {
         { status }
       );
 
-      const updatedReservation = response as unknown as Reservation;
+      const updatedReservation = response as unknown as ReservationModel;
 
       // Update local state
       const index = reservations.value.findIndex((r) => r.$id === id);

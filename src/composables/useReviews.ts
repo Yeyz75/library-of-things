@@ -1,11 +1,11 @@
 import { ref, computed } from 'vue';
 import { reviewService } from '../services/reviewService';
 import type {
-  Review,
-  CreateReviewData,
-  ReviewSummary,
-  UserStats,
-} from '../types';
+  ReviewModel as Review,
+  CreateReviewDataModel as CreateReviewData,
+  ReviewSummaryModel as ReviewSummary,
+  UserStatsModel as UserStats,
+} from '@/types/models';
 
 export function useReviews() {
   const reviews = ref<Review[]>([]);

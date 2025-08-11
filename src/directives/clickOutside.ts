@@ -1,6 +1,6 @@
 // src/directives/clickOutside.ts
 import type { Directive } from 'vue';
-import type { ClickOutsideElementModel } from '@/types';
+import type { ClickOutsideElementModel } from '@/types/models';
 
 const clickOutside: Directive = {
   beforeMount(el, binding) {

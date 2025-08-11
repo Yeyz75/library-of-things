@@ -268,7 +268,7 @@ import BaseLoader from '@/components/common/BaseLoader.vue';
 import { useAuthStore } from '@/store/auth.store';
 import { useItemsStore } from '@/store/items.store';
 import { useI18n } from '@/composables/useI18n';
-import type { Item, ItemCategory } from '@/types';
+import type { ItemModel, ItemCategoryModel } from '@/types/models';
 import { storeToRefs } from 'pinia';
 
 const router = useRouter();
@@ -287,8 +287,8 @@ const tagsInput = ref('');
 const form = reactive({
   title: '',
   description: '',
-  category: '' as ItemCategory | '',
-  condition: '' as Item['condition'] | '',
+  category: '' as ItemCategoryModel | '',
+  condition: '' as ItemModel['condition'] | '',
   location: '',
 });
 
@@ -399,8 +399,8 @@ async function handleSubmit() {
     const itemData = {
       title: form.title.trim(),
       description: form.description.trim(),
-      category: form.category as ItemCategory,
-      condition: form.condition as Item['condition'],
+      category: form.category as ItemCategoryModel,
+      condition: form.condition as ItemModel['condition'],
       location: form.location.trim(),
       ownerId: userId.value,
       ownerName: currentUser.value.name || currentUser.value.email || 'Unknown',
