@@ -37,7 +37,7 @@
 
           <!-- Thumbnail Gallery -->
           <div
-            v-if="currentItem.imageUrls.length > 1"
+            v-if="currentItem?.imageUrls?.length > 1"
             class="grid grid-cols-4 gap-2"
           >
             <button
@@ -53,7 +53,7 @@
             >
               <img
                 :src="imageUrl"
-                :alt="`${currentItem.title} ${index + 1}`"
+                :alt="`${currentItem?.title || ''} ${index + 1}`"
                 class="w-full h-full object-cover"
               />
             </button>
@@ -85,7 +85,7 @@
                 <span
                   class="inline-block bg-primary-100 text-primary-800 text-sm font-medium px-3 py-1 rounded-full"
                 >
-                  {{ getCategoryName(currentItem.category) }}
+                  {{ getCategoryName(currentItem?.category || '') }}
                 </span>
               </div>
             </div>
@@ -138,7 +138,7 @@
             </div>
 
             <!-- Tags -->
-            <div v-if="currentItem.tags.length > 0">
+            <div v-if="currentItem?.tags && currentItem.tags.length > 0">
               <h4 class="font-medium text-gray-900 dark:text-gray-50 mb-2">
                 Tags
               </h4>
@@ -163,12 +163,12 @@
                   class="h-10 w-10 bg-primary-600 rounded-full flex items-center justify-center"
                 >
                   <span class="text-white font-medium text-sm">
-                    {{ currentItem.ownerName.charAt(0).toUpperCase() }}
+                    {{ currentItem?.ownerName?.charAt(0)?.toUpperCase() || '' }}
                   </span>
                 </div>
                 <div>
                   <p class="font-medium text-gray-900 dark:text-gray-50">
-                    {{ currentItem.ownerName }}
+                    {{ currentItem?.ownerName || '' }}
                   </p>
                   <p class="text-sm text-gray-600 dark:text-gray-300">
                     Member since
@@ -294,10 +294,10 @@
     >
       <CreateReviewForm
         v-if="currentItem && userId"
-        :reservation-id="''"
+        :reservation-id="completedReservation?.$id || ''"
         :item-id="currentItem.$id"
         :reviewer-id="userId"
-        :reviewed-user-id="currentItem.ownerId"
+        :reviewed-user-id="currentItem?.ownerId || ''"
         :review-type="'borrower_to_owner'"
         @submit="handleReviewCreated"
         @cancel="showCreateReviewModal = false"
@@ -361,12 +361,14 @@ import CreateReviewForm from '@/components/reviews/CreateReviewForm.vue';
 import { useAuthStore } from '@/store/auth.store';
 import { useItemsStore } from '@/store/items.store';
 import { useReviews } from '@/composables/useReviews';
+import { useReservationsStore } from '@/store/reservations.store';
 import { storeToRefs } from 'pinia';
 
 const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
 const itemsStore = useItemsStore();
+const reservationsStore = useReservationsStore();
 const { loadItemReviews, reviews, isLoading: reviewsLoading } = useReviews();
 
 const { isAuthenticated, userId } = storeToRefs(authStore);
@@ -383,7 +385,7 @@ const hasMoreReviews = ref(false);
 const currentItem = computed(() => itemsStore.currentItem);
 
 const currentImageUrl = computed(() => {
-  if (!currentItem.value?.imageUrls.length) return null;
+  if (!currentItem.value?.imageUrls?.length) return null;
   return currentItem.value.imageUrls[currentImageIndex.value];
 });
 
@@ -474,11 +476,27 @@ async function loadMoreReviews() {
   hasMoreReviews.value = response && response.length === reviewsLimit.value;
 }
 
+const completedReservation = computed(() => {
+  return reservationsStore.reservations.find(
+    (r) =>
+      r.itemId === currentItem.value?.$id &&
+      r.borrowerId === userId.value &&
+      (r.status === 'completed' || r.status === 'returned')
+  );
+});
+
 async function loadItem() {
   const itemId = route.params.id as string;
   if (itemId) {
     await itemsStore.fetchItemById(itemId);
-    // Load reviews after item is loaded
+    // Cargar reservaciones del usuario
+    if (userId.value) {
+      await reservationsStore.fetchReservations({
+        borrowerId: userId.value,
+        status: 'completed',
+      });
+    }
+    // Cargar reseñas después de cargar el ítem
     await loadItemReviewsData();
   }
 }
