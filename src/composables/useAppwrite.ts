@@ -1,8 +1,9 @@
 // Composable para usar Appwrite en componentes Vue
 import { ref, reactive } from 'vue';
-import { userService } from '@/services/userService';
 import { itemService } from '@/services/itemService';
 import { reservationService } from '@/services/reservationService';
+import { userService } from '@/services/userService';
+import { index as getUsersIndex } from '@/api/users';
 import { account, databases, DATABASE_ID, COLLECTIONS, ID } from '@/api/api';
 import type { UserModel, ItemModel, ReservationModel } from '@/types/models';
 import type {
@@ -36,11 +37,12 @@ export function useAppwrite() {
     loading.value = true;
     error.value = null;
     try {
-      const response = await databases.listDocuments(
-        DATABASE_ID,
-        COLLECTIONS.USERS
-      );
-      state.users = response.documents as unknown as UserModel[];
+      const response = await getUsersIndex();
+      if (response.success && response.data) {
+        state.users = response.data.documents;
+      } else {
+        throw new Error(response.error || 'Error al cargar usuarios');
+      }
     } catch (err) {
       handleError(err);
     } finally {

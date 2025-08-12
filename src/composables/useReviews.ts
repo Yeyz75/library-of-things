@@ -1,6 +1,7 @@
 import { ref, computed } from 'vue';
 import { reviewService } from '../services/reviewService';
 import { userStatsService } from '../services/userStatsService';
+import { reviewsAPI, userStatsAPI } from '@/api';
 import type {
   ReviewModel as Review,
   CreateReviewDataModel as CreateReviewData,
@@ -80,25 +81,27 @@ export function useReviews() {
     }
   };
 
-  // Load reviews for an item
-  const loadItemReviews = async (itemId: string, limit = 10, offset = 0) => {
+  // Load reviews for an item using API directly
+  const loadItemReviews = async (itemId: string, offset = 0) => {
     try {
       isLoading.value = true;
       error.value = null;
 
-      const itemReviews = await reviewService.getItemReviews(
-        itemId,
-        limit,
-        offset
-      );
+      const response = await reviewsAPI.getReviewsByItem(itemId);
 
-      if (offset === 0) {
-        reviews.value = itemReviews;
+      if (response.success && response.data) {
+        const itemReviews = response.data.documents;
+
+        if (offset === 0) {
+          reviews.value = itemReviews;
+        } else {
+          reviews.value.push(...itemReviews);
+        }
+
+        return itemReviews;
       } else {
-        reviews.value.push(...itemReviews);
+        throw new Error(response.error || 'Error loading reviews');
       }
-
-      return itemReviews;
     } catch (err) {
       error.value =
         err instanceof Error ? err.message : 'Error loading reviews';
@@ -108,25 +111,27 @@ export function useReviews() {
     }
   };
 
-  // Load reviews for a user
-  const loadUserReviews = async (userId: string, limit = 10, offset = 0) => {
+  // Load reviews for a user using API directly
+  const loadUserReviews = async (userId: string, offset = 0) => {
     try {
       isLoading.value = true;
       error.value = null;
 
-      const userReviews = await reviewService.getUserReviews(
-        userId,
-        limit,
-        offset
-      );
+      const response = await reviewsAPI.getReviewsByReviewedUser(userId);
 
-      if (offset === 0) {
-        reviews.value = userReviews;
+      if (response.success && response.data) {
+        const userReviews = response.data.documents;
+
+        if (offset === 0) {
+          reviews.value = userReviews;
+        } else {
+          reviews.value.push(...userReviews);
+        }
+
+        return userReviews;
       } else {
-        reviews.value.push(...userReviews);
+        throw new Error(response.error || 'Error loading user reviews');
       }
-
-      return userReviews;
     } catch (err) {
       error.value =
         err instanceof Error ? err.message : 'Error loading user reviews';
@@ -153,14 +158,22 @@ export function useReviews() {
     }
   };
 
-  // Load user statistics
+  // Load user statistics using API directly
   const loadUserStats = async (userId: string) => {
     try {
       isLoading.value = true;
       error.value = null;
 
-      userStats.value = await userStatsService.getUserStats(userId);
-      return userStats.value;
+      const response = await userStatsAPI.getStatsByUserId(userId);
+
+      if (response.success && response.data) {
+        userStats.value = response.data;
+        return userStats.value;
+      } else {
+        // Fallback to service for complex logic
+        userStats.value = await userStatsService.getUserStats(userId);
+        return userStats.value;
+      }
     } catch (err) {
       error.value =
         err instanceof Error ? err.message : 'Error loading user stats';
