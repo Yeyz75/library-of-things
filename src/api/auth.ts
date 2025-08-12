@@ -1,3 +1,22 @@
+// -----------------------------
+// FLUJOS DE LOGIN APPWRITE
+//
+// 1. Login estándar (email y password):
+//    - Usar AuthAPI.login({ email, password })
+//    - Internamente llama a account.createSession(email, password)
+//    - NO usar /account/sessions/token para este caso
+//
+// 2. Login avanzado (token: userId + secret):
+//    - Usar AuthAPI.loginWithToken({ userId, secret })
+//    - Solo si tienes userId y secret de magic link, phone, etc.
+//    - Internamente llama a account.createSession(userId, secret)
+//    - NO usar email como userId aquí
+// -----------------------------
+
+export interface TokenCredentials {
+  userId: string;
+  secret: string;
+}
 import {
   account,
   handleApiError,
@@ -49,16 +68,35 @@ export class AuthAPI {
     }
   }
 
-  // Iniciar sesión
+  // Iniciar sesión estándar
   static async login(
     credentials: LoginCredentials
   ): Promise<ApiResponse<Models.Session>> {
     try {
-      const session = await account.createSession(
+      const session = await account.createEmailPasswordSession(
         credentials.email,
         credentials.password
       );
       return handleApiSuccess(session, 'Sesión iniciada exitosamente');
+    } catch (error) {
+      return handleApiError(error) as ApiResponse<Models.Session>;
+    }
+  }
+
+  /**
+   * Login avanzado usando userId y secret (token)
+   * Usar solo si tienes userId y secret de magic link, phone, etc.
+   * No usar para login normal con email y password.
+   */
+  static async loginWithToken(
+    credentials: TokenCredentials
+  ): Promise<ApiResponse<Models.Session>> {
+    try {
+      const session = await account.createSession(
+        credentials.userId,
+        credentials.secret
+      );
+      return handleApiSuccess(session, 'Sesión iniciada con token');
     } catch (error) {
       return handleApiError(error) as ApiResponse<Models.Session>;
     }
