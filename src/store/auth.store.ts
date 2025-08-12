@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import { account, databases, DATABASE_ID, COLLECTIONS, ID } from '@/api/api';
+import { AuthAPI } from '@/api';
+import { show as showUser, save as saveUser } from '@/api/users';
 import type { UserModel } from '@/types/models';
 import type { Models } from 'appwrite';
 
@@ -22,8 +23,12 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null;
 
     try {
-      await account.createEmailPasswordSession(email, password);
-      await getCurrentUser();
+      const response = await AuthAPI.login({ email, password });
+      if (response.success) {
+        await getCurrentUser();
+      } else {
+        throw new Error(response.error || 'Failed to sign in');
+      }
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : 'Failed to sign in';
@@ -40,10 +45,12 @@ export const useAuthStore = defineStore('auth', () => {
 
     try {
       // Create OAuth2 token for Google
-      const successUrl = `${window.location.origin}/auth/callback`;
-      const failureUrl = `${window.location.origin}/login?error=oauth_failed`;
+      /*     const successUrl = `${window.location.origin}/auth/callback`;
+      const failureUrl = `${window.location.origin}/login?error=oauth_failed`; */
 
-      await account.createOAuth2Token('google', successUrl, failureUrl);
+      // Note: OAuth2 functionality would need to be added to AuthAPI
+      // For now, we'll throw an error indicating it's not implemented
+      throw new Error('Google OAuth not implemented in AuthAPI yet');
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : 'Failed to sign in with Google';
@@ -63,17 +70,34 @@ export const useAuthStore = defineStore('auth', () => {
 
     try {
       // Create account
-      const user = await account.create(ID.unique(), email, password, name);
+      const registerResponse = await AuthAPI.register({
+        email,
+        password,
+        name,
+      });
+      if (!registerResponse.success) {
+        throw new Error(registerResponse.error || 'Failed to create account');
+      }
 
       // Create session
-      await account.createEmailPasswordSession(email, password);
+      const loginResponse = await AuthAPI.login({ email, password });
+      if (!loginResponse.success) {
+        throw new Error(loginResponse.error || 'Failed to sign in');
+      }
 
       // Create user document in database
-      await databases.createDocument(DATABASE_ID, COLLECTIONS.USERS, user.$id, {
-        email: user.email,
-        name: user.name,
-        avatarUrl: '',
-      });
+      const userResponse = await saveUser(
+        {
+          email,
+          name,
+          avatarUrl: '',
+        },
+        registerResponse.data?.$id
+      );
+
+      if (!userResponse.success) {
+        console.warn('Failed to create user document:', userResponse.error);
+      }
 
       await getCurrentUser();
     } catch (err: unknown) {
@@ -91,9 +115,13 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null;
 
     try {
-      await account.deleteSession('current');
-      appwriteUser.value = null;
-      userData.value = null;
+      const response = await AuthAPI.logout();
+      if (response.success) {
+        appwriteUser.value = null;
+        userData.value = null;
+      } else {
+        throw new Error(response.error || 'Failed to sign out');
+      }
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : 'Failed to sign out';
@@ -106,30 +134,35 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function getCurrentUser() {
     try {
-      const user = await account.get();
-      appwriteUser.value = user;
+      const response = await AuthAPI.getCurrentUser();
+      if (response.success && response.data) {
+        appwriteUser.value = response.data as Models.User<Models.Preferences>;
 
-      // Load user data from database
-      try {
-        const userDoc = await databases.getDocument(
-          DATABASE_ID,
-          COLLECTIONS.USERS,
-          user.$id
-        );
-        userData.value = userDoc as unknown as UserModel;
-      } catch {
-        // If user document doesn't exist, create it
-        const newUserDoc = await databases.createDocument(
-          DATABASE_ID,
-          COLLECTIONS.USERS,
-          user.$id,
-          {
-            email: user.email,
-            name: user.name,
-            avatarUrl: '',
+        // Load user data from database
+        try {
+          const userResponse = await showUser(response.data.$id);
+          if (userResponse.success && userResponse.data) {
+            userData.value = userResponse.data;
+          } else {
+            throw new Error('User document not found');
           }
-        );
-        userData.value = newUserDoc as unknown as UserModel;
+        } catch {
+          // If user document doesn't exist, create it
+          const createResponse = await saveUser(
+            {
+              email: response.data.email,
+              name: response.data.name,
+              avatarUrl: '',
+            },
+            response.data.$id
+          );
+
+          if (createResponse.success && createResponse.data) {
+            userData.value = createResponse.data;
+          }
+        }
+      } else {
+        throw new Error(response.error || 'Failed to get current user');
       }
     } catch (err: unknown) {
       // Clear user data on any error (including 401 Unauthorized)

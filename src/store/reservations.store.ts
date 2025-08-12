@@ -1,6 +1,12 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import { databases, DATABASE_ID, COLLECTIONS, ID, Query } from '@/api/api';
+import { reservationsAPI } from '@/api';
+import {
+  index as getReservations,
+  show as getReservation,
+  save as saveReservation,
+  remove as deleteReservationAPI,
+} from '@/api/reservations';
 import type { ReservationModel, ReservationStatusModel } from '@/types/models';
 
 export const useReservationsStore = defineStore('reservations', () => {
@@ -46,50 +52,43 @@ export const useReservationsStore = defineStore('reservations', () => {
     error.value = null;
 
     try {
-      const queries = [];
+      let response;
 
       if (filters?.borrowerId) {
-        queries.push(Query.equal('borrowerId', filters.borrowerId));
-      }
-
-      if (filters?.ownerId) {
-        queries.push(Query.equal('ownerId', filters.ownerId));
-      }
-
-      if (filters?.status) {
-        queries.push(Query.equal('status', filters.status));
-      }
-
-      // Nueva funcionalidad para múltiples status
-      if (filters?.statuses && filters.statuses.length > 0) {
-        // Si Query.or no está disponible, cargamos todas las reservaciones y filtramos después
-        // queries.push(Query.or(
-        //   filters.statuses.map(status => Query.equal('status', status))
-        // ));
-        // Por ahora, no agregamos filtro de status y filtraremos después
-      }
-
-      queries.push(Query.orderDesc('$createdAt'));
-
-      const response = await databases.listDocuments(
-        DATABASE_ID,
-        COLLECTIONS.RESERVATIONS,
-        queries
-      );
-
-      let fetchedReservations =
-        response.documents as unknown as ReservationModel[];
-
-      // Filtrar por múltiples status si se especifica
-      if (filters?.statuses && filters.statuses.length > 0) {
-        fetchedReservations = fetchedReservations.filter((reservation) =>
-          filters.statuses!.includes(
-            reservation.status as ReservationStatusModel
-          )
+        response = await reservationsAPI.getReservationsByBorrower(
+          filters.borrowerId
         );
+      } else if (filters?.ownerId) {
+        response = await reservationsAPI.getReservationsByOwner(
+          filters.ownerId
+        );
+      } else if (filters?.status) {
+        response = await reservationsAPI.getReservationsByStatus(
+          filters.status
+        );
+      } else {
+        response = await getReservations({
+          orderBy: '$createdAt',
+          orderType: 'DESC',
+        });
       }
 
-      reservations.value = fetchedReservations;
+      if (response.success && response.data) {
+        let fetchedReservations = response.data.documents;
+
+        // Filtrar por múltiples status si se especifica
+        if (filters?.statuses && filters.statuses.length > 0) {
+          fetchedReservations = fetchedReservations.filter((reservation) =>
+            filters.statuses!.includes(
+              reservation.status as ReservationStatusModel
+            )
+          );
+        }
+
+        reservations.value = fetchedReservations;
+      } else {
+        throw new Error(response.error || 'Failed to fetch reservations');
+      }
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : 'Failed to fetch reservations';
@@ -104,12 +103,12 @@ export const useReservationsStore = defineStore('reservations', () => {
     error.value = null;
 
     try {
-      const response = await databases.getDocument(
-        DATABASE_ID,
-        COLLECTIONS.RESERVATIONS,
-        id
-      );
-      currentReservation.value = response as unknown as ReservationModel;
+      const response = await getReservation(id);
+      if (response.success && response.data) {
+        currentReservation.value = response.data;
+      } else {
+        throw new Error(response.error || 'Reservation not found');
+      }
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : 'Reservation not found';
@@ -126,16 +125,14 @@ export const useReservationsStore = defineStore('reservations', () => {
     error.value = null;
 
     try {
-      const response = await databases.createDocument(
-        DATABASE_ID,
-        COLLECTIONS.RESERVATIONS,
-        ID.unique(),
-        reservationData
-      );
+      const response = await saveReservation(reservationData);
 
-      const newReservation = response as unknown as ReservationModel;
-      reservations.value.unshift(newReservation);
-      return newReservation;
+      if (response.success && response.data) {
+        reservations.value.unshift(response.data);
+        return response.data;
+      } else {
+        throw new Error(response.error || 'Failed to create reservation');
+      }
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : 'Failed to create reservation';
@@ -154,22 +151,21 @@ export const useReservationsStore = defineStore('reservations', () => {
     error.value = null;
 
     try {
-      const response = await databases.updateDocument(
-        DATABASE_ID,
-        COLLECTIONS.RESERVATIONS,
-        id,
-        { status }
-      );
+      const response = await reservationsAPI.updateStatus(id, status);
 
-      const updatedReservation = response as unknown as ReservationModel;
+      if (response.success && response.data) {
+        const updatedReservation = response.data;
 
-      // Update local state
-      const index = reservations.value.findIndex((r) => r.$id === id);
-      if (index !== -1) {
-        reservations.value[index] = updatedReservation;
-      }
-      if (currentReservation.value?.$id === id) {
-        currentReservation.value = updatedReservation;
+        // Update local state
+        const index = reservations.value.findIndex((r) => r.$id === id);
+        if (index !== -1) {
+          reservations.value[index] = updatedReservation;
+        }
+        if (currentReservation.value?.$id === id) {
+          currentReservation.value = updatedReservation;
+        }
+      } else {
+        throw new Error(response.error || 'Failed to update reservation');
       }
     } catch (err: unknown) {
       const errorMessage =
@@ -186,12 +182,16 @@ export const useReservationsStore = defineStore('reservations', () => {
     error.value = null;
 
     try {
-      await databases.deleteDocument(DATABASE_ID, COLLECTIONS.RESERVATIONS, id);
+      const response = await deleteReservationAPI(id);
 
-      // Remove from local state
-      reservations.value = reservations.value.filter((r) => r.$id !== id);
-      if (currentReservation.value?.$id === id) {
-        currentReservation.value = null;
+      if (response.success) {
+        // Remove from local state
+        reservations.value = reservations.value.filter((r) => r.$id !== id);
+        if (currentReservation.value?.$id === id) {
+          currentReservation.value = null;
+        }
+      } else {
+        throw new Error(response.error || 'Failed to delete reservation');
       }
     } catch (err: unknown) {
       const errorMessage =

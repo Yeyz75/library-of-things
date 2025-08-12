@@ -1,13 +1,14 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
+import { itemsAPI } from '@/api';
 import {
-  databases,
-  DATABASE_ID,
-  COLLECTIONS,
-  ID,
-  Query,
-  uploadMultipleFiles,
-} from '@/api/api';
+  index as getItems,
+  show as getItem,
+  save as saveItem,
+  update as updateItemAPI,
+  remove as deleteItemAPI,
+} from '@/api/items';
+import { ID, uploadMultipleFiles } from '@/api/api';
 import type { ItemModel } from '@/types/models';
 
 export const useItemsStore = defineStore('items', () => {
@@ -37,12 +38,11 @@ export const useItemsStore = defineStore('items', () => {
 
   async function getItemById(id: string): Promise<ItemModel | null> {
     try {
-      const response = await databases.getDocument(
-        DATABASE_ID,
-        COLLECTIONS.ITEMS,
-        id
-      );
-      return response as unknown as ItemModel;
+      const response = await getItem(id);
+      if (response.success && response.data) {
+        return response.data;
+      }
+      return null;
     } catch {
       return null;
     }
@@ -58,29 +58,27 @@ export const useItemsStore = defineStore('items', () => {
     error.value = null;
 
     try {
-      const queries = [];
+      let response;
 
       if (filters?.category) {
-        queries.push(Query.equal('category', filters.category));
+        response = await itemsAPI.getItemsByCategory(
+          filters.category as unknown
+        );
+      } else if (filters?.ownerId) {
+        response = await itemsAPI.getItemsByOwner(filters.ownerId);
+      } else {
+        response = await getItems({
+          limit: filters?.limit,
+          orderBy: '$createdAt',
+          orderType: 'DESC',
+        });
       }
 
-      if (filters?.ownerId) {
-        queries.push(Query.equal('ownerId', filters.ownerId));
+      if (response.success && response.data) {
+        items.value = response.data.documents;
+      } else {
+        throw new Error(response.error || 'Failed to fetch items');
       }
-
-      if (filters?.limit) {
-        queries.push(Query.limit(filters.limit));
-      }
-
-      queries.push(Query.orderDesc('$createdAt'));
-
-      const response = await databases.listDocuments(
-        DATABASE_ID,
-        COLLECTIONS.ITEMS,
-        queries
-      );
-
-      items.value = response.documents as unknown as ItemModel[];
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : 'Failed to fetch items';
@@ -95,12 +93,12 @@ export const useItemsStore = defineStore('items', () => {
     error.value = null;
 
     try {
-      const response = await databases.getDocument(
-        DATABASE_ID,
-        COLLECTIONS.ITEMS,
-        id
-      );
-      currentItem.value = response as unknown as ItemModel;
+      const response = await getItem(id);
+      if (response.success && response.data) {
+        currentItem.value = response.data;
+      } else {
+        throw new Error(response.error || 'Item not found');
+      }
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : 'Item not found';
@@ -117,16 +115,14 @@ export const useItemsStore = defineStore('items', () => {
     error.value = null;
 
     try {
-      const response = await databases.createDocument(
-        DATABASE_ID,
-        COLLECTIONS.ITEMS,
-        ID.unique(),
-        itemData
-      );
+      const response = await saveItem(itemData);
 
-      const newItem = response as unknown as ItemModel;
-      items.value.unshift(newItem);
-      return newItem.$id;
+      if (response.success && response.data) {
+        items.value.unshift(response.data);
+        return response.data.$id;
+      } else {
+        throw new Error(response.error || 'Failed to create item');
+      }
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : 'Failed to create item';
@@ -145,22 +141,21 @@ export const useItemsStore = defineStore('items', () => {
     error.value = null;
 
     try {
-      const response = await databases.updateDocument(
-        DATABASE_ID,
-        COLLECTIONS.ITEMS,
-        id,
-        updates
-      );
+      const response = await updateItemAPI(id, updates);
 
-      const updatedItem = response as unknown as ItemModel;
+      if (response.success && response.data) {
+        const updatedItem = response.data;
 
-      // Update local state
-      const index = items.value.findIndex((item) => item.$id === id);
-      if (index !== -1) {
-        items.value[index] = updatedItem;
-      }
-      if (currentItem.value?.$id === id) {
-        currentItem.value = updatedItem;
+        // Update local state
+        const index = items.value.findIndex((item) => item.$id === id);
+        if (index !== -1) {
+          items.value[index] = updatedItem;
+        }
+        if (currentItem.value?.$id === id) {
+          currentItem.value = updatedItem;
+        }
+      } else {
+        throw new Error(response.error || 'Failed to update item');
       }
     } catch (err: unknown) {
       const errorMessage =
@@ -177,12 +172,16 @@ export const useItemsStore = defineStore('items', () => {
     error.value = null;
 
     try {
-      await databases.deleteDocument(DATABASE_ID, COLLECTIONS.ITEMS, id);
+      const response = await deleteItemAPI(id);
 
-      // Remove from local state
-      items.value = items.value.filter((item) => item.$id !== id);
-      if (currentItem.value?.$id === id) {
-        currentItem.value = null;
+      if (response.success) {
+        // Remove from local state
+        items.value = items.value.filter((item) => item.$id !== id);
+        if (currentItem.value?.$id === id) {
+          currentItem.value = null;
+        }
+      } else {
+        throw new Error(response.error || 'Failed to delete item');
       }
     } catch (err: unknown) {
       const errorMessage =
