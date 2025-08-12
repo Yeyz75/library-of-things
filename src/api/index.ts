@@ -1,18 +1,6 @@
 // Exportar configuración base y utilidades
 export * from './api';
 
-// Exportar módulos específicos
-export * from './auth';
-/* export * from './database'; */
-export * from './storage';
-
-// Exportar recursos específicos
-export * from './users';
-/* export * from './items';
-export * from './reservations';
-export * from './reviews';
-export * from './userStats'; */
-
 // Exportar clases principales para fácil acceso
 export { AuthAPI } from './auth';
 export { DatabaseAPI } from './database';

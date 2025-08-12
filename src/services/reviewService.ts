@@ -1,4 +1,5 @@
 import { databases, COLLECTIONS, DATABASE_ID, ID, Query } from '../api/api';
+import { reviewsAPI } from '../api/reviews';
 import type {
   ReviewModel,
   CreateReviewDataModel,
@@ -19,20 +20,18 @@ export const reviewService = {
     reviewerId: string
   ): Promise<ReviewModel | null> {
     try {
-      const response = await databases.listDocuments(
-        DATABASE_ID,
-        COLLECTIONS.REVIEWS,
-        [
-          Query.equal('reservationId', reservationId),
-          Query.equal('reviewerId', reviewerId),
-          Query.limit(1),
-        ]
+      const response = await reviewsAPI.getReviewsByReservation(reservationId);
+
+      if (!response.success || !response.data) {
+        return null;
+      }
+
+      const existingReview = response.data.documents.find(
+        (review) => review.reviewerId === reviewerId
       );
 
-      return response.documents.length > 0
-        ? this.formatReview(
-            response.documents[0] as Models.Document & ReviewModel
-          )
+      return existingReview
+        ? this.formatReview(existingReview as unknown)
         : null;
     } catch (error) {
       console.error('Error checking existing review:', error);

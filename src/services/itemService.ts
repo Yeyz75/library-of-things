@@ -1,7 +1,14 @@
-import { databases, COLLECTIONS, DATABASE_ID } from '../api/api';
+import { index } from '../api/items';
 
 export const itemService = {
   async getAllItems() {
-    return await databases.listDocuments(DATABASE_ID, COLLECTIONS.ITEMS);
+    const response = await index();
+    if (response.success) {
+      return {
+        documents: response.data?.documents || [],
+        total: response.data?.total || 0,
+      };
+    }
+    throw new Error(response.error || 'Failed to get items');
   },
 };

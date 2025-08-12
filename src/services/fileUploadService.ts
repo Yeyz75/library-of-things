@@ -1,4 +1,5 @@
-import { storage, BUCKET_ID, ID } from '../api/api';
+import { StorageAPI } from '../api/storage';
+import { BUCKET_ID } from '../api/api';
 
 export const fileUploadService = {
   async uploadPhotos(photos?: File[]): Promise<string[]> {
@@ -7,16 +8,15 @@ export const fileUploadService = {
     }
 
     try {
-      const uploadPromises = photos.map(async (photo) => {
-        const response = await storage.createFile(
-          BUCKET_ID,
-          ID.unique(),
-          photo
-        );
-        return storage.getFileView(BUCKET_ID, response.$id).toString();
-      });
+      const response = await StorageAPI.uploadMultipleFiles(BUCKET_ID, photos);
 
-      return await Promise.all(uploadPromises);
+      if (!response.success || !response.data) {
+        throw new Error(response.error || 'Failed to upload photos');
+      }
+
+      return response.data.map((file) =>
+        StorageAPI.getFileView(BUCKET_ID, file.$id)
+      );
     } catch (error) {
       console.error('Error uploading photos:', error);
       throw new Error('Failed to upload photos');
@@ -25,7 +25,11 @@ export const fileUploadService = {
 
   async deletePhoto(fileId: string): Promise<void> {
     try {
-      await storage.deleteFile(BUCKET_ID, fileId);
+      const response = await StorageAPI.deleteFile(BUCKET_ID, fileId);
+
+      if (!response.success) {
+        throw new Error(response.error || 'Failed to delete photo');
+      }
     } catch (error) {
       console.error('Error deleting photo:', error);
       throw new Error('Failed to delete photo');

@@ -1,7 +1,14 @@
-import { databases, COLLECTIONS, DATABASE_ID } from '../api/api';
+import { index } from '../api/reservations';
 
 export const reservationService = {
   async getAllReservations() {
-    return await databases.listDocuments(DATABASE_ID, COLLECTIONS.RESERVATIONS);
+    const response = await index();
+    if (response.success) {
+      return {
+        documents: response.data?.documents || [],
+        total: response.data?.total || 0,
+      };
+    }
+    throw new Error(response.error || 'Failed to get reservations');
   },
 };

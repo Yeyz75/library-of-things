@@ -1,4 +1,5 @@
 import { databases, COLLECTIONS, DATABASE_ID, ID, Query } from '../api/api';
+import { userStatsAPI } from '../api/userStats';
 import type {
   UserStatsModel,
   ReviewModel,
@@ -12,19 +13,14 @@ export const userStatsService = {
   // Get user statistics
   async getUserStats(userId: string): Promise<UserStatsModel | null> {
     try {
-      const response = await databases.listDocuments(
-        DATABASE_ID,
-        COLLECTIONS.USER_STATS,
-        [Query.equal('userId', userId)]
-      );
+      const response = await userStatsAPI.getStatsByUserId(userId);
 
-      if (response.documents.length === 0) {
+      if (!response.success) {
+        // If no stats exist, create them
         return await this.createUserStats(userId);
       }
 
-      return this.formatUserStats(
-        response.documents[0] as unknown as Models.Document & UserStatsModel
-      );
+      return this.formatUserStats(response.data as unknown);
     } catch (error) {
       console.error('Error fetching user stats:', error);
       return null;
