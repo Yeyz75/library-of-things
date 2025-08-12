@@ -152,21 +152,40 @@
     font-family: theme('fontFamily.sans');
     font-weight: 500;
     letter-spacing: -0.01em;
+    line-height: 1.25;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    min-height: 2.5rem;
+    /* Más espacio horizontal y alineación vertical */
   }
 
   .btn-sm {
-    @apply px-4 py-2 text-sm;
+    @apply py-2 text-sm;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
     border-radius: var(--border-radius-button);
+    line-height: 1.25;
+    min-height: 2rem;
   }
 
   .btn-md {
-    @apply px-6 py-3 text-base;
+    @apply py-3 text-base;
+    padding-left: 1.75rem;
+    padding-right: 1.75rem;
     border-radius: var(--border-radius-button);
+    line-height: 1.25;
+    min-height: 2.75rem;
   }
 
   .btn-lg {
-    @apply px-8 py-4 text-lg;
+    @apply py-4 text-lg;
+    padding-left: 2.25rem;
+    padding-right: 2.25rem;
     border-radius: var(--border-radius-modern);
+    line-height: 1.25;
+    min-height: 3.25rem;
   }
 
   .btn-primary {
