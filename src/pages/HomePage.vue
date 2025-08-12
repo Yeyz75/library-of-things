@@ -55,11 +55,11 @@ import {
   CurrencyDollarIcon,
 } from '@heroicons/vue/24/outline';
 import AppLayout from '@/components/layout/AppLayout.vue';
-import HeroSection from '@/components/pages/home/HeroSection.vue';
-import HowItWorksSection from '@/components/pages/home/HowItWorksSection.vue';
-import WhyItWorksSection from '@/components/pages/home/WhyItWorksSection.vue';
-import CommunityImpactSection from '@/components/pages/home/CommunityImpactSection.vue';
-import FeaturedItemsSection from '@/components/pages/home/FeaturedItemsSection.vue';
+import HeroSection from '@/pages/home/HeroSection.vue';
+import HowItWorksSection from '@/pages/home/HowItWorksSection.vue';
+import WhyItWorksSection from '@/pages/home/WhyItWorksSection.vue';
+import CommunityImpactSection from '@/pages/home/CommunityImpactSection.vue';
+import FeaturedItemsSection from '@/pages/home/FeaturedItemsSection.vue';
 import { useItemsStore } from '@/store/items.store';
 import { useAuthStore } from '@/store/auth.store';
 import { useToast } from '@/composables/useToast';
