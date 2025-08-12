@@ -6,8 +6,8 @@ import type {
   ReservationModel,
 } from '@/types/models';
 import type { Models } from 'appwrite';
-import { trustCalculationService } from './trustCalculationService';
-import { jsonUtilsService } from './jsonUtilsService';
+import { trustCalculationService } from '../utils/trustCalculationService';
+import { jsonUtilsService } from '../utils/jsonUtilsService';
 
 export const userStatsService = {
   // Get user statistics
@@ -20,7 +20,9 @@ export const userStatsService = {
         return await this.createUserStats(userId);
       }
 
-      return this.formatUserStats(response.data as unknown);
+      return this.formatUserStats(
+        response.data as Models.Document & UserStatsModel
+      );
     } catch (error) {
       console.error('Error fetching user stats:', error);
       return null;

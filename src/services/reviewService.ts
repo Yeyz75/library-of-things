@@ -9,11 +9,11 @@ import type {
 import type { Models } from 'appwrite';
 import { userStatsService } from './userStatsService';
 import { fileUploadService } from './fileUploadService';
-import { reviewValidator } from './reviewValidator';
-import { reviewFormatter } from './reviewFormatter';
+import { reviewValidator } from '../utils/reviewValidator';
+import { reviewFormatter } from '../utils/reviewFormatter';
 import { reviewBuilder } from './reviewBuilder';
 import { reviewUpdater } from './reviewUpdater';
-import { reviewCalculator } from './reviewCalculator';
+import { reviewCalculator } from '../utils/reviewCalculator';
 
 export const reviewService = {
   // Check if user already has a review for this reservation

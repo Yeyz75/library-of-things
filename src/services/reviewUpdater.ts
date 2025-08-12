@@ -1,6 +1,6 @@
 import { databases, COLLECTIONS, DATABASE_ID } from '../api/api';
 import type { CreateReviewDataModel } from '@/types/models';
-import { jsonUtilsService } from './jsonUtilsService';
+import { jsonUtilsService } from '../utils/jsonUtilsService';
 import { reviewService } from './reviewService';
 
 export const reviewUpdater = {

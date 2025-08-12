@@ -5,7 +5,7 @@ import type {
   ItemModel,
 } from '@/types/models';
 import type { Models } from 'appwrite';
-import { jsonUtilsService } from './jsonUtilsService';
+import { jsonUtilsService } from '../utils/jsonUtilsService';
 
 export const reviewBuilder = {
   async buildReviewDocument(
