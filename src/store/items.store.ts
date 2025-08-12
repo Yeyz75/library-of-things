@@ -4,10 +4,10 @@ import {
   databases,
   DATABASE_ID,
   COLLECTIONS,
-  uploadMultipleFiles,
   ID,
   Query,
-} from '@/lib/appwrite';
+  uploadMultipleFiles,
+} from '@/api/api';
 import type { ItemModel } from '@/types/models';
 
 export const useItemsStore = defineStore('items', () => {

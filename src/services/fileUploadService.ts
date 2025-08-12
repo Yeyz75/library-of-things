@@ -1,4 +1,4 @@
-import { storage, BUCKET_ID, ID } from '../lib/appwrite';
+import { storage, BUCKET_ID, ID } from '../api/api';
 
 export const fileUploadService = {
   async uploadPhotos(photos?: File[]): Promise<string[]> {

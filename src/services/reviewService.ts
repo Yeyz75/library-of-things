@@ -1,10 +1,4 @@
-import {
-  databases,
-  COLLECTIONS,
-  DATABASE_ID,
-  ID,
-  Query,
-} from '../lib/appwrite';
+import { databases, COLLECTIONS, DATABASE_ID, ID, Query } from '../api/api';
 import type {
   ReviewModel,
   CreateReviewDataModel,

@@ -1,4 +1,4 @@
-import { databases, COLLECTIONS, DATABASE_ID } from '../lib/appwrite';
+import { databases, COLLECTIONS, DATABASE_ID } from '../api/api';
 
 export const reservationService = {
   async getAllReservations() {

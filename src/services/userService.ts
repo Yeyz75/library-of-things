@@ -1,4 +1,4 @@
-import { account } from '../lib/appwrite';
+import { account } from '../api/api';
 
 export const userService = {
   async getCurrentUser() {

@@ -1,12 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import {
-  account,
-  databases,
-  DATABASE_ID,
-  COLLECTIONS,
-  ID,
-} from '@/lib/appwrite';
+import { account, databases, DATABASE_ID, COLLECTIONS, ID } from '@/api/api';
 import type { UserModel } from '@/types/models';
 import type { Models } from 'appwrite';
 

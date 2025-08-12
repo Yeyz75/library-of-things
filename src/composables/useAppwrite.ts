@@ -3,13 +3,7 @@ import { ref, reactive } from 'vue';
 import { userService } from '@/services/userService';
 import { itemService } from '@/services/itemService';
 import { reservationService } from '@/services/reservationService';
-import {
-  account,
-  databases,
-  DATABASE_ID,
-  COLLECTIONS,
-  ID,
-} from '@/lib/appwrite';
+import { account, databases, DATABASE_ID, COLLECTIONS, ID } from '@/api/api';
 import type { UserModel, ItemModel, ReservationModel } from '@/types/models';
 import type {
   UseAppwriteAppwriteStateModel,

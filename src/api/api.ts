@@ -35,6 +35,9 @@ export const COLLECTIONS = {
   USER_STATS: import.meta.env.VITE_APPWRITE_USER_STATS_COLLECTION_ID || '',
 } as const;
 
+// Storage Bucket ID
+export const BUCKET_ID = import.meta.env.VITE_APPWRITE_BUCKET_ID || '';
+
 // Tipos base para respuestas
 export interface ApiResponse<T = unknown> {
   success: boolean;
@@ -257,6 +260,61 @@ export function apiResource<T extends { $id?: string }>(collectionId: string) {
     },
   };
 }
+
+// Helper functions para storage (migradas desde lib/appwrite)
+export const generateFileMetadata = (
+  type: 'avatar' | 'item',
+  entityId: string,
+  originalFileName: string
+) => {
+  const timestamp = Date.now();
+  const extension = originalFileName.split('.').pop() || 'jpg';
+  return {
+    type,
+    entityId,
+    timestamp,
+    extension,
+    originalName: originalFileName,
+  };
+};
+
+export const getFilePreview = (fileId: string, width = 400, height = 400) => {
+  return storage.getFilePreview(BUCKET_ID, fileId, width, height);
+};
+
+export const getFileView = (fileId: string) => {
+  return storage.getFileView(BUCKET_ID, fileId);
+};
+
+export const uploadFile = async (
+  file: File,
+  type: 'avatar' | 'item',
+  entityId: string
+): Promise<{ fileId: string; url: string; metadata: unknown }> => {
+  const metadata = generateFileMetadata(type, entityId, file.name);
+
+  const response = await storage.createFile(BUCKET_ID, ID.unique(), file);
+  const url = getFileView(response.$id).toString();
+
+  return {
+    fileId: response.$id,
+    url,
+    metadata,
+  };
+};
+
+export const deleteFile = async (fileId: string): Promise<void> => {
+  await storage.deleteFile(BUCKET_ID, fileId);
+};
+
+export const uploadMultipleFiles = async (
+  files: File[],
+  type: 'avatar' | 'item',
+  entityId: string
+): Promise<Array<{ fileId: string; url: string; metadata: unknown }>> => {
+  const uploadPromises = files.map((file) => uploadFile(file, type, entityId));
+  return Promise.all(uploadPromises);
+};
 
 // Exportar Query y ID para uso en filtros personalizados
 export { Query, ID };

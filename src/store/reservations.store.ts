@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import { databases, DATABASE_ID, COLLECTIONS, ID, Query } from '@/lib/appwrite';
+import { databases, DATABASE_ID, COLLECTIONS, ID, Query } from '@/api/api';
 import type { ReservationModel, ReservationStatusModel } from '@/types/models';
 
 export const useReservationsStore = defineStore('reservations', () => {
