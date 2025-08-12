@@ -43,6 +43,7 @@ export interface DescriptionListProps extends BaseComponentProps {
   orientation?: 'horizontal' | 'vertical';
   size?: ComponentSize;
   divider?: boolean;
+  dividerStyle?: 'line' | 'space' | 'dot';
 }
 
 export interface DescriptionItem {
@@ -50,6 +51,7 @@ export interface DescriptionItem {
   label: string;
   value: string | number | VNode;
   icon?: string;
+  valueIcon?: string;
   badge?: BadgeConfig;
 }
 
