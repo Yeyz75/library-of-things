@@ -82,12 +82,12 @@ export function useReviews() {
   };
 
   // Load reviews for an item using API directly
-  const loadItemReviews = async (itemId: string, offset = 0) => {
+  const loadItemReviews = async (itemId: string, limit = 10, offset = 0) => {
     try {
       isLoading.value = true;
       error.value = null;
 
-      const response = await reviewsAPI.getReviewsByItem(itemId);
+      const response = await reviewsAPI.getReviewsByItem(itemId, limit, offset);
 
       if (response.success && response.data) {
         const itemReviews = response.data.documents;
@@ -112,12 +112,16 @@ export function useReviews() {
   };
 
   // Load reviews for a user using API directly
-  const loadUserReviews = async (userId: string, offset = 0) => {
+  const loadUserReviews = async (userId: string, limit = 10, offset = 0) => {
     try {
       isLoading.value = true;
       error.value = null;
 
-      const response = await reviewsAPI.getReviewsByReviewedUser(userId);
+      const response = await reviewsAPI.getReviewsByReviewedUser(
+        userId,
+        limit,
+        offset
+      );
 
       if (response.success && response.data) {
         const userReviews = response.data.documents;

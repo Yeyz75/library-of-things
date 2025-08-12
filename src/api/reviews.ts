@@ -1,4 +1,10 @@
-import { apiResource, COLLECTIONS, Query, type ApiResponse } from './api';
+import {
+  apiResource,
+  COLLECTIONS,
+  Query,
+  type ApiResponse,
+  type QueryOptions,
+} from './api';
 import type { ReviewModel, ReviewTypeModel } from '@/types/models';
 
 // Endpoint para reviews
@@ -32,24 +38,48 @@ export const reviewsAPI = {
 
   // Obtener reviews por usuario revisado
   async getReviewsByReviewedUser(
-    reviewedUserId: string
+    reviewedUserId: string,
+    limit?: number,
+    offset?: number
   ): Promise<ApiResponse<{ documents: ReviewModel[]; total: number }>> {
-    return index({
+    const options: QueryOptions = {
       filters: [Query.equal('reviewedUserId', reviewedUserId)],
       orderBy: '$createdAt',
       orderType: 'DESC',
-    });
+    };
+
+    if (limit !== undefined) {
+      options.limit = limit;
+    }
+
+    if (offset !== undefined) {
+      options.offset = offset;
+    }
+
+    return index(options);
   },
 
   // Obtener reviews por item
   async getReviewsByItem(
-    itemId: string
+    itemId: string,
+    limit?: number,
+    offset?: number
   ): Promise<ApiResponse<{ documents: ReviewModel[]; total: number }>> {
-    return index({
+    const options: QueryOptions = {
       filters: [Query.equal('itemId', itemId)],
       orderBy: '$createdAt',
       orderType: 'DESC',
-    });
+    };
+
+    if (limit !== undefined) {
+      options.limit = limit;
+    }
+
+    if (offset !== undefined) {
+      options.offset = offset;
+    }
+
+    return index(options);
   },
 
   // Obtener reviews por reserva
@@ -213,7 +243,7 @@ export const reviewsAPI = {
     }>
   > {
     try {
-      const reviewsResponse = await getReviewsByItem(itemId);
+      const reviewsResponse = await getReviewsByItem(itemId, 100); // Obtener hasta 100 reseñas para calcular estadísticas
 
       if (!reviewsResponse.success || !reviewsResponse.data) {
         return { success: false, error: 'Error al obtener reviews del item' };
