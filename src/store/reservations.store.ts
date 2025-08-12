@@ -40,6 +40,7 @@ export const useReservationsStore = defineStore('reservations', () => {
     borrowerId?: string;
     ownerId?: string;
     status?: ReservationStatusModel;
+    statuses?: ReservationStatusModel[]; // Nueva opción para múltiples status
   }) {
     isLoading.value = true;
     error.value = null;
@@ -59,6 +60,15 @@ export const useReservationsStore = defineStore('reservations', () => {
         queries.push(Query.equal('status', filters.status));
       }
 
+      // Nueva funcionalidad para múltiples status
+      if (filters?.statuses && filters.statuses.length > 0) {
+        // Si Query.or no está disponible, cargamos todas las reservaciones y filtramos después
+        // queries.push(Query.or(
+        //   filters.statuses.map(status => Query.equal('status', status))
+        // ));
+        // Por ahora, no agregamos filtro de status y filtraremos después
+      }
+
       queries.push(Query.orderDesc('$createdAt'));
 
       const response = await databases.listDocuments(
@@ -67,7 +77,19 @@ export const useReservationsStore = defineStore('reservations', () => {
         queries
       );
 
-      reservations.value = response.documents as unknown as ReservationModel[];
+      let fetchedReservations =
+        response.documents as unknown as ReservationModel[];
+
+      // Filtrar por múltiples status si se especifica
+      if (filters?.statuses && filters.statuses.length > 0) {
+        fetchedReservations = fetchedReservations.filter((reservation) =>
+          filters.statuses!.includes(
+            reservation.status as ReservationStatusModel
+          )
+        );
+      }
+
+      reservations.value = fetchedReservations;
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : 'Failed to fetch reservations';

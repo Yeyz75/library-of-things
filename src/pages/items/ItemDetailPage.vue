@@ -37,7 +37,9 @@
 
           <!-- Thumbnail Gallery -->
           <div
-            v-if="currentItem?.imageUrls?.length > 1"
+            v-if="
+              currentItem?.imageUrls ? currentItem?.imageUrls?.length > 1 : ''
+            "
             class="grid grid-cols-4 gap-2"
           >
             <button
@@ -232,11 +234,12 @@
               </div>
               <button
                 v-if="canLeaveReview"
-                @click="showCreateReviewModal = true"
+                @click="openReviewModal"
                 class="btn-secondary"
               >
-                <PlusIcon class="h-4 w-4 mr-2" />
-                Write Review
+                <PlusIcon v-if="!existingReview" class="h-4 w-4 mr-2" />
+                <PencilIcon v-else class="h-4 w-4 mr-2" />
+                {{ reviewButtonText }}
               </button>
             </div>
           </div>
@@ -275,10 +278,10 @@
               </p>
               <button
                 v-if="canLeaveReview"
-                @click="showCreateReviewModal = true"
+                @click="openReviewModal"
                 class="btn-primary"
               >
-                Write First Review
+                {{ existingReview ? 'Edit Your Review' : 'Write First Review' }}
               </button>
             </div>
           </div>
@@ -289,7 +292,7 @@
     <!-- Create Review Modal -->
     <BaseModal
       :is-open="showCreateReviewModal"
-      title="Write a Review"
+      :title="isEditingReview ? 'Edit Review' : 'Write a Review'"
       @close="showCreateReviewModal = false"
     >
       <CreateReviewForm
@@ -299,6 +302,7 @@
         :reviewer-id="userId"
         :reviewed-user-id="currentItem?.ownerId || ''"
         :review-type="'borrower_to_owner'"
+        :existing-review="isEditingReview ? existingReview : null"
         @submit="handleReviewCreated"
         @cancel="showCreateReviewModal = false"
       />
@@ -363,13 +367,24 @@ import { useItemsStore } from '@/store/items.store';
 import { useReviews } from '@/composables/useReviews';
 import { useReservationsStore } from '@/store/reservations.store';
 import { storeToRefs } from 'pinia';
+import type {
+  CreateReviewDataModel,
+  ReviewModel as Review,
+} from '@/types/models';
 
 const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
 const itemsStore = useItemsStore();
 const reservationsStore = useReservationsStore();
-const { loadItemReviews, reviews, isLoading: reviewsLoading } = useReviews();
+const {
+  loadItemReviews,
+  reviews,
+  isLoading: reviewsLoading,
+  createReview,
+  updateReview,
+  getExistingReview,
+} = useReviews();
 
 const { isAuthenticated, userId } = storeToRefs(authStore);
 
@@ -381,6 +396,8 @@ const isDeleting = ref(false);
 const reviewsOffset = ref(0);
 const reviewsLimit = ref(5);
 const hasMoreReviews = ref(false);
+const existingReview = ref<Review | null>(null);
+const isEditingReview = ref(false);
 
 const currentItem = computed(() => itemsStore.currentItem);
 
@@ -394,8 +411,18 @@ const isOwner = computed(() => {
 });
 
 const canLeaveReview = computed(() => {
-  return isAuthenticated.value && !isOwner.value;
-  // TODO: Add logic to check if user has actually borrowed this item
+  const hasCompletedReservation = completedReservation.value !== undefined;
+  const canReview =
+    isAuthenticated.value && !isOwner.value && hasCompletedReservation;
+
+  return canReview;
+});
+
+const reviewButtonText = computed(() => {
+  if (existingReview.value) {
+    return 'Edit Review';
+  }
+  return 'Write Review';
 });
 
 const categories = {
@@ -444,10 +471,43 @@ function handleReservationCreated() {
   // Could show a success message or redirect to reservations
 }
 
-function handleReviewCreated() {
-  showCreateReviewModal.value = false;
-  // Reload reviews to show the new one
-  loadItemReviewsData();
+async function handleReviewCreated(reviewData: CreateReviewDataModel) {
+  try {
+    let result;
+
+    if (isEditingReview.value && existingReview.value) {
+      result = await updateReview(existingReview.value.$id, reviewData);
+    } else {
+      result = await createReview(reviewData);
+    }
+
+    if (result) {
+      showCreateReviewModal.value = false;
+      isEditingReview.value = false;
+      await loadItemReviewsData();
+      await checkExistingReview();
+    }
+  } catch (error) {
+    console.error('Error al procesar la reseña:', error);
+  }
+}
+
+async function checkExistingReview() {
+  if (userId.value && completedReservation.value) {
+    existingReview.value = await getExistingReview(
+      completedReservation.value.$id ?? '',
+      userId.value
+    );
+  }
+}
+
+function openReviewModal() {
+  if (existingReview.value) {
+    isEditingReview.value = true;
+  } else {
+    isEditingReview.value = false;
+  }
+  showCreateReviewModal.value = true;
 }
 
 async function loadItemReviewsData() {
@@ -477,24 +537,33 @@ async function loadMoreReviews() {
 }
 
 const completedReservation = computed(() => {
-  return reservationsStore.reservations.find(
+  const allReservations = reservationsStore.reservations;
+  const itemId = currentItem.value?.$id;
+  const currentUserId = userId.value;
+  const found = allReservations.find(
     (r) =>
-      r.itemId === currentItem.value?.$id &&
-      r.borrowerId === userId.value &&
+      r.itemId === itemId &&
+      r.borrowerId === currentUserId &&
       (r.status === 'completed' || r.status === 'returned')
   );
+
+  return found;
 });
 
 async function loadItem() {
   const itemId = route.params.id as string;
   if (itemId) {
     await itemsStore.fetchItemById(itemId);
-    // Cargar reservaciones del usuario
+    // Cargar reservaciones del usuario (tanto completed como returned)
     if (userId.value) {
+      // Cargar reservaciones completadas y devueltas del usuario
       await reservationsStore.fetchReservations({
         borrowerId: userId.value,
-        status: 'completed',
+        statuses: ['completed', 'returned'],
       });
+
+      // Verificar si ya existe una reseña
+      await checkExistingReview();
     }
     // Cargar reseñas después de cargar el ítem
     await loadItemReviewsData();

@@ -1,6 +1,8 @@
 <template>
   <div class="create-review-form">
-    <h3 class="form-title">Escribir Reseña</h3>
+    <h3 class="form-title">
+      {{ props.existingReview ? 'Editar Reseña' : 'Escribir Reseña' }}
+    </h3>
 
     <form @submit.prevent="submitReview">
       <!-- Overall Rating -->
@@ -174,8 +176,12 @@
           Cancelar
         </button>
         <button type="submit" :disabled="isSubmitting" class="btn-primary">
-          <span v-if="isSubmitting">Enviando...</span>
-          <span v-else>Enviar Reseña</span>
+          <span v-if="isSubmitting">{{
+            props.existingReview ? 'Actualizando...' : 'Enviando...'
+          }}</span>
+          <span v-else>{{
+            props.existingReview ? 'Actualizar Reseña' : 'Enviar Reseña'
+          }}</span>
         </button>
       </div>
     </form>
@@ -184,7 +190,10 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
-import type { CreateReviewDataModel as CreateReviewData } from '@/types/models';
+import type {
+  CreateReviewDataModel as CreateReviewData,
+  ReviewModel,
+} from '@/types/models';
 import type {
   CreateReviewFormPhotoPreviewModel,
   CreateReviewFormPropsModel,
@@ -192,7 +201,9 @@ import type {
 } from '@/types/models';
 import StarRating from './StarRating.vue';
 
-interface Props extends CreateReviewFormPropsModel {}
+interface Props extends CreateReviewFormPropsModel {
+  existingReview?: ReviewModel | null;
+}
 
 const props = defineProps<Props>();
 
@@ -215,14 +226,18 @@ const formData = reactive<{
   };
   comment: string;
 }>({
-  overallRating: 0,
+  overallRating: props.existingReview?.overallRating || 0,
   aspectRatings: {
-    communication: 0,
-    punctuality: 0,
-    ...(props.reviewType === 'borrower_to_owner' && { itemCondition: 0 }),
-    ...(props.reviewType === 'owner_to_borrower' && { reliability: 0 }),
+    communication: props.existingReview?.aspectRatings?.communication || 0,
+    punctuality: props.existingReview?.aspectRatings?.punctuality || 0,
+    ...(props.reviewType === 'borrower_to_owner' && {
+      itemCondition: props.existingReview?.aspectRatings?.itemCondition || 0,
+    }),
+    ...(props.reviewType === 'owner_to_borrower' && {
+      reliability: props.existingReview?.aspectRatings?.reliability || 0,
+    }),
   },
-  comment: '',
+  comment: props.existingReview?.comment || '',
 });
 
 const errors = reactive({

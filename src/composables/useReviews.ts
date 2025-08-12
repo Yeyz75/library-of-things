@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue';
 import { reviewService } from '../services/reviewService';
+import { userStatsService } from '../services/userStatsService';
 import type {
   ReviewModel as Review,
   CreateReviewDataModel as CreateReviewData,
@@ -14,6 +15,50 @@ export function useReviews() {
   const isLoading = ref(false);
   const error = ref<string | null>(null);
 
+  // Check if user already has a review for this reservation
+  const getExistingReview = async (
+    reservationId: string,
+    reviewerId: string
+  ): Promise<Review | null> => {
+    try {
+      return await reviewService.getExistingReview(reservationId, reviewerId);
+    } catch (err) {
+      error.value =
+        err instanceof Error ? err.message : 'Error checking existing review';
+      return null;
+    }
+  };
+
+  // Update an existing review
+  const updateReview = async (
+    reviewId: string,
+    reviewData: Partial<CreateReviewData>
+  ): Promise<Review | null> => {
+    try {
+      isLoading.value = true;
+      error.value = null;
+
+      const updatedReview = await reviewService.updateReview(
+        reviewId,
+        reviewData
+      );
+
+      // Update in local state
+      const index = reviews.value.findIndex((r) => r.$id === reviewId);
+      if (index !== -1) {
+        reviews.value[index] = updatedReview;
+      }
+
+      return updatedReview;
+    } catch (err) {
+      error.value =
+        err instanceof Error ? err.message : 'Error updating review';
+      return null;
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
   // Create a new review
   const createReview = async (
     reviewData: CreateReviewData
@@ -23,7 +68,7 @@ export function useReviews() {
       error.value = null;
 
       const review = await reviewService.createReview(reviewData);
-      reviews.value.unshift(review); // Add to beginning of list
+      reviews.value.unshift(review);
 
       return review;
     } catch (err) {
@@ -114,7 +159,7 @@ export function useReviews() {
       isLoading.value = true;
       error.value = null;
 
-      userStats.value = await reviewService.getUserStats(userId);
+      userStats.value = await userStatsService.getUserStats(userId);
       return userStats.value;
     } catch (err) {
       error.value =
@@ -234,6 +279,8 @@ export function useReviews() {
 
     // Actions
     createReview,
+    updateReview,
+    getExistingReview,
     loadItemReviews,
     loadUserReviews,
     loadItemReviewSummary,
