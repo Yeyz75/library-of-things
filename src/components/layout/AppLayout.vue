@@ -1,5 +1,7 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-950">
+  <div
+    class="min-h-screen flex flex-col bg-neutral-50 dark:bg-neutral-950 transition-colors duration-300"
+  >
     <AppHeader />
 
     <main class="flex-1 pt-16">

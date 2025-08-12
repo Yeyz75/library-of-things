@@ -1,48 +1,48 @@
 <template>
   <header
-    class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-800 transition-colors duration-300"
+    class="fixed top-0 left-0 right-0 z-50 glass border-b border-neutral-200/20 dark:border-neutral-800/20 backdrop-blur-xl transition-all duration-300"
   >
-    <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <nav class="container">
       <div class="flex items-center justify-between h-16">
-        <!-- Logo -->
+        <!-- Logo con nuevo diseño -->
         <div class="flex-shrink-0">
           <router-link
             to="/"
-            class="flex items-center space-x-2 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
+            class="flex items-center space-x-3 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-all duration-200 group"
           >
             <div
-              class="h-8 w-8 bg-primary-600 dark:bg-primary-500 rounded-lg flex items-center justify-center hover-glow"
+              class="h-10 w-10 gradient-cosmic rounded-xl flex items-center justify-center shadow-primary hover:shadow-glow transition-all duration-300 group-hover:scale-105"
             >
-              <span class="text-white font-bold text-sm">LoT</span>
+              <span class="text-white font-display font-bold text-sm">LoT</span>
             </div>
             <span
-              class="font-bold text-lg hidden sm:block text-gray-900 dark:text-gray-100"
+              class="font-display font-bold text-xl hidden sm:block text-neutral-900 dark:text-neutral-100"
               >Library of Things</span
             >
           </router-link>
         </div>
 
         <!-- Desktop Navigation -->
-        <div class="hidden md:flex items-center space-x-1">
+        <div class="hidden md:flex items-center space-x-2">
           <router-link
             to="/"
-            class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            class="text-neutral-600 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 hover:bg-neutral-50 dark:hover:bg-neutral-800"
             active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
           >
             {{ t('header.home') }}
           </router-link>
           <router-link
             to="/search"
-            class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            class="text-neutral-600 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 hover:bg-neutral-50 dark:hover:bg-neutral-800"
             active-class="text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
           >
             {{ t('header.browseItems') }}
           </router-link>
           <button
             @click="showSearchModal = true"
-            class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center"
+            class="text-neutral-600 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 flex items-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
           >
-            <MagnifyingGlassIcon class="h-5 w-5 mr-1" />
+            <MagnifyingGlassIcon class="h-4 w-4 mr-2" />
             {{ t('common.search') }}
           </button>
         </div>
@@ -59,17 +59,17 @@
             <!-- User Avatar/Menu -->
             <button
               @click="showUserMenu = !showUserMenu"
-              class="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 rounded-full p-1 transition-all duration-200"
+              class="flex items-center space-x-2 text-neutral-600 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 focus-ring rounded-xl p-2 transition-all duration-200 hover:bg-neutral-50 dark:hover:bg-neutral-800"
             >
               <img
                 v-if="currentUser?.avatarUrl"
                 :src="currentUser.avatarUrl"
                 :alt="currentUser.name"
-                class="h-8 w-8 rounded-full object-cover ring-2 ring-gray-200 dark:ring-gray-700"
+                class="h-8 w-8 rounded-full object-cover ring-2 ring-neutral-200 dark:ring-neutral-700"
               />
               <div
                 v-else
-                class="h-8 w-8 rounded-full bg-primary-600 dark:bg-primary-500 flex items-center justify-center ring-2 ring-gray-200 dark:ring-gray-700 hover-glow"
+                class="h-8 w-8 rounded-full gradient-primary flex items-center justify-center ring-2 ring-neutral-200 dark:ring-neutral-700 shadow-primary"
               >
                 <span class="text-white text-sm font-medium">
                   {{
@@ -83,68 +83,72 @@
 
             <!-- User Dropdown -->
             <transition
-              enter-active-class="transition ease-out duration-100"
+              enter-active-class="transition ease-out duration-200"
               enter-from-class="transform opacity-0 scale-95"
               enter-to-class="transform opacity-100 scale-100"
-              leave-active-class="transition ease-in duration-75"
+              leave-active-class="transition ease-in duration-150"
               leave-from-class="transform opacity-100 scale-100"
               leave-to-class="transform opacity-0 scale-95"
             >
               <div
                 v-if="showUserMenu"
                 v-click-outside="() => (showUserMenu = false)"
-                class="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-gray-700 py-1 z-50 border border-gray-200 dark:border-gray-700"
+                class="absolute right-0 mt-2 w-64 glass rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10 py-2 z-50 border border-neutral-200/20 dark:border-neutral-800/20"
               >
                 <div
-                  class="px-4 py-2 border-b border-gray-200 dark:border-gray-700"
+                  class="px-4 py-3 border-b border-neutral-200/20 dark:border-neutral-800/20"
                 >
-                  <p class="text-sm font-medium text-gray-900 dark:text-white">
+                  <p
+                    class="text-sm font-semibold text-neutral-900 dark:text-white font-display"
+                  >
                     {{ currentUser?.name || currentUser?.email }}
                   </p>
-                  <p class="text-xs text-gray-500 dark:text-gray-400">
+                  <p
+                    class="text-xs text-neutral-500 dark:text-neutral-400 font-body"
+                  >
                     {{ t('header.dashboard') }}
                   </p>
                 </div>
                 <router-link
                   to="/dashboard"
-                  class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  class="interactive-subtle block px-4 py-3 text-sm text-neutral-700 dark:text-neutral-300 font-body"
                   @click="showUserMenu = false"
                 >
                   {{ t('header.dashboard') }}
                 </router-link>
                 <router-link
                   to="/profile"
-                  class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  class="interactive-subtle block px-4 py-3 text-sm text-neutral-700 dark:text-neutral-300 font-body"
                   @click="showUserMenu = false"
                 >
                   {{ t('header.profile') }}
                 </router-link>
                 <router-link
                   to="/reservations"
-                  class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  class="interactive-subtle block px-4 py-3 text-sm text-neutral-700 dark:text-neutral-300 font-body"
                   @click="showUserMenu = false"
                 >
                   {{ t('header.myReservations') }}
                 </router-link>
-                <hr class="border-gray-200 dark:border-gray-700 my-1" />
+                <div class="divider-gradient my-2"></div>
                 <router-link
                   to="/help"
-                  class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  class="interactive-subtle block px-4 py-3 text-sm text-neutral-700 dark:text-neutral-300 font-body"
                   @click="showUserMenu = false"
                 >
                   {{ t('header.help') }}
                 </router-link>
                 <router-link
                   to="/donations"
-                  class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  class="interactive-subtle block px-4 py-3 text-sm text-neutral-700 dark:text-neutral-300 font-body"
                   @click="showUserMenu = false"
                 >
                   {{ t('header.donations') }}
                 </router-link>
-                <hr class="border-gray-200 dark:border-gray-700 my-1" />
+                <div class="divider-gradient my-2"></div>
                 <button
                   @click="handleSignOut"
-                  class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  class="interactive-subtle block w-full text-left px-4 py-3 text-sm text-neutral-700 dark:text-neutral-300 font-body"
                 >
                   {{ t('header.signOut') }}
                 </button>
