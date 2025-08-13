@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Confirmación de Devolución</title>
+    <style>
+      /* Reset styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+          Cantarell, sans-serif;
+        line-height: 1.6;
+        color: #374151;
+        background-color: #f9fafb;
+      }
+
+      .email-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      .header {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        padding: 32px 24px;
+        text-align: center;
+      }
+
+      .header h1 {
+        color: #ffffff;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .header p {
+        color: #d1fae5;
+        font-size: 16px;
+      }
+
+      .content {
+        padding: 32px 24px;
+      }
+
+      .greeting {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 16px;
+      }
+
+      .message {
+        font-size: 16px;
+        line-height: 1.7;
+        color: #4b5563;
+        margin-bottom: 24px;
+      }
+
+      .success-badge {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 50px;
+        display: inline-block;
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 24px;
+      }
+
+      .item-card {
+        background-color: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 24px 0;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .item-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 8px;
+        object-fit: cover;
+        background-color: #e5e7eb;
+      }
+
+      .item-details h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 4px;
+      }
+
+      .item-details p {
+        font-size: 14px;
+        color: #6b7280;
+      }
+
+      .return-details {
+        background-color: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        padding: 16px;
+        margin: 24px 0;
+        border-radius: 0 8px 8px 0;
+      }
+
+      .return-details h4 {
+        font-size: 16px;
+        font-weight: 600;
+        color: #92400e;
+        margin-bottom: 8px;
+      }
+
+      .detail-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 4px;
+        font-size: 14px;
+      }
+
+      .detail-label {
+        font-weight: 500;
+        color: #92400e;
+      }
+
+      .detail-value {
+        color: #451a03;
+      }
+
+      .review-section {
+        background-color: #f0f9ff;
+        border: 1px solid #bae6fd;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 24px 0;
+        text-align: center;
+      }
+
+      .review-section h4 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #0369a1;
+        margin-bottom: 12px;
+      }
+
+      .review-section p {
+        color: #0369a1;
+        margin-bottom: 16px;
+      }
+
+      .stars {
+        font-size: 24px;
+        margin: 12px 0;
+      }
+
+      .thank-you {
+        background-color: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 24px 0;
+        text-align: center;
+      }
+
+      .thank-you h4 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #166534;
+        margin-bottom: 8px;
+      }
+
+      .thank-you p {
+        color: #166534;
+      }
+
+      .cta-button {
+        display: inline-block;
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: #ffffff;
+        text-decoration: none;
+        padding: 14px 28px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 16px;
+        text-align: center;
+        margin: 12px;
+        transition: transform 0.2s;
+      }
+
+      .cta-button:hover {
+        transform: translateY(-1px);
+      }
+
+      .secondary-button {
+        display: inline-block;
+        background-color: #ffffff;
+        color: #6b7280;
+        text-decoration: none;
+        padding: 12px 24px;
+        border: 2px solid #d1d5db;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 14px;
+        margin: 8px;
+      }
+
+      .footer {
+        background-color: #f3f4f6;
+        padding: 24px;
+        text-align: center;
+        border-top: 1px solid #e5e7eb;
+      }
+
+      .footer p {
+        font-size: 14px;
+        color: #6b7280;
+        margin-bottom: 8px;
+      }
+
+      .footer a {
+        color: #10b981;
+        text-decoration: none;
+      }
+
+      /* Responsive */
+      @media (max-width: 600px) {
+        .email-container {
+          margin: 0;
+          box-shadow: none;
+        }
+
+        .header,
+        .content,
+        .footer {
+          padding: 24px 16px;
+        }
+
+        .item-card {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .item-image {
+          width: 120px;
+          height: 120px;
+        }
+
+        .detail-row {
+          flex-direction: column;
+          gap: 4px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="header">
+        <h1>✅ ¡Completado!</h1>
+        <p>Devolución confirmada exitosamente</p>
+      </div>
+
+      <div class="content">
+        <div class="greeting">¡Hola {{recipientName}}! 🎉</div>
+
+        <div class="success-badge">✅ Devolución Confirmada</div>
+
+        {{#if (eq recipientType 'borrower')}}
+        <div class="message">
+          ¡Gracias por devolver <strong>{{itemTitle}}</strong> a tiempo! Tu
+          préstamo se ha completado exitosamente. Esperamos que hayas disfrutado
+          de la experiencia.
+        </div>
+        {{else}}
+        <div class="message">
+          ¡Excelentes noticias! <strong>{{borrowerName}}</strong> ha devuelto tu
+          item <strong>{{itemTitle}}</strong>. El préstamo se ha completado
+          exitosamente.
+        </div>
+        {{/if}}
+
+        <div class="item-card">
+          {{#if itemImageUrl}}
+          <img src="{{itemImageUrl}}" alt="{{itemTitle}}" class="item-image" />
+          {{else}}
+          <div
+            class="item-image"
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background-color: #e5e7eb;
+              color: #9ca3af;
+              font-size: 24px;
+            "
+          >
+            📦
+          </div>
+          {{/if}}
+          <div class="item-details">
+            <h3>{{itemTitle}}</h3>
+            {{#if (eq recipientType 'borrower')}}
+            <p>Prestado por <strong>{{ownerName}}</strong></p>
+            {{else}}
+            <p>Devuelto por <strong>{{borrowerName}}</strong></p>
+            {{/if}}
+          </div>
+        </div>
+
+        <div class="return-details">
+          <h4>📋 Resumen del Préstamo</h4>
+          <div class="detail-row">
+            <span class="detail-label">Fecha de devolución:</span>
+            <span class="detail-value">{{returnDate}}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Estado:</span>
+            <span class="detail-value">Completado ✅</span>
+          </div>
+          {{#if (eq recipientType 'borrower')}}
+          <div class="detail-row">
+            <span class="detail-label">Propietario:</span>
+            <span class="detail-value">{{ownerName}}</span>
+          </div>
+          {{else}}
+          <div class="detail-row">
+            <span class="detail-label">Prestatario:</span>
+            <span class="detail-value">{{borrowerName}}</span>
+          </div>
+          {{/if}}
+        </div>
+
+        <div class="review-section">
+          <h4>⭐ ¡Tu Opinión Importa!</h4>
+          {{#if (eq recipientType 'borrower')}}
+          <p>
+            Ayuda a otros usuarios compartiendo tu experiencia con
+            <strong>{{ownerName}}</strong> y este item.
+          </p>
+          {{else}}
+          <p>
+            Ayuda a otros usuarios compartiendo tu experiencia con
+            <strong>{{borrowerName}}</strong> como prestatario.
+          </p>
+          {{/if}}
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <a href="{{reviewUrl}}" class="cta-button"> ✍️ Escribir Reseña </a>
+        </div>
+
+        <div class="thank-you">
+          <h4>🌟 ¡Gracias por Participar!</h4>
+          {{#if (eq recipientType 'borrower')}}
+          <p>
+            Gracias por ser parte de nuestra comunidad de intercambio
+            responsable. ¡Esperamos verte pronto en tu próximo préstamo!
+          </p>
+          {{else}}
+          <p>
+            Gracias por compartir tus items y hacer posible una comunidad más
+            sostenible. ¡Tu generosidad marca la diferencia!
+          </p>
+          {{/if}}
+        </div>
+
+        <div style="text-align: center">
+          {{#if (eq recipientType 'borrower')}}
+          <a href="/explore" class="secondary-button">
+            🔍 Explorar Más Items
+          </a>
+          {{else}}
+          <a href="/items/my-items" class="secondary-button">
+            📦 Ver Mis Items
+          </a>
+          {{/if}}
+        </div>
+
+        <div class="message">
+          <small>
+            💡 <strong>¿Sabías que?</strong> Cada préstamo exitoso ayuda a
+            reducir el consumo innecesario y fortalece los lazos de nuestra
+            comunidad. ¡Sigue participando!
+          </small>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p><strong>Library of Things</strong></p>
+        <p>Celebrando otro intercambio exitoso en nuestra comunidad</p>
+        <p>
+          <a href="{{reviewUrl}}">Escribir reseña</a> |
+          <a href="#">Centro de ayuda</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

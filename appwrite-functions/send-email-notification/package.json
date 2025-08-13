@@ -1,0 +1,23 @@
+{
+  "name": "send-email-notification",
+  "version": "1.0.0",
+  "description": "Appwrite function to send email notifications for Library of Things",
+  "main": "src/main.js",
+  "type": "module",
+  "scripts": {
+    "build": "echo 'No build step required'",
+    "start": "node src/main.js"
+  },
+  "dependencies": {
+    "node-appwrite": "^13.0.0"
+  },
+  "keywords": [
+    "appwrite",
+    "function",
+    "email",
+    "notifications",
+    "library-of-things"
+  ],
+  "author": "Library of Things",
+  "license": "MIT"
+}
