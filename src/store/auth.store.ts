@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 import { AuthAPI } from '@/api';
 import { show as showUser, save as saveUser } from '@/api/users';
 import type { UserModel } from '@/types/models';
-import type { Models } from 'appwrite';
+import type { Models, OAuthProvider } from 'appwrite';
 
 export const useAuthStore = defineStore('auth', () => {
   // State
@@ -44,13 +44,20 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null;
 
     try {
-      // Create OAuth2 token for Google
-      /*     const successUrl = `${window.location.origin}/auth/callback`;
-      const failureUrl = `${window.location.origin}/login?error=oauth_failed`; */
+      // Crear URLs de callback
+      const successUrl = `${window.location.origin}/auth/callback`;
+      const failureUrl = `${window.location.origin}/login?error=oauth_failed`;
 
-      // Note: OAuth2 functionality would need to be added to AuthAPI
-      // For now, we'll throw an error indicating it's not implemented
-      throw new Error('Google OAuth not implemented in AuthAPI yet');
+      // Iniciar el flujo OAuth2 con Google
+      // Esto redirigirá automáticamente al proveedor OAuth
+      await AuthAPI.createOAuth2Session(
+        'google' as OAuthProvider,
+        successUrl,
+        failureUrl
+      );
+
+      // La función no retorna aquí porque hay una redirección
+      // El manejo se completa en AuthCallback.vue
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : 'Failed to sign in with Google';
@@ -207,6 +214,54 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  async function handleOAuthCallback() {
+    isLoading.value = true;
+    error.value = null;
+
+    try {
+      // Verificar la sesión OAuth después del callback
+      const response = await AuthAPI.handleOAuthCallback();
+      if (response.success && response.data) {
+        appwriteUser.value = response.data as Models.User<Models.Preferences>;
+
+        // Intentar cargar los datos del usuario desde la base de datos
+        try {
+          const userResponse = await showUser(response.data.$id);
+          if (userResponse.success && userResponse.data) {
+            userData.value = userResponse.data;
+          } else {
+            throw new Error('User document not found');
+          }
+        } catch {
+          // Si el documento del usuario no existe, crearlo automáticamente
+          const createResponse = await saveUser(
+            {
+              email: response.data.email,
+              name: response.data.name,
+              avatarUrl: '',
+            },
+            response.data.$id
+          );
+
+          if (createResponse.success && createResponse.data) {
+            userData.value = createResponse.data;
+          } else {
+            throw new Error('Failed to create user document');
+          }
+        }
+      } else {
+        throw new Error(response.error || 'OAuth callback failed');
+      }
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'OAuth callback failed';
+      error.value = errorMessage;
+      throw err;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   function clearError() {
     error.value = null;
   }
@@ -228,6 +283,7 @@ export const useAuthStore = defineStore('auth', () => {
     signOut,
     getCurrentUser,
     initializeAuth,
+    handleOAuthCallback,
     clearError,
   };
 });

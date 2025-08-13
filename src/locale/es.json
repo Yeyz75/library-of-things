@@ -38,7 +38,8 @@
         "emailRequired": "El correo electrónico es requerido",
         "emailInvalid": "Por favor ingresa un correo electrónico válido",
         "passwordRequired": "La contraseña es requerida",
-        "passwordTooShort": "La contraseña debe tener al menos 6 caracteres"
+        "passwordTooShort": "La contraseña debe tener al menos 6 caracteres",
+        "oauthFailed": "El inicio de sesión con Google falló. Por favor intenta de nuevo o usa correo electrónico y contraseña."
       }
     },
     "register": {

@@ -127,10 +127,11 @@
           <button
             type="button"
             @click="handleGoogleSignIn"
-            :disabled="authStore.isLoading"
+            :disabled="authStore.isLoading || isGoogleLoading"
             class="w-full btn-secondary flex items-center justify-center"
           >
-            <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24">
+            <BaseLoader v-if="isGoogleLoading" size="sm" class="mr-2" />
+            <svg v-else class="w-5 h-5 mr-2" viewBox="0 0 24 24">
               <path
                 fill="#4285F4"
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -148,7 +149,11 @@
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
-            {{ t('auth.login.continueWithGoogle') }}
+            {{
+              isGoogleLoading
+                ? t('auth.login.signingIn')
+                : t('auth.login.continueWithGoogle')
+            }}
           </button>
         </div>
 
@@ -169,7 +174,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, onUnmounted } from 'vue';
+import { reactive, ref, onUnmounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import BaseLoader from '@/components/common/BaseLoader.vue';
 import { useAuthStore } from '@/store/auth.store';
@@ -180,6 +185,11 @@ const route = useRoute();
 const authStore = useAuthStore();
 const { t } = useI18n();
 
+// Manejar errores de OAuth desde la URL
+if (route.query.error === 'oauth_failed') {
+  authStore.error = t('auth.login.errors.oauthFailed');
+}
+
 const form = reactive({
   email: '',
   password: '',
@@ -189,6 +199,8 @@ const errors = reactive({
   email: '',
   password: '',
 });
+
+const isGoogleLoading = ref(false);
 
 function validateForm(): boolean {
   let isValid = true;
@@ -235,14 +247,14 @@ async function handleSubmit() {
 }
 
 async function handleGoogleSignIn() {
+  isGoogleLoading.value = true;
   try {
     await authStore.signInWithGoogle();
-
-    // Redirect to intended page or dashboard
-    const redirectTo = (route.query.redirect as string) || '/dashboard';
-    router.push(redirectTo);
+    // La redirección se maneja automáticamente por OAuth
+    // No necesitamos hacer nada más aquí
   } catch {
     // Error is handled in the store
+    isGoogleLoading.value = false;
   }
 }
 

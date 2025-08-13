@@ -23,7 +23,7 @@ import {
   handleApiSuccess,
   type ApiResponse,
 } from './api';
-import { ID, Models } from 'appwrite';
+import { ID, Models, OAuthProvider } from 'appwrite';
 
 export interface User {
   $id: string;
@@ -183,6 +183,31 @@ export class AuthAPI {
       return handleApiSuccess(null, 'Contraseña restablecida exitosamente');
     } catch (error) {
       return handleApiError(error) as ApiResponse<null>;
+    }
+  }
+
+  // Iniciar OAuth con cualquier proveedor soportado
+  static async createOAuth2Session(
+    provider: OAuthProvider,
+    successUrl?: string,
+    failureUrl?: string
+  ): Promise<void> {
+    // Crear URLs de callback si no se proporcionan
+    const success = successUrl || `${window.location.origin}/auth/callback`;
+    const failure =
+      failureUrl || `${window.location.origin}/login?error=oauth_failed`;
+
+    // Crear sesión OAuth2 - esto redirigirá automáticamente
+    account.createOAuth2Session(provider, success, failure);
+  }
+
+  // Verificar si hay una sesión OAuth activa después del callback
+  static async handleOAuthCallback(): Promise<ApiResponse<User>> {
+    try {
+      const user = await account.get();
+      return handleApiSuccess(user as User, 'Autenticación OAuth exitosa');
+    } catch (error) {
+      return handleApiError(error) as ApiResponse<User>;
     }
   }
 }

@@ -38,7 +38,8 @@
         "emailRequired": "Email is required",
         "emailInvalid": "Please enter a valid email address",
         "passwordRequired": "Password is required",
-        "passwordTooShort": "Password must be at least 6 characters"
+        "passwordTooShort": "Password must be at least 6 characters",
+        "oauthFailed": "Google sign-in failed. Please try again or use email and password."
       }
     },
     "register": {

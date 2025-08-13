@@ -27,8 +27,8 @@ const { t } = useI18n();
 
 onMounted(async () => {
   try {
-    // Get the current user after OAuth callback
-    await authStore.getCurrentUser();
+    // Manejar el callback de OAuth y crear/obtener usuario
+    await authStore.handleOAuthCallback();
     router.push('/dashboard');
   } catch (error) {
     console.error('Error during OAuth callback:', error);
