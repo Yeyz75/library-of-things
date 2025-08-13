@@ -144,7 +144,6 @@ export const useAuthStore = defineStore('auth', () => {
       const response = await AuthAPI.getCurrentUser();
       if (response.success && response.data) {
         appwriteUser.value = response.data as Models.User<Models.Preferences>;
-
         // Load user data from database
         try {
           const userResponse = await showUser(response.data.$id);
@@ -163,7 +162,6 @@ export const useAuthStore = defineStore('auth', () => {
             },
             response.data.$id
           );
-
           if (createResponse.success && createResponse.data) {
             userData.value = createResponse.data;
           }
@@ -175,7 +173,6 @@ export const useAuthStore = defineStore('auth', () => {
       // Clear user data on any error (including 401 Unauthorized)
       appwriteUser.value = null;
       userData.value = null;
-
       // Only log error if it's not a 401 (user not authenticated) or 404 (session not found)
       if (
         err &&
