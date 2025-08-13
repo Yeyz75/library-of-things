@@ -4,9 +4,38 @@ import type { ItemModel, ItemCategoryModel } from '@/types/models';
 // Endpoint para items
 const endpoint = COLLECTIONS.ITEMS;
 
-// Exportar métodos estándar usando destructuring
-export const { index, show, save, update, remove, search, count } =
-  apiResource<ItemModel>(endpoint);
+// Validar que el endpoint esté configurado
+if (!endpoint) {
+  console.warn(
+    'COLLECTIONS.ITEMS is not configured. Please check your environment variables.'
+  );
+}
+
+// Exportar métodos estándar manteniendo el contexto
+const itemResource = apiResource<ItemModel>(endpoint);
+
+// Verificar que todas las funciones estén disponibles antes de exportar
+if (!itemResource || typeof itemResource.search !== 'function') {
+  console.error(
+    'apiResource did not return valid functions. Check environment configuration.'
+  );
+}
+
+// Exportar funciones manteniendo el contexto para evitar el problema de 'this'
+export const index = (...args: Parameters<typeof itemResource.index>) =>
+  itemResource.index(...args);
+export const show = (...args: Parameters<typeof itemResource.show>) =>
+  itemResource.show(...args);
+export const save = (...args: Parameters<typeof itemResource.save>) =>
+  itemResource.save(...args);
+export const update = (...args: Parameters<typeof itemResource.update>) =>
+  itemResource.update(...args);
+export const remove = (...args: Parameters<typeof itemResource.remove>) =>
+  itemResource.remove(...args);
+export const search = (...args: Parameters<typeof itemResource.search>) =>
+  itemResource.search(...args);
+export const count = (...args: Parameters<typeof itemResource.count>) =>
+  itemResource.count(...args);
 
 // Métodos adicionales específicos para items
 export const itemsAPI = {
@@ -19,7 +48,7 @@ export const itemsAPI = {
     });
   },
 
-  // Obtener items por categoría
+  // Obtener items por categoría (usar filtro igual, no búsqueda)
   async getItemsByCategory(
     category: ItemCategoryModel
   ): Promise<ApiResponse<{ documents: ItemModel[]; total: number }>> {
@@ -37,11 +66,44 @@ export const itemsAPI = {
     });
   },
 
-  // Buscar items por título
+  // Buscar items por título (versión mejorada con fulltext cuando esté disponible)
   async searchByTitle(
     title: string
   ): Promise<ApiResponse<{ documents: ItemModel[]; total: number }>> {
-    return search('title', title);
+    try {
+      // Primero intentar búsqueda fulltext (requiere índice)
+      return await search('title', title);
+    } catch {
+      console.warn('Fulltext search not available, trying startsWith...');
+      try {
+        // Si falla fulltext, intentar startsWith
+        return await index({
+          filters: [Query.startsWith('title', title)],
+        });
+      } catch {
+        // Si también falla startsWith, filtrar en el cliente
+        console.warn(
+          'Index-based search failed, falling back to client-side filtering'
+        );
+        const allItemsResponse = await index({});
+
+        if (allItemsResponse.success && allItemsResponse.data) {
+          const filteredItems = allItemsResponse.data.documents.filter((item) =>
+            item.title?.toLowerCase().includes(title.toLowerCase())
+          );
+
+          return {
+            success: true,
+            data: {
+              documents: filteredItems,
+              total: filteredItems.length,
+            },
+          };
+        }
+
+        return allItemsResponse;
+      }
+    }
   },
 
   // Buscar items por ubicación

@@ -87,6 +87,29 @@ export const handleApiSuccess = <T>(
 
 // Función genérica para crear recursos API
 export function apiResource<T extends { $id?: string }>(collectionId: string) {
+  // Validar que el collectionId esté presente
+  if (!collectionId) {
+    console.error(
+      'apiResource: collectionId is required but was empty or undefined'
+    );
+    // Retornar métodos que fallan gracefully
+    const failedMethod = <R>(): Promise<ApiResponse<R>> =>
+      Promise.resolve(
+        handleApiError<R>(
+          'Collection ID is not configured. Please check your environment variables.'
+        )
+      );
+    return {
+      index: failedMethod,
+      show: failedMethod,
+      save: failedMethod,
+      update: failedMethod,
+      remove: failedMethod,
+      search: failedMethod,
+      count: failedMethod,
+    };
+  }
+
   return {
     // Listar todos los documentos (index)
     async index(
