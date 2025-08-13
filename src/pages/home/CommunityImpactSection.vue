@@ -173,7 +173,7 @@ type CommunityStats = {
 const props = defineProps<{
   communityStats: CommunityStats;
   t: (_key: string) => string;
-  communityImpactSectionRef: Ref<HTMLElement | null>;
+  communityImpactSectionRef?: Ref<HTMLElement | null>;
 }>();
 
 useMotion(props.communityImpactSectionRef);

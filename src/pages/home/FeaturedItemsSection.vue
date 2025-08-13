@@ -68,6 +68,8 @@
 import { useMotion } from '@vueuse/motion';
 import type { ItemModel as Item } from '@/types/models';
 import type { Ref } from 'vue';
+import BaseLoader from '@/components/common/BaseLoader.vue';
+import ItemCard from '@/components/common/ItemCard.vue';
 
 type CategoryObj = { key: string; name: string };
 
@@ -78,7 +80,7 @@ const props = defineProps<{
   t: (_key: string) => string;
   handleReserve: (_item: Item) => void;
   handleShare: (_item: Item) => void;
-  featuredItemsSectionRef: Ref<HTMLElement | null>;
+  featuredItemsSectionRef?: Ref<HTMLElement | null>;
 }>();
 
 useMotion(props.featuredItemsSectionRef);
