@@ -387,6 +387,8 @@
   "search": {
     "title": "Buscar Artículos",
     "placeholder": "Buscar artículos para pedir prestado...",
+    "quickSearch": "Búsquedas populares",
+    "clickToExplore": "Haz clic para explorar",
     "results": "Resultados de Búsqueda",
     "resultsCount": "{count} artículos encontrados",
     "resultsFor": "para \"{query}\"",

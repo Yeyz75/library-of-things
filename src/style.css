@@ -4,6 +4,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import micro-interactions */
+@import './styles/micro-interactions.css';
+
 /* Custom scrollbar moderno */
 @layer base {
   :root {

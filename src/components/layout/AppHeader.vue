@@ -38,7 +38,9 @@
           >
             {{ t('header.browseItems') }}
           </router-link>
+          <!-- Search button only shown on non-search pages -->
           <button
+            v-if="!isSearchPage"
             @click="showSearchModal = true"
             class="text-neutral-600 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 flex items-center hover:bg-neutral-50 dark:hover:bg-neutral-800"
           >
@@ -318,8 +320,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick, watch, Ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted, nextTick, watch, computed, Ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/store/auth.store';
 import { useThemeStore } from '@/store/theme.store';
@@ -335,6 +337,7 @@ import SearchBar from '@/components/common/SearchBar.vue';
 import type { UserModel as User } from '@/types/models';
 
 const router = useRouter();
+const route = useRoute();
 const authStore = useAuthStore();
 const themeStore = useThemeStore();
 const { t } = useI18n();
@@ -348,6 +351,11 @@ const { isAuthenticated, currentUser } = storeToRefs(authStore) as unknown as {
   isAuthenticated: Ref<boolean>;
   currentUser: Ref<User | null>;
 };
+
+// Check if we're on a search-related page
+const isSearchPage = computed(() => {
+  return route.path === '/search' || route.path === '/explore';
+});
 
 // Initialize theme on component mount
 onMounted(() => {

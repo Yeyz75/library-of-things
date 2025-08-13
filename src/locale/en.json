@@ -387,6 +387,8 @@
   "search": {
     "title": "Search Items",
     "placeholder": "Search for items to borrow...",
+    "quickSearch": "Popular Searches",
+    "clickToExplore": "Click to explore",
     "results": "Search Results",
     "resultsCount": "{count} items found",
     "resultsFor": "for \"{query}\"",

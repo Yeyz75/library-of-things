@@ -1,35 +1,73 @@
 <template>
   <div class="relative" v-click-outside="closeDropdown">
-    <div class="relative">
+    <div class="relative group">
+      <!-- Search icon -->
       <div
         class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
       >
-        <MagnifyingGlassIcon class="h-5 w-5 text-gray-400 dark:text-gray-500" />
+        <MagnifyingGlassIcon
+          :class="[
+            'h-5 w-5 transition-colors duration-200',
+            prominent ? 'h-6 w-6' : 'h-5 w-5',
+            searchQuery
+              ? 'text-primary-500 dark:text-primary-400'
+              : 'text-gray-400 dark:text-gray-500',
+          ]"
+        />
       </div>
+
+      <!-- Input field -->
       <input
         ref="searchInput"
         v-model="searchQuery"
         type="text"
         :placeholder="placeholder"
-        class="block w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+        :class="[
+          'block w-full pl-10 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200',
+          prominent ? 'py-4 text-lg' : 'py-3',
+        ]"
         @input="handleInput"
         @focus="showDropdown = true"
         @keydown="handleKeydown"
       />
-      <div class="absolute inset-y-0 right-0 flex items-center">
+
+      <!-- Action buttons -->
+      <div class="absolute inset-y-0 right-0 flex items-center space-x-1 pr-2">
+        <!-- Clear button -->
         <button
           v-if="searchQuery"
           @click="clearSearch"
-          class="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200"
+          class="p-1.5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
         >
-          <XMarkIcon class="h-5 w-5" />
+          <XMarkIcon class="h-4 w-4" />
         </button>
+
+        <!-- Voice search button (future feature) -->
+        <button
+          v-if="supportsVoiceSearch"
+          @click="startVoiceSearch"
+          class="p-1.5 text-gray-400 dark:text-gray-500 hover:text-primary-500 dark:hover:text-primary-400 transition-colors duration-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+          :class="{ 'text-red-500 animate-pulse': isListening }"
+        >
+          <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+
+        <!-- Filters button -->
         <button
           @click="toggleFilters"
-          class="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200"
-          :class="{ 'text-primary-600 dark:text-primary-400': showFilters }"
+          class="p-1.5 text-gray-400 dark:text-gray-500 hover:text-primary-500 dark:hover:text-primary-400 transition-colors duration-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+          :class="{
+            'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20':
+              showFilters,
+          }"
         >
-          <AdjustmentsHorizontalIcon class="h-5 w-5" />
+          <AdjustmentsHorizontalIcon class="h-4 w-4" />
         </button>
       </div>
     </div>
@@ -219,6 +257,7 @@ const props = withDefaults(defineProps<Props>(), {
   categories: () => [],
   suggestions: () => [],
   modelValue: '',
+  prominent: false,
 });
 
 const emit = defineEmits<{
@@ -236,6 +275,15 @@ const showDropdown = ref(false);
 const showFilters = ref(false);
 const selectedIndex = ref(-1);
 const recentSearches = ref<string[]>([]);
+const isListening = ref(false);
+
+// Voice search support detection
+const supportsVoiceSearch = computed(() => {
+  return (
+    typeof window !== 'undefined' &&
+    ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)
+  );
+});
 
 const filters = ref<SearchFilters>({
   category: '',
@@ -319,6 +367,20 @@ function clearSearch() {
   searchQuery.value = '';
   searchInput.value?.focus();
   performSearch();
+}
+
+function startVoiceSearch() {
+  if (!supportsVoiceSearch.value) return;
+
+  // Simple implementation - for now just show a placeholder
+  // In production, you'd implement Web Speech API here
+  isListening.value = true;
+
+  // Simulate voice search
+  setTimeout(() => {
+    isListening.value = false;
+    // Could implement actual voice recognition here
+  }, 2000);
 }
 
 function clearFilters() {

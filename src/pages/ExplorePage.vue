@@ -1,85 +1,154 @@
 <template>
   <AppLayout>
     <div class="container py-8">
-      <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-          {{ t('browseItems.title') }}
-        </h1>
-        <p class="text-gray-600 dark:text-gray-400">
-          {{ t('home.categories.subtitle') }}
-        </p>
+      <!-- Hero Section with Prominent Search -->
+      <div class="text-center mb-12">
+        <div class="max-w-4xl mx-auto">
+          <h1
+            class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4 font-display"
+          >
+            {{ t('browseItems.title') }}
+          </h1>
+          <p
+            class="text-xl text-gray-600 dark:text-gray-400 mb-8 leading-relaxed"
+          >
+            {{ t('home.categories.subtitle') }}
+          </p>
+
+          <!-- Prominent Search Bar -->
+          <div class="relative max-w-2xl mx-auto mb-8">
+            <div class="relative group">
+              <div
+                class="absolute inset-0 bg-gradient-to-r from-primary-500 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition-opacity duration-300"
+              ></div>
+              <div
+                class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-2"
+              >
+                <SearchBar
+                  v-model="searchQuery"
+                  :categories="categories"
+                  :suggestions="searchSuggestions"
+                  :placeholder="t('search.placeholder')"
+                  :prominent="true"
+                  @search="handleSearch"
+                  class="border-0 shadow-none bg-transparent"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Search Suggestions -->
+          <div class="flex flex-wrap gap-2 justify-center mb-8">
+            <span class="text-sm text-gray-500 dark:text-gray-400 mr-2"
+              >{{ t('search.quickSearch') }}:</span
+            >
+            <button
+              v-for="suggestion in popularSearches"
+              :key="suggestion"
+              @click="selectQuickSearch(suggestion)"
+              class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-primary-100 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 transform hover:scale-105"
+            >
+              {{ suggestion }}
+            </button>
+          </div>
+        </div>
       </div>
 
-      <!-- Categories Section -->
+      <!-- Categories Section - Redesigned -->
       <div class="mb-12">
         <h2
-          class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-6"
+          class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-8 text-center"
         >
           {{ t('home.categories.title') }}
         </h2>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div
+          class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
+        >
           <router-link
-            v-for="category in categories"
+            v-for="(category, index) in categories"
             :key="category.key"
             :to="`/search?category=${category.key}`"
-            class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 hover:shadow-md transition-all duration-200 hover:-translate-y-1 cursor-pointer group"
+            :style="{ animationDelay: `${index * 80}ms` }"
+            class="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 cursor-pointer overflow-hidden category-card-hover particle-effect animate-fade-in-scale"
           >
-            <div class="text-center">
+            <!-- Gradient overlay on hover -->
+            <div
+              class="absolute inset-0 bg-gradient-to-br from-primary-500/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            ></div>
+
+            <div class="relative text-center">
               <div
-                class="bg-gray-100 dark:bg-gray-700 rounded-full p-3 mb-3 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/20 transition-colors w-12 h-12 mx-auto flex items-center justify-center"
+                class="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-2xl p-4 mb-4 group-hover:from-primary-100 dark:group-hover:from-primary-900/30 group-hover:to-purple-100 dark:group-hover:to-purple-900/30 transition-all duration-300 w-16 h-16 mx-auto flex items-center justify-center transform group-hover:scale-110"
               >
                 <component
                   :is="category.icon"
-                  class="h-6 w-6 mx-auto text-gray-600 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors"
+                  class="h-8 w-8 text-gray-600 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300"
                 />
               </div>
               <h3
-                class="font-medium text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors"
+                class="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300 text-sm"
               >
                 {{ t(`items.categories.${category.key}`) }}
               </h3>
+              <div
+                class="mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              >
+                <span class="text-xs text-gray-500 dark:text-gray-400">{{
+                  t('search.clickToExplore')
+                }}</span>
+              </div>
             </div>
+
+            <!-- Hover indicator -->
+            <div
+              class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"
+            ></div>
           </router-link>
         </div>
       </div>
 
-      <!-- Search Section -->
-      <div class="mb-12">
-        <h2
-          class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-6"
-        >
-          {{ t('search.title') }}
-        </h2>
-        <div
-          class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
-        >
-          <SearchBar
-            v-model="searchQuery"
-            :categories="categories"
-            :suggestions="searchSuggestions"
-            :placeholder="t('search.placeholder')"
-            @search="handleSearch"
-          />
-        </div>
-      </div>
-
-      <!-- Recent Items -->
+      <!-- Recent Items with Better Design -->
       <div>
-        <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center justify-between mb-8">
           <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
             {{ t('home.items.title') }}
           </h2>
           <router-link
             to="/search"
-            class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 text-sm font-medium"
+            class="inline-flex items-center px-4 py-2 text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/30 rounded-xl transition-all duration-200 transform hover:scale-105"
           >
             {{ t('home.featuredItems.browseAll') }}
+            <svg
+              class="ml-2 h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
           </router-link>
         </div>
 
-        <!-- Loading State -->
-        <div v-if="isLoading" class="text-center py-12">
-          <BaseLoader size="lg" :text="t('home.items.loading')" />
+        <!-- Loading State with Better Animation -->
+        <div v-if="isLoading" class="text-center py-16">
+          <div class="relative">
+            <div
+              class="w-16 h-16 border-4 border-primary-200 dark:border-primary-800 border-t-primary-600 dark:border-t-primary-400 rounded-full animate-spin mx-auto mb-4"
+            ></div>
+            <div
+              class="absolute inset-0 w-16 h-16 border-4 border-transparent border-t-purple-600 dark:border-t-purple-400 rounded-full animate-ping mx-auto"
+            ></div>
+          </div>
+          <p
+            class="text-lg font-medium text-gray-600 dark:text-gray-400 animate-pulse"
+          >
+            {{ t('home.items.loading') }}
+          </p>
         </div>
 
         <!-- Error State -->
@@ -93,10 +162,10 @@
           />
         </div>
 
-        <!-- Items Grid -->
+        <!-- Items Grid with Enhanced Design -->
         <div
           v-else-if="items.length > 0"
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           <ItemCard
             v-for="item in items"
@@ -147,7 +216,6 @@ import {
 import AppLayout from '@/components/layout/AppLayout.vue';
 import SearchBar from '@/components/common/SearchBar.vue';
 import ItemCard from '@/components/common/ItemCard.vue';
-import BaseLoader from '@/components/common/BaseLoader.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import { useItemsStore } from '@/store/items.store';
 import { useAuthStore } from '@/store/auth.store';
@@ -170,38 +238,47 @@ const error = ref('');
 const categories = [
   {
     key: 'tools',
+    name: 'Herramientas',
     icon: WrenchScrewdriverIcon,
   },
   {
     key: 'electronics',
+    name: 'Electrónicos',
     icon: ComputerDesktopIcon,
   },
   {
     key: 'books',
+    name: 'Libros',
     icon: BookOpenIcon,
   },
   {
     key: 'sports',
+    name: 'Deportes',
     icon: PlayIcon,
   },
   {
     key: 'home',
+    name: 'Hogar',
     icon: HomeIcon,
   },
   {
     key: 'garden',
+    name: 'Jardín',
     icon: BeakerIcon,
   },
   {
     key: 'clothing',
+    name: 'Ropa',
     icon: SparklesIcon,
   },
   {
     key: 'games',
+    name: 'Juegos',
     icon: PlayIcon,
   },
   {
     key: 'other',
+    name: 'Otros',
     icon: EllipsisHorizontalIcon,
   },
 ];
@@ -215,6 +292,15 @@ const searchSuggestions = [
   'guitar',
   'books',
   'games',
+];
+
+const popularSearches = [
+  'taladro',
+  'laptop',
+  'bicicleta',
+  'cámara',
+  'tienda',
+  'guitarra',
 ];
 
 const items = computed(() => {
@@ -258,6 +344,11 @@ function handleSearch(
     path: '/search',
     query: queryParams,
   });
+}
+
+function selectQuickSearch(suggestion: string) {
+  searchQuery.value = suggestion;
+  handleSearch(suggestion, {});
 }
 
 function handleReserve(item: ItemModel) {

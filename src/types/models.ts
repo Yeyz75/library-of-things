@@ -118,6 +118,7 @@ export interface SearchBarPropsModel {
   categories?: Array<{ key?: string; name?: string }>;
   suggestions?: string[];
   modelValue?: string;
+  prominent?: boolean;
 }
 
 export interface ReserveModalPropsModel {
