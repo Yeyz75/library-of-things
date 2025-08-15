@@ -15,8 +15,8 @@
 
       <!-- Sort options -->
       <div v-if="showSortOptions" class="sort-options">
-        <label for="sort-select" class="sr-only">
-          {{ $t('reviews.sortBy') }}
+        <label for="sort-select" class="sort-label">
+          {{ $t('reviews.sortBy') }}:
         </label>
         <select
           id="sort-select"
@@ -343,8 +343,20 @@ onMounted(() => {
   @apply flex items-center justify-between gap-4;
 }
 
+.reviews-count h3 {
+  @apply text-lg font-semibold text-neutral-900 dark:text-neutral-100;
+}
+
+.reviews-count span {
+  @apply text-neutral-500;
+}
+
 .sort-options {
   @apply flex items-center gap-2;
+}
+
+.sort-label {
+  @apply text-sm font-medium text-neutral-700 dark:text-neutral-300;
 }
 
 .sort-select {
@@ -379,7 +391,11 @@ onMounted(() => {
   }
 
   .sort-options {
-    @apply w-full;
+    @apply w-full flex-col items-start;
+  }
+
+  .sort-label {
+    @apply mb-1;
   }
 
   .sort-select {

@@ -1,5 +1,5 @@
 <template>
-  <div class="star-rating" :class="{ interactive: interactive }">
+  <div class="star-rating" :class="{ interactive: interactive, [size]: true }">
     <div class="stars-container">
       <div
         v-for="star in 5"
@@ -15,12 +15,24 @@
         @mouseleave="interactive && (hoverRating = 0)"
       >
         <svg
-          width="16"
-          height="16"
+          width="20"
+          height="20"
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
+          <defs>
+            <linearGradient
+              :id="`half-star-${_uid}`"
+              x1="0%"
+              y1="0%"
+              x2="100%"
+              y2="0%"
+            >
+              <stop offset="50%" stop-color="#FCD34D" />
+              <stop offset="50%" stop-color="#E5E7EB" />
+            </linearGradient>
+          </defs>
           <path
             d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
             :fill="getStarFill(star)"
@@ -53,6 +65,9 @@ const props = withDefaults(defineProps<Props>(), {
   size: 'medium',
 });
 
+// Generate a unique ID for the gradient
+const _uid = Math.random().toString(36).substr(2, 9);
+
 const hoverRating = ref(0);
 
 const displayRating = computed(() => {
@@ -70,7 +85,7 @@ const getStarFill = (starNumber: number): string => {
     starNumber === Math.ceil(currentRating) &&
     currentRating % 1 >= 0.5
   ) {
-    return 'url(#half-star)'; // Half star
+    return `url(#half-star-${_uid})`; // Half star with gradient
   } else if (props.interactive && starNumber <= hoverRating.value) {
     return '#FCD34D'; // Gold for hovered stars
   }
@@ -95,12 +110,14 @@ const formatRating = (rating: number): string => {
 
 .stars-container {
   display: flex;
-  gap: 0.125rem;
+  gap: 0.25rem;
 }
 
 .star {
   cursor: default;
   transition: transform 0.1s ease;
+  width: 20px;
+  height: 20px;
 }
 
 .star.interactive {
@@ -123,18 +140,18 @@ const formatRating = (rating: number): string => {
 }
 
 /* Size variants */
-.star-rating.small .star svg {
-  width: 12px;
-  height: 12px;
+.star-rating.small .star {
+  width: 16px;
+  height: 16px;
 }
 
 .star-rating.small .rating-text {
   font-size: 0.75rem;
 }
 
-.star-rating.large .star svg {
-  width: 20px;
-  height: 20px;
+.star-rating.large .star {
+  width: 24px;
+  height: 24px;
 }
 
 .star-rating.large .rating-text {

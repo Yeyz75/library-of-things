@@ -23,9 +23,9 @@
       <div class="form-group">
         <label class="form-label">Calificaciones por Aspecto *</label>
 
-        <div class="aspect-ratings-form">
+        <div class="aspect-ratings-grid">
           <!-- Communication (always shown) -->
-          <div class="aspect-group">
+          <div class="aspect-item">
             <label class="aspect-label">Comunicación</label>
             <StarRating
               v-model:rating="formData.aspectRatings.communication"
@@ -36,7 +36,7 @@
           </div>
 
           <!-- Punctuality (always shown) -->
-          <div class="aspect-group">
+          <div class="aspect-item">
             <label class="aspect-label">Puntualidad</label>
             <StarRating
               v-model:rating="formData.aspectRatings.punctuality"
@@ -47,7 +47,7 @@
           </div>
 
           <!-- Item Condition (only for borrower reviews) -->
-          <div v-if="reviewType === 'borrower_to_owner'" class="aspect-group">
+          <div v-if="reviewType === 'borrower_to_owner'" class="aspect-item">
             <label class="aspect-label">Estado del Artículo</label>
             <StarRating
               v-model:rating="formData.aspectRatings.itemCondition"
@@ -58,7 +58,7 @@
           </div>
 
           <!-- Reliability (only for owner reviews) -->
-          <div v-if="reviewType === 'owner_to_borrower'" class="aspect-group">
+          <div v-if="reviewType === 'owner_to_borrower'" class="aspect-item">
             <label class="aspect-label">Confiabilidad</label>
             <StarRating
               v-model:rating="formData.aspectRatings.reliability"
@@ -68,6 +68,10 @@
             />
           </div>
         </div>
+
+        <p v-if="errors.aspectRatings" class="error-text">
+          {{ errors.aspectRatings }}
+        </p>
       </div>
 
       <!-- Comment -->
@@ -376,16 +380,18 @@ const submitReview = async () => {
 <style scoped>
 .create-review-form {
   background: white;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   padding: 1.5rem;
   border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
 }
 
 .form-title {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: #111827;
   margin: 0 0 1.5rem 0;
+  text-align: center;
 }
 
 .form-group {
@@ -400,35 +406,38 @@ const submitReview = async () => {
   margin-bottom: 0.5rem;
 }
 
-.aspect-ratings-form {
-  display: flex;
-  flex-direction: column;
+.aspect-ratings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
   padding: 1rem;
   background: #f9fafb;
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
 }
 
-.aspect-group {
+.aspect-item {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .aspect-label {
   font-size: 0.875rem;
   color: #374151;
-  min-width: 120px;
+  font-weight: 500;
 }
 
 .form-textarea {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
   font-size: 0.875rem;
   resize: vertical;
-  min-height: 100px;
+  min-height: 120px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .form-textarea:focus {
@@ -456,13 +465,18 @@ const submitReview = async () => {
 .error-text {
   color: #ef4444;
   font-size: 0.75rem;
-  margin: 0;
+  margin: 0.5rem 0 0 0;
 }
 
 .photo-upload-area {
   border: 2px dashed #d1d5db;
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
   padding: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.photo-upload-area:hover {
+  border-color: #3b82f6;
 }
 
 .hidden-input {
@@ -474,6 +488,7 @@ const submitReview = async () => {
   padding: 2rem;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  border-radius: 0.375rem;
 }
 
 .upload-placeholder:hover {
@@ -500,15 +515,16 @@ const submitReview = async () => {
 .photo-preview-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 0.5rem;
+  gap: 0.75rem;
   max-width: 400px;
 }
 
 .photo-preview {
   position: relative;
   aspect-ratio: 1;
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
   overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 }
 
 .photo-preview img {
@@ -531,6 +547,11 @@ const submitReview = async () => {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.remove-photo-btn:hover {
+  background: rgba(0, 0, 0, 0.7);
 }
 
 .remove-photo-btn svg {
@@ -541,16 +562,19 @@ const submitReview = async () => {
 .add-more-photos {
   aspect-ratio: 1;
   border: 2px dashed #d1d5db;
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .add-more-photos:hover {
   background-color: #f9fafb;
+  border-color: #3b82f6;
 }
 
 .add-more-photos .upload-icon {
@@ -565,6 +589,8 @@ const submitReview = async () => {
   gap: 1rem;
   justify-content: flex-end;
   margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
 }
 
 .btn-secondary {
@@ -572,7 +598,7 @@ const submitReview = async () => {
   border: 1px solid #d1d5db;
   background: white;
   color: #374151;
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -587,7 +613,7 @@ const submitReview = async () => {
   background: #3b82f6;
   color: white;
   border: none;
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -607,18 +633,22 @@ const submitReview = async () => {
     padding: 1rem;
   }
 
-  .aspect-group {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
+  .form-title {
+    font-size: 1.25rem;
   }
 
-  .aspect-label {
-    min-width: auto;
+  .aspect-ratings-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
   .form-actions {
     flex-direction: column;
+  }
+
+  .btn-secondary,
+  .btn-primary {
+    width: 100%;
   }
 }
 </style>

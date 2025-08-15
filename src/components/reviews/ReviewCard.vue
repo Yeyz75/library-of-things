@@ -4,17 +4,11 @@
     <div class="reviewer-header">
       <div class="reviewer-info">
         <div class="reviewer-avatar">
-          {{
-            review.reviewerName
-              ? review.reviewerName.charAt(0).toUpperCase()
-              : ''
-          }}
+          {{ reviewerInitials }}
         </div>
         <div class="reviewer-details">
           <h4 class="reviewer-name">{{ review.reviewerName }}</h4>
-          <p class="review-date">
-            {{ formatDate(review.$createdAt ? review.$createdAt : '') }}
-          </p>
+          <p class="review-date">{{ formattedDate }}</p>
         </div>
       </div>
 
@@ -98,6 +92,36 @@ const reviewTypeBadgeClass = computed(() => {
     : 'badge-borrower';
 });
 
+const reviewerInitials = computed(() => {
+  if (!props.review.reviewerName) return '';
+  const names = props.review.reviewerName.split(' ');
+  return names
+    .map((name) => name.charAt(0).toUpperCase())
+    .join('')
+    .slice(0, 2);
+});
+
+const formattedDate = computed(() => {
+  const dateString = props.review.$createdAt ? props.review.$createdAt : '';
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInDays = Math.floor(
+    (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)
+  );
+
+  if (diffInDays === 0) return 'Hoy';
+  if (diffInDays === 1) return 'Ayer';
+  if (diffInDays < 7) return `Hace ${diffInDays} días`;
+  if (diffInDays < 30) return `Hace ${Math.floor(diffInDays / 7)} semanas`;
+  if (diffInDays < 365) return `Hace ${Math.floor(diffInDays / 30)} meses`;
+
+  return date.toLocaleDateString('es-ES', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+});
+
 const aspectRatings = computed(() => {
   const aspects = [];
   const ratings = props.review.aspectRatings;
@@ -137,26 +161,6 @@ const aspectRatings = computed(() => {
   return aspects;
 });
 
-const formatDate = (dateString: string): string => {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffInDays = Math.floor(
-    (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)
-  );
-
-  if (diffInDays === 0) return 'Hoy';
-  if (diffInDays === 1) return 'Ayer';
-  if (diffInDays < 7) return `Hace ${diffInDays} días`;
-  if (diffInDays < 30) return `Hace ${Math.floor(diffInDays / 7)} semanas`;
-  if (diffInDays < 365) return `Hace ${Math.floor(diffInDays / 30)} meses`;
-
-  return date.toLocaleDateString('es-ES', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-};
-
 const openPhotoModal = (photoUrl: string) => {
   emit('photo-click', photoUrl);
 };
@@ -166,9 +170,17 @@ const openPhotoModal = (photoUrl: string) => {
 .review-card {
   background: white;
   border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   padding: 1.5rem;
   margin-bottom: 1rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s ease;
+}
+
+.review-card:hover {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .reviewer-header {
@@ -187,7 +199,7 @@ const openPhotoModal = (photoUrl: string) => {
 .reviewer-avatar {
   width: 2.5rem;
   height: 2.5rem;
-  background: #3b82f6;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
   color: white;
   border-radius: 50%;
   display: flex;
@@ -195,6 +207,7 @@ const openPhotoModal = (photoUrl: string) => {
   justify-content: center;
   font-weight: 600;
   font-size: 1rem;
+  flex-shrink: 0;
 }
 
 .reviewer-details {
@@ -220,6 +233,7 @@ const openPhotoModal = (photoUrl: string) => {
   border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 500;
+  align-self: center;
 }
 
 .badge-owner {
@@ -239,23 +253,23 @@ const openPhotoModal = (photoUrl: string) => {
 .aspect-ratings {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.75rem;
   margin-bottom: 1rem;
   padding: 1rem;
   background: #f9fafb;
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
 }
 
 .aspect-rating {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .aspect-label {
   font-size: 0.875rem;
   color: #374151;
-  min-width: 120px;
+  min-width: 140px;
 }
 
 .aspect-value {
@@ -266,6 +280,9 @@ const openPhotoModal = (photoUrl: string) => {
 
 .review-comment {
   margin-bottom: 1rem;
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 0.5rem;
 }
 
 .review-comment p {
@@ -281,7 +298,7 @@ const openPhotoModal = (photoUrl: string) => {
 .photos-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 0.5rem;
+  gap: 0.75rem;
   max-width: 400px;
 }
 
@@ -289,13 +306,17 @@ const openPhotoModal = (photoUrl: string) => {
   width: 100%;
   height: 100px;
   object-fit: cover;
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
   cursor: pointer;
   transition: transform 0.2s ease;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 }
 
 .review-photo:hover {
   transform: scale(1.05);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .item-info {
@@ -316,7 +337,7 @@ const openPhotoModal = (photoUrl: string) => {
 
   .reviewer-header {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.75rem;
     align-items: flex-start;
   }
 
@@ -330,6 +351,10 @@ const openPhotoModal = (photoUrl: string) => {
 
   .aspect-label {
     min-width: auto;
+  }
+
+  .review-comment {
+    padding: 0.75rem;
   }
 }
 </style>

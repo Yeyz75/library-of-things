@@ -34,46 +34,50 @@
       "or": "o",
       "noAccount": "¿No tienes una cuenta?",
       "signUpHere": "Regístrate aquí",
+      "error": {
+        "title": "Error al cargar reseñas",
+        "retry": "Intentar de nuevo"
+      },
       "errors": {
-        "emailRequired": "El correo electrónico es requerido",
-        "emailInvalid": "Por favor ingresa un correo electrónico válido",
-        "passwordRequired": "La contraseña es requerida",
-        "passwordTooShort": "La contraseña debe tener al menos 6 caracteres",
-        "oauthFailed": "El inicio de sesión con Google falló. Por favor intenta de nuevo o usa correo electrónico y contraseña."
-      }
-    },
-    "register": {
-      "title": "Crea tu cuenta",
-      "subtitle": "Únete a nuestra comunidad y comienza a compartir",
-      "fullName": "Nombre completo",
-      "fullNamePlaceholder": "Ingresa tu nombre completo",
-      "email": "Correo electrónico",
-      "emailPlaceholder": "Ingresa tu correo electrónico",
-      "password": "Contraseña",
-      "passwordPlaceholder": "Crea una contraseña",
-      "confirmPassword": "Confirmar contraseña",
-      "confirmPasswordPlaceholder": "Confirma tu contraseña",
-      "createAccount": "Crear cuenta",
-      "creatingAccount": "Creando cuenta...",
-      "continueWithGoogle": "Continuar con Google",
-      "or": "o",
-      "hasAccount": "¿Ya tienes una cuenta?",
-      "signInHere": "Inicia sesión aquí",
-      "errors": {
-        "nameRequired": "El nombre completo es requerido",
-        "nameTooShort": "El nombre completo debe tener al menos 2 caracteres",
-        "emailRequired": "El correo electrónico es requerido",
-        "emailInvalid": "Por favor ingresa un correo electrónico válido",
-        "passwordRequired": "La contraseña es requerida",
-        "passwordTooShort": "La contraseña debe tener al menos 6 caracteres",
-        "confirmPasswordRequired": "Por favor confirma tu contraseña",
-        "passwordsDoNotMatch": "Las contraseñas no coinciden"
-      }
-    },
-    "callback": {
-      "processing": "Procesando autenticación...",
-      "pleaseWait": "Por favor espera mientras completamos tu inicio de sesión"
+        "loadFailed": "Error al cargar los datos de la reseña. Por favor intenta de nuevo.",
+        "invalidRequest": "Solicitud de reseña no válida.",
+        "missingData": "Faltan datos obligatorios."
+      },
+      "passwordTooShort": "La contraseña debe tener al menos 6 caracteres",
+      "oauthFailed": "El inicio de sesión con Google falló. Por favor intenta de nuevo o usa correo electrónico y contraseña."
     }
+  },
+  "register": {
+    "title": "Crea tu cuenta",
+    "subtitle": "Únete a nuestra comunidad y comienza a compartir",
+    "fullName": "Nombre completo",
+    "fullNamePlaceholder": "Ingresa tu nombre completo",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "Ingresa tu correo electrónico",
+    "password": "Contraseña",
+    "passwordPlaceholder": "Crea una contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "confirmPasswordPlaceholder": "Confirma tu contraseña",
+    "createAccount": "Crear cuenta",
+    "creatingAccount": "Creando cuenta...",
+    "continueWithGoogle": "Continuar con Google",
+    "or": "o",
+    "hasAccount": "¿Ya tienes una cuenta?",
+    "signInHere": "Inicia sesión aquí",
+    "errors": {
+      "nameRequired": "El nombre completo es requerido",
+      "nameTooShort": "El nombre completo debe tener al menos 2 caracteres",
+      "emailRequired": "El correo electrónico es requerido",
+      "emailInvalid": "Por favor ingresa un correo electrónico válido",
+      "passwordRequired": "La contraseña es requerida",
+      "passwordTooShort": "La contraseña debe tener al menos 6 caracteres",
+      "confirmPasswordRequired": "Por favor confirma tu contraseña",
+      "passwordsDoNotMatch": "Las contraseñas no coinciden"
+    }
+  },
+  "callback": {
+    "processing": "Procesando autenticación...",
+    "pleaseWait": "Por favor espera mientras completamos tu inicio de sesión"
   },
   "dashboard": {
     "welcome": "¡Bienvenido de vuelta, {name}!",
@@ -641,6 +645,19 @@
       "title": "Error al cargar reseñas",
       "retry": "Intentar de nuevo"
     },
+    "errors": {
+      "loadFailed": "Error al cargar los datos de la reseña. Por favor intenta de nuevo.",
+      "invalidRequest": "Solicitud de reseña no válida.",
+      "missingData": "Faltan datos obligatorios."
+    },
+    "create": {
+      "title": "Escribir una reseña",
+      "subtitle": "Comparte tu experiencia con el propietario para ayudar a otros",
+      "borrowedOn": "Prestado el {date}"
+    },
+    "edit": {
+      "title": "Editar reseña"
+    },
     "sortBy": "Ordenar por",
     "sort": {
       "newest": "Más recientes",
@@ -679,6 +696,7 @@
     "success": "Éxito",
     "warning": "Advertencia",
     "info": "Información",
+    "home": "Inicio",
     "save": "Guardar",
     "cancel": "Cancelar",
     "delete": "Eliminar",

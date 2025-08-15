@@ -61,6 +61,12 @@ const router = createRouter({
           component: () => import('@/pages/items/EditItemPage.vue'),
           meta: { layout: 'app', requiresAuth: true },
         },
+        {
+          path: ':id/review',
+          name: 'CreateReview',
+          component: () => import('@/pages/items/CreateReviewPage.vue'),
+          meta: { layout: 'app', requiresAuth: true },
+        },
       ],
     },
     {

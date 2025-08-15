@@ -69,6 +69,40 @@
               "
             />
           </button>
+
+          <!-- Owner actions dropdown -->
+          <div v-if="currentUserId === item.ownerId" class="relative">
+            <button
+              @click="showOwnerActions = !showOwnerActions"
+              class="p-2 rounded-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md hover:bg-white dark:hover:bg-gray-900 transition-colors duration-200 border border-white/20"
+            >
+              <EllipsisVerticalIcon
+                class="h-5 w-5 text-gray-700 dark:text-gray-300"
+              />
+            </button>
+
+            <!-- Dropdown menu -->
+            <div
+              v-if="showOwnerActions"
+              class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-10 border border-gray-200 dark:border-gray-700"
+              @click.stop="showOwnerActions = false"
+            >
+              <router-link
+                :to="`/items/${item.$id}/edit`"
+                class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <PencilIcon class="h-4 w-4 mr-2" />
+                Editar Artículo
+              </router-link>
+              <button
+                @click="handleDelete"
+                class="flex items-center w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <TrashIcon class="h-4 w-4 mr-2" />
+                Eliminar
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -228,7 +262,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import {
   PhotoIcon,
   ShareIcon,
@@ -236,6 +270,9 @@ import {
   CalendarIcon,
   ClockIcon,
   ChatBubbleLeftIcon,
+  EllipsisVerticalIcon,
+  PencilIcon,
+  TrashIcon,
 } from '@heroicons/vue/24/outline';
 import { useI18n } from '@/composables/useI18n';
 import type { ItemModel, ItemCategoryModel } from '@/types/models';
@@ -258,14 +295,16 @@ const props = withDefaults(defineProps<Props>(), {
 // Expose currentUserId as a local const for template use
 const currentUserId = (props as Props).currentUserId;
 
-defineEmits<{
+const emit = defineEmits<{
   reserve: [item: ItemModel];
   share: [item: ItemModel];
   contact: [item: ItemModel];
+  delete: [item: ItemModel];
 }>();
 
 const { t } = useI18n();
 const isFavorite = ref(false);
+const showOwnerActions = ref(false);
 
 // Computed properties para el estado del item
 const statusText = computed(() =>
@@ -340,6 +379,29 @@ function toggleFavorite() {
   isFavorite.value = !isFavorite.value;
   // TODO: Implementar lógica de favoritos
 }
+
+function handleDelete() {
+  // Emit an event to let the parent handle the deletion
+  emit('delete', props.item);
+}
+
+// Close owner actions dropdown when clicking outside
+const handleClickOutside = (event: MouseEvent) => {
+  const target = event.target as HTMLElement;
+  if (!target.closest('.relative')) {
+    showOwnerActions.value = false;
+  }
+};
+
+// Add event listener for click outside
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+});
+
+// Clean up event listener
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
 </script>
 
 <style scoped>
