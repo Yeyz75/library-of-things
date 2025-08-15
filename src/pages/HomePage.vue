@@ -188,8 +188,8 @@ const featuredItems = computed(() => {
 });
 
 function scrollToHowItWorks() {
-  const el = howItWorksSectionRef.value?.$el;
-  if (el) {
+  const el = howItWorksSectionRef.value;
+  if (el instanceof HTMLElement) {
     el.scrollIntoView({ behavior: 'smooth' });
   }
 }

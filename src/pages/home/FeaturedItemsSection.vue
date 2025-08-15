@@ -67,7 +67,8 @@
 <script setup lang="ts">
 import { useMotion } from '@vueuse/motion';
 import type { ItemModel as Item } from '@/types/models';
-import type { Ref } from 'vue';
+import type { Ref, UnwrapRef } from 'vue';
+import { isRef, ref as vueRef } from 'vue';
 import BaseLoader from '@/components/common/BaseLoader.vue';
 import ItemCard from '@/components/common/ItemCard.vue';
 
@@ -80,8 +81,17 @@ const props = defineProps<{
   t: (_key: string) => string;
   handleReserve: (_item: Item) => void;
   handleShare: (_item: Item) => void;
-  featuredItemsSectionRef?: Ref<HTMLElement | null>;
+  featuredItemsSectionRef?: Ref<HTMLElement | null> | HTMLElement | null;
 }>();
 
-useMotion(props.featuredItemsSectionRef);
+const normalizedFeaturedRef = ((): Ref<HTMLElement | null> => {
+  if (isRef(props.featuredItemsSectionRef)) {
+    return props.featuredItemsSectionRef as Ref<HTMLElement | null>;
+  }
+  return vueRef(
+    (props.featuredItemsSectionRef as UnwrapRef<HTMLElement | null>) ?? null
+  );
+})();
+
+useMotion(normalizedFeaturedRef);
 </script>

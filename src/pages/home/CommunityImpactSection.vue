@@ -170,11 +170,25 @@ type CommunityStats = {
   moneySaved: number;
 };
 
+import { isRef, ref as vueRef, type UnwrapRef } from 'vue';
+
 const props = defineProps<{
   communityStats: CommunityStats;
   t: (_key: string) => string;
-  communityImpactSectionRef?: Ref<HTMLElement | null>;
+  // Accept either a Ref<HTMLElement|null> or an HTMLElement|null directly
+  communityImpactSectionRef?: Ref<HTMLElement | null> | HTMLElement | null;
 }>();
 
-useMotion(props.communityImpactSectionRef);
+// Normalize the incoming prop to a Ref<HTMLElement|null> before using useMotion
+const normalizedCommunityRef = ((): Ref<HTMLElement | null> => {
+  if (isRef(props.communityImpactSectionRef)) {
+    return props.communityImpactSectionRef as Ref<HTMLElement | null>;
+  }
+  // If an element or null was passed, wrap it into a ref
+  return vueRef(
+    (props.communityImpactSectionRef as UnwrapRef<HTMLElement | null>) ?? null
+  );
+})();
+
+useMotion(normalizedCommunityRef);
 </script>
