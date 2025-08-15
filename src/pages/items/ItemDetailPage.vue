@@ -19,6 +19,7 @@
       <ArticleDetailView
         :item="currentItem"
         :categories="categoryOptions"
+        :currentUserId="userId"
         @reserve="showReserveModal = true"
         @share="handleShare"
         @contact="handleContact"
