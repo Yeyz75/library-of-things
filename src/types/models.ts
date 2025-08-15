@@ -16,6 +16,8 @@ export interface BaseModalPropsModel {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   closable?: boolean;
   closeOnBackdrop?: boolean;
+  // Accessible label for the modal dialog
+  ariaLabel?: string;
 }
 
 export interface BaseModalEmitsModel {

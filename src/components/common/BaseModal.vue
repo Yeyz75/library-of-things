@@ -31,6 +31,7 @@
             v-if="isOpen"
             ref="modalContent"
             role="dialog"
+            :aria-label="ariaLabel"
             aria-modal="true"
             tabindex="-1"
             class="relative z-50 w-full max-w-lg mx-4 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 transition-colors duration-300 overflow-auto max-h-[95vh] sm:rounded-lg"
@@ -122,6 +123,12 @@ function handleClose() {
 }
 
 const attrs = useAttrs();
+
+const ariaLabel = computed(() => {
+  const a = attrs['aria-label'];
+  if (props.ariaLabel) return props.ariaLabel;
+  return typeof a === 'string' ? a : undefined;
+});
 
 function handleBackdropClick(event: MouseEvent) {
   if (props.closeOnBackdrop && event.target === event.currentTarget) {
