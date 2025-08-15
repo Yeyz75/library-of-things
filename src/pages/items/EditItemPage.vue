@@ -373,16 +373,16 @@ async function loadItem() {
       return;
     }
 
-    // Populate form with existing data
-    form.title = item.title;
-    form.description = item.description;
-    form.category = item.category;
-    form.condition = item.condition;
-    form.location = item.location;
-    form.isAvailable = item.isAvailable;
+    // Populate form with existing data (safely handle optional fields)
+    form.title = item.title ?? '';
+    form.description = item.description ?? '';
+    form.category = (item.category as ItemCategoryModel) ?? '';
+    form.condition = (item.condition as ItemModel['condition']) ?? '';
+    form.location = item.location ?? '';
+    form.isAvailable = item.isAvailable ?? true;
 
-    existingImages.value = [...item.imageUrls];
-    tagsInput.value = item.tags.join(', ');
+    existingImages.value = [...(item.imageUrls ?? [])];
+    tagsInput.value = (item.tags ?? []).join(', ');
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to load item';
   } finally {
@@ -506,9 +506,10 @@ async function handleSubmit() {
     // Upload new images if any
     let newImageUrls: string[] = [];
     if (selectedFiles.value.length > 0) {
+      // uploadItemImages(files, itemId?) expects files first
       newImageUrls = await itemsStore.uploadItemImages(
-        itemId,
-        selectedFiles.value
+        selectedFiles.value,
+        itemId
       );
     }
 
