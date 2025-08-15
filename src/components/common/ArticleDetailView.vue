@@ -188,13 +188,24 @@
       <!-- Acciones principales -->
       <div class="flex flex-col sm:flex-row gap-2">
         <button
-          v-if="item.isAvailable"
+          v-if="item.isAvailable && currentUserId !== item.ownerId"
           @click="$emit('reserve', item)"
           class="flex-1 bg-gradient-to-r from-primary-600 to-purple-600 hover:from-primary-700 hover:to-purple-700 text-white font-semibold py-2 px-4 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md transform"
         >
           <CalendarIcon class="h-4 w-4 inline mr-2" />
           Solicitar Préstamo
         </button>
+
+        <!-- If the item is available but the current user is the owner, show disabled button -->
+        <button
+          v-else-if="item.isAvailable && currentUserId === item.ownerId"
+          disabled
+          class="flex-1 bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 font-semibold py-2 px-4 rounded-xl cursor-not-allowed"
+        >
+          <CalendarIcon class="h-4 w-4 inline mr-2" />
+          Tu artículo
+        </button>
+
         <button
           v-else
           disabled
@@ -237,11 +248,15 @@ interface Props {
     icon?: unknown;
   }>;
   showFavorite?: boolean;
+  currentUserId?: string | null;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   showFavorite: true,
 });
+
+// Expose currentUserId as a local const for template use
+const currentUserId = (props as Props).currentUserId;
 
 defineEmits<{
   reserve: [item: ItemModel];

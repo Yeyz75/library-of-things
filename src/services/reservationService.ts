@@ -32,6 +32,19 @@ export const reservationService = {
     reservationData: Omit<ReservationModel, '$id' | '$createdAt' | '$updatedAt'>
   ): Promise<ApiResponse<ReservationModel>> {
     try {
+      // Prevent borrower being the owner on the client/service layer
+      if (
+        reservationData.borrowerId &&
+        reservationData.ownerId &&
+        reservationData.borrowerId === reservationData.ownerId
+      ) {
+        return {
+          success: false,
+          error:
+            'No se puede crear una reserva: el solicitante es el propietario del artículo.',
+        } as ApiResponse<ReservationModel>;
+      }
+
       // Crear la reserva
       const reservationResponse = await save(reservationData);
 

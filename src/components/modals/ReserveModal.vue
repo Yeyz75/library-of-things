@@ -213,6 +213,12 @@ async function handleSubmit() {
     return;
   }
 
+  // Prevent owner from reserving their own item
+  if (props.item.ownerId && userId.value === props.item.ownerId) {
+    submitError.value = 'No puedes reservar tu propio artículo.';
+    return;
+  }
+
   isSubmitting.value = true;
   submitError.value = '';
 
