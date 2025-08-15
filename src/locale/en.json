@@ -665,6 +665,12 @@
       "totalReviews": "Total reviews",
       "averageRating": "Average rating",
       "ratingDistribution": "Rating distribution"
+    },
+    "actions": {
+      "writeFirst": "Write First Review",
+      "editYour": "Edit Your Review",
+      "write": "Write Review",
+      "edit": "Edit Review"
     }
   },
   "common": {

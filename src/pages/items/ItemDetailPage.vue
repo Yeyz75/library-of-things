@@ -56,7 +56,7 @@
         <div class="border-t border-gray-200 dark:border-gray-700 pt-8">
           <div class="flex items-center justify-between mb-6">
             <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-50">
-              Reviews & Ratings
+              {{ $t('reviews.title') }}
             </h2>
             <div class="flex items-center space-x-4">
               <div
@@ -93,27 +93,6 @@
             @photo-click="handleReviewPhotoClick"
             @review-updated="handleReviewUpdated"
           />
-
-          <!-- Empty State for when no reviews exist -->
-          <div v-if="!currentItem?.totalReviews" class="text-center py-12">
-            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-8">
-              <h3
-                class="text-lg font-medium text-gray-900 dark:text-gray-50 mb-2"
-              >
-                No reviews yet
-              </h3>
-              <p class="text-gray-600 dark:text-gray-300 mb-4">
-                Be the first to review this item after borrowing it.
-              </p>
-              <button
-                v-if="canLeaveReview"
-                @click="openReviewModal"
-                class="btn-primary"
-              >
-                {{ existingReview ? 'Edit Your Review' : 'Write First Review' }}
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -121,7 +100,7 @@
     <!-- Create Review Modal -->
     <BaseModal
       :is-open="showCreateReviewModal"
-      :title="isEditingReview ? 'Edit Review' : 'Write a Review'"
+      :title="modalTitle"
       @close="showCreateReviewModal = false"
     >
       <CreateReviewForm
@@ -191,6 +170,7 @@ import { useItemsStore } from '@/store/items.store';
 import { useReviews } from '@/composables/useReviews';
 import { useReservationsStore } from '@/store/reservations.store';
 import { storeToRefs } from 'pinia';
+import { useI18n } from '@/composables/useI18n';
 import type {
   CreateReviewDataModel,
   ReviewModel as Review,
@@ -228,11 +208,20 @@ const canLeaveReview = computed(() => {
   return canReview;
 });
 
+// review button text should use translations
+const { t } = useI18n();
 const reviewButtonText = computed(() => {
   if (existingReview.value) {
-    return 'Edit Review';
+    return t('reviews.actions.edit');
   }
-  return 'Write Review';
+  return t('reviews.actions.write');
+});
+
+const modalTitle = computed(() => {
+  if (isEditingReview.value) {
+    return t('reviews.actions.edit');
+  }
+  return t('reviews.actions.write');
 });
 
 // Category options for the ArticleDetailView component

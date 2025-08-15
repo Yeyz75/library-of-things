@@ -665,6 +665,12 @@
       "totalReviews": "Total de reseñas",
       "averageRating": "Calificación promedio",
       "ratingDistribution": "Distribución de calificaciones"
+    },
+    "actions": {
+      "writeFirst": "Escribir la primera reseña",
+      "editYour": "Editar tu reseña",
+      "write": "Escribir reseña",
+      "edit": "Editar reseña"
     }
   },
   "common": {
