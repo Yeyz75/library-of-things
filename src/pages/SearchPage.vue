@@ -50,7 +50,8 @@
             <span v-else>All Items</span>
           </h2>
           <div class="text-sm text-gray-500 dark:text-gray-400">
-            {{ totalResults }} {{ totalResults === 1 ? 'item' : 'items' }} found
+            {{ pagination.totalItems.value }}
+            {{ pagination.totalItems.value === 1 ? 'item' : 'items' }} found
           </div>
         </div>
 
@@ -81,7 +82,7 @@
       </div>
 
       <!-- Loading State -->
-      <div v-if="isLoading" class="text-center py-12">
+      <div v-if="pagination.loading.value" class="text-center py-12">
         <div
           class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"
         ></div>
@@ -89,7 +90,7 @@
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="text-center py-12">
+      <div v-else-if="pagination.error.value" class="text-center py-12">
         <div
           class="bg-red-100 dark:bg-red-900/20 border border-red-300 dark:border-red-700 rounded-lg p-6 max-w-md mx-auto"
         >
@@ -99,9 +100,11 @@
           <h3 class="text-lg font-medium text-red-800 dark:text-red-300 mb-2">
             Search Failed
           </h3>
-          <p class="text-red-700 dark:text-red-400 mb-4">{{ error }}</p>
+          <p class="text-red-700 dark:text-red-400 mb-4">
+            {{ pagination.error.value }}
+          </p>
           <button
-            @click="retrySearch"
+            @click="pagination.refresh"
             class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200"
           >
             Try Again
@@ -111,7 +114,7 @@
 
       <!-- Empty State -->
       <div
-        v-else-if="hasSearched && searchResults.length === 0"
+        v-else-if="hasSearched && pagination.items.value.length === 0"
         class="text-center py-12"
       >
         <div class="text-gray-400 dark:text-gray-500 mb-4">
@@ -140,12 +143,12 @@
       </div>
 
       <!-- Search Results Grid -->
-      <div v-else-if="searchResults.length > 0" class="space-y-6">
+      <div v-else-if="pagination.items.value.length > 0" class="space-y-6">
         <div
           class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
         >
           <div
-            v-for="item in searchResults"
+            v-for="item in pagination.items.value"
             :key="item.$id"
             class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow duration-200"
           >
@@ -179,6 +182,19 @@
             </div>
           </div>
         </div>
+
+        <!-- Pagination Component -->
+        <div class="mt-8">
+          <Pagination
+            :current-page="pagination.currentPage.value"
+            :total-items="pagination.totalItems.value"
+            :items-per-page="pagination.pageSize.value"
+            :loading="pagination.loading.value"
+            :page-size-options="[10, 20, 50]"
+            @page-change="pagination.goToPage"
+            @page-size-change="pagination.changePageSize"
+          />
+        </div>
       </div>
 
       <!-- Popular Items (when no search) -->
@@ -201,28 +217,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { XMarkIcon, ExclamationTriangleIcon } from '@heroicons/vue/24/outline';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import SearchBar from '@/components/common/SearchBar.vue';
+import Pagination from '@/components/ui/Pagination.vue';
+import { usePagination } from '@/composables/usePagination';
 import { itemsAPI } from '@/api';
-import type { ItemCategoryModel } from '@/types/models';
+import type { ItemCategoryModel, ItemModel } from '@/types/models';
+import type { PaginatedResponse } from '@/types/pagination';
 
-interface Item {
-  $id: string;
-  title: string;
-  description: string;
-  isAvailable: boolean;
-  category?: string;
-}
-
-// Reactive state
+// Reactive state for search criteria
 const searchQuery = ref('');
 const selectedCategory = ref<string>('');
-const isLoading = ref(false);
-const error = ref('');
-const searchResults = ref<Item[]>([]);
-const totalResults = ref(0);
 const hasSearched = ref(false);
 
 // Categories configuration
@@ -237,6 +244,44 @@ const categories = ref([
   { key: 'games', name: 'Games', icon: '🎮' },
   { key: 'other', name: 'Other', icon: '📦' },
 ]);
+
+// Pagination fetch function that handles both search and category filtering
+const fetchItems = async (
+  page: number,
+  pageSize: number
+): Promise<PaginatedResponse<ItemModel>> => {
+  const paginationParams = { page, pageSize };
+
+  if (searchQuery.value.trim()) {
+    // Search by title
+    return await itemsAPI.searchByTitle(searchQuery.value, paginationParams);
+  } else if (selectedCategory.value) {
+    // Filter by category
+    return await itemsAPI.getItemsByCategory(
+      selectedCategory.value as ItemCategoryModel,
+      paginationParams
+    );
+  } else {
+    // Return empty results when no search criteria
+    return {
+      data: [],
+      pagination: {
+        currentPage: page,
+        totalPages: 0,
+        totalItems: 0,
+        itemsPerPage: pageSize,
+        hasNextPage: false,
+        hasPreviousPage: false,
+      },
+    };
+  }
+};
+
+// Initialize pagination
+const pagination = usePagination<ItemModel>({
+  fetchFunction: fetchItems,
+  initialPageSize: 20,
+});
 
 // Helper functions
 const getCategoryName = (key: string) => {
@@ -254,57 +299,20 @@ async function handleSearch(query: string) {
   selectedCategory.value = '';
   searchQuery.value = query;
   hasSearched.value = true;
-  isLoading.value = true;
-  error.value = '';
 
-  try {
-    const response = await itemsAPI.searchByTitle(query);
-
-    if (response.success && response.data) {
-      searchResults.value = response.data.documents as Item[];
-      totalResults.value = response.data.total;
-    } else {
-      throw new Error(response.error || 'Failed to search items');
-    }
-  } catch (err: unknown) {
-    const errorMessage =
-      err instanceof Error ? err.message : 'Search failed. Please try again.';
-    error.value = errorMessage;
-    searchResults.value = [];
-    totalResults.value = 0;
-  } finally {
-    isLoading.value = false;
-  }
+  // Reset pagination to first page and refresh
+  pagination.reset();
+  await pagination.refresh();
 }
 
 async function searchByCategory(categoryKey: string) {
   selectedCategory.value = categoryKey;
   searchQuery.value = '';
   hasSearched.value = true;
-  isLoading.value = true;
-  error.value = '';
 
-  try {
-    // Usar getItemsByCategory para filtrar por categoría (no búsqueda de texto)
-    const response = await itemsAPI.getItemsByCategory(
-      categoryKey as ItemCategoryModel
-    );
-
-    if (response.success && response.data) {
-      searchResults.value = response.data.documents as Item[];
-      totalResults.value = response.data.total;
-    } else {
-      throw new Error(response.error || 'Failed to fetch category items');
-    }
-  } catch (err: unknown) {
-    const errorMessage =
-      err instanceof Error ? err.message : 'Failed to load category items.';
-    error.value = errorMessage;
-    searchResults.value = [];
-    totalResults.value = 0;
-  } finally {
-    isLoading.value = false;
-  }
+  // Reset pagination to first page and refresh
+  pagination.reset();
+  await pagination.refresh();
 }
 
 function clearSearch() {
@@ -318,23 +326,22 @@ function clearCategory() {
 }
 
 function clearResults() {
-  searchResults.value = [];
-  totalResults.value = 0;
+  searchQuery.value = '';
+  selectedCategory.value = '';
   hasSearched.value = false;
-  error.value = '';
+  pagination.reset();
 }
 
-function retrySearch() {
-  if (searchQuery.value) {
-    handleSearch(searchQuery.value);
-  } else if (selectedCategory.value) {
-    searchByCategory(selectedCategory.value);
-  }
-}
-
-function handleReserve(item: Item) {
+function handleReserve(item: ItemModel) {
   // Handle reservation logic
   console.log('Reserve item:', item);
   // This would typically open a modal or navigate to reservation page
 }
+
+// Watch for changes in search criteria to trigger refresh
+watch([searchQuery, selectedCategory], () => {
+  if (hasSearched.value && (searchQuery.value || selectedCategory.value)) {
+    pagination.refresh();
+  }
+});
 </script>
