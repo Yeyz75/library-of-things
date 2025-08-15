@@ -75,6 +75,7 @@
             <button
               @click="showOwnerActions = !showOwnerActions"
               class="p-2 rounded-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md hover:bg-white dark:hover:bg-gray-900 transition-colors duration-200 border border-white/20"
+              aria-label="More options"
             >
               <EllipsisVerticalIcon
                 class="h-5 w-5 text-gray-700 dark:text-gray-300"
@@ -383,12 +384,19 @@ function toggleFavorite() {
 function handleDelete() {
   // Emit an event to let the parent handle the deletion
   emit('delete', props.item);
+  // Close the dropdown menu
+  showOwnerActions.value = false;
 }
 
 // Close owner actions dropdown when clicking outside
 const handleClickOutside = (event: MouseEvent) => {
   const target = event.target as HTMLElement;
-  if (!target.closest('.relative')) {
+  const dropdown = document.querySelector('.relative .absolute');
+  if (
+    dropdown &&
+    !dropdown.contains(target) &&
+    !target.closest('button[aria-label="More options"]')
+  ) {
     showOwnerActions.value = false;
   }
 };
