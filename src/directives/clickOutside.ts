@@ -7,12 +7,12 @@ const clickOutside: Directive = {
     const element = el as ClickOutsideElementModel;
     element._clickOutsideHandler = (event: MouseEvent) => {
       if (!element.contains(event.target as Node)) {
-        setTimeout(() => {
-          binding.value();
-        }, 0);
+        binding.value();
       }
     };
-    document.addEventListener('mousedown', element._clickOutsideHandler);
+    // Use 'click' so clicks that call event.stopPropagation or @click.stop on elements
+    // inside the component run before this handler and prevent race conditions.
+    document.addEventListener('click', element._clickOutsideHandler);
   },
   unmounted(el) {
     const element = el as ClickOutsideElementModel;

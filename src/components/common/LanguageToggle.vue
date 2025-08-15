@@ -1,7 +1,7 @@
 <template>
   <div class="relative">
     <button
-      @click="toggleDropdown"
+      @click.stop="toggleDropdown"
       class="flex items-center space-x-2 px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
       :class="{ 'ring-2 ring-primary-500': isOpen }"
     >
