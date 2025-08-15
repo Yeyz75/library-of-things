@@ -128,6 +128,15 @@
           </div>
         </template>
       </ExploreLayout>
+      <!-- Item detail modal -->
+      <ItemDetailModal
+        :is-open="isDetailModalOpen"
+        :item="selectedItem"
+        :categories="categories"
+        @close="closeDetailModal"
+        @reserve="handleReserve"
+        @share="handleShare"
+      />
     </div>
   </AppLayout>
 </template>
@@ -150,6 +159,7 @@ import AppLayout from '@/components/layout/AppLayout.vue';
 import SearchBar from '@/components/common/SearchBar.vue';
 import ExploreLayout from '@/components/layout/ExploreLayout.vue';
 import ArticleCardGrid from '@/components/common/ArticleCardGrid.vue';
+import ItemDetailModal from '@/components/modals/ItemDetailModal.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import { useItemsStore } from '@/store/items.store';
 import { useAuthStore } from '@/store/auth.store';
@@ -166,6 +176,8 @@ const { t } = useI18n();
 const { isAuthenticated } = storeToRefs(authStore);
 
 const searchQuery = ref('');
+const selectedItem = ref<ItemModel | null>(null);
+const isDetailModalOpen = ref(false);
 const isLoading = ref(false);
 const error = ref('');
 
@@ -339,8 +351,52 @@ function selectCategory(key: ItemCategoryModel) {
 }
 
 function viewDetails(item: ItemModel) {
-  router.push(`/items/${item.$id}`);
+  // Open modal and update URL so deep link works
+  selectedItem.value = item;
+  isDetailModalOpen.value = true;
+  router.push({
+    query: {
+      ...router.currentRoute.value.query,
+      itemId: item.$id,
+      modal: 'true',
+    },
+  });
 }
+
+// Close handler for modal
+function closeDetailModal() {
+  isDetailModalOpen.value = false;
+  selectedItem.value = null;
+  // remove modal query param - replace so it doesn't add history
+  const newQuery = { ...router.currentRoute.value.query } as Record<
+    string,
+    string
+  >;
+  delete newQuery.modal;
+  router.replace({ path: router.currentRoute.value.path, query: newQuery });
+}
+
+// Open modal on deep link (/items/:id?modal=true)
+onMounted(async () => {
+  await loadItems();
+  const { query } = router.currentRoute.value;
+  if (query.itemId && query.modal === 'true') {
+    const id = query.itemId as string;
+    // try to get item from already loaded items
+    let it: ItemModel | null | undefined = itemsStore.items.find(
+      (i) => i.$id === id
+    );
+    if (!it) {
+      // fetch single item
+      const fetched = await itemsStore.getItemById(id);
+      it = fetched ?? undefined;
+    }
+    if (it) {
+      selectedItem.value = it;
+      isDetailModalOpen.value = true;
+    }
+  }
+});
 
 function handleReserve(item: ItemModel) {
   if (!isAuthenticated.value) {
@@ -378,7 +434,5 @@ function handleEmptyStateAction() {
   }
 }
 
-onMounted(() => {
-  loadItems();
-});
+// (removed duplicate onMounted)
 </script>
