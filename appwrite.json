@@ -17,6 +17,21 @@
       "enabled": true,
       "logging": true,
       "scopes": ["messages.write"]
+    },
+    {
+      "$id": "daily-reminders",
+      "name": "Daily Reminders",
+      "runtime": "node-18.0",
+      "path": "appwrite-functions/daily-reminders",
+      "entrypoint": "src/main.js",
+      "ignore": [".git"],
+      "execute": [],
+      "events": [],
+      "schedule": "0 9 * * *",
+      "timeout": 300,
+      "enabled": true,
+      "logging": true,
+      "scopes": ["databases.read", "functions.write"]
     }
   ]
 }

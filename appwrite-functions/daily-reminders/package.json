@@ -1,0 +1,23 @@
+{
+  "name": "daily-reminders",
+  "version": "1.0.0",
+  "description": "Appwrite function to send daily loan reminders",
+  "main": "src/main.js",
+  "type": "module",
+  "scripts": {
+    "build": "echo 'No build step required'",
+    "start": "node src/main.js"
+  },
+  "dependencies": {
+    "node-appwrite": "^13.0.0"
+  },
+  "keywords": [
+    "appwrite",
+    "function",
+    "reminders",
+    "cron",
+    "library-of-things"
+  ],
+  "author": "Library of Things",
+  "license": "MIT"
+}

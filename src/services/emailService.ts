@@ -37,7 +37,23 @@ export type EmailTemplateType =
 
 // Servicio principal de email
 export class EmailService {
-  private static readonly FUNCTION_ID = 'send-email-notification';
+  private static readonly FUNCTION_ID =
+    import.meta.env.VITE_EMAIL_FUNCTION_ID || 'send-email-notification';
+
+  /**
+   * Convierte un email a target ID si es necesario
+   * Por ahora, maneja el caso específico de yeyzon75@gmail.com
+   * TODO: Implementar lookup dinámico de targets
+   */
+  private static getTargetId(email: string): string {
+    // Mapeo temporal de emails conocidos a target IDs
+    const emailToTargetMap: Record<string, string> = {
+      'yeyzon75@gmail.com': '689e08773ef4d029a7a3',
+      // Agregar más mappings según sea necesario
+    };
+
+    return emailToTargetMap[email] || email;
+  }
 
   /**
    * Envía una notificación por email usando Appwrite Functions
@@ -46,9 +62,15 @@ export class EmailService {
     data: EmailNotificationData
   ): Promise<ApiResponse<void>> {
     try {
+      // Convertir email a target ID si es necesario
+      const targetData = {
+        ...data,
+        to: this.getTargetId(data.to),
+      };
+
       const response = await functions.createExecution(
         this.FUNCTION_ID,
-        JSON.stringify(data),
+        JSON.stringify(targetData),
         false // async = false para obtener respuesta inmediata
       );
 
