@@ -143,7 +143,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import {
@@ -198,10 +198,22 @@ const sortedItems = computed(() => {
 });
 
 const filteredItems = computed(() => {
-  if (!selectedCategory.value) return sortedItems.value;
-  return sortedItems.value.filter(
-    (it) => it.category === selectedCategory.value
-  );
+  // Start from sorted items and apply category filter if any
+  let list = selectedCategory.value
+    ? sortedItems.value.filter((it) => it.category === selectedCategory.value)
+    : sortedItems.value;
+
+  // Apply text search filter (searchQuery is two-way bound to SearchBar and
+  // also synchronized with the route query param `search`).
+  const q = (searchQuery.value || '').trim().toLowerCase();
+  if (!q) return list;
+
+  return list.filter((it) => {
+    const title = (it.title || '').toLowerCase();
+    const desc = (it.description || '').toLowerCase();
+    const tags = (it.tags || []).join(' ').toLowerCase();
+    return title.includes(q) || desc.includes(q) || tags.includes(q);
+  });
 });
 
 // Visible items: show a reasonable number on the explore page
@@ -382,6 +394,11 @@ function closeDetailModal() {
 onMounted(async () => {
   await loadItems();
   const { query } = router.currentRoute.value;
+  // Initialize searchQuery from route param if present
+  if (query.search) {
+    searchQuery.value = String(query.search || '');
+  }
+
   if (query.itemId && query.modal === 'true') {
     const id = query.itemId as string;
     isDetailLoading.value = true;
@@ -404,6 +421,34 @@ onMounted(async () => {
     }
   }
 });
+
+// Keep route query `search` in sync when the user types or clears the search
+watch(
+  () => searchQuery.value,
+  (val) => {
+    const rawQuery = router.currentRoute.value.query || {};
+    const current: Record<string, string | undefined> = {};
+    Object.entries(rawQuery).forEach(([k, v]) => {
+      if (v == null) {
+        current[k] = undefined;
+      } else if (Array.isArray(v)) {
+        current[k] = String(v[0]);
+      } else {
+        current[k] = String(v);
+      }
+    });
+
+    const q: Record<string, string | undefined> = val
+      ? { ...current, search: val }
+      : { ...current };
+    if (!val) delete q.search;
+    // Use replace() to avoid creating history entries on every keystroke
+    router.replace({
+      path: router.currentRoute.value.path,
+      query: q as Record<string, string>,
+    });
+  }
+);
 
 function handleReserve(item: ItemModel) {
   if (!isAuthenticated.value) {
