@@ -128,16 +128,6 @@
           </div>
         </template>
       </ExploreLayout>
-      <!-- Item detail modal -->
-      <ItemDetailModal
-        :is-open="isDetailModalOpen"
-        :item="selectedItem"
-        :is-loading="isDetailLoading"
-        :categories="categories"
-        @close="closeDetailModal"
-        @reserve="handleReserve"
-        @share="handleShare"
-      />
     </div>
   </AppLayout>
 </template>
@@ -157,16 +147,15 @@ import {
   EllipsisHorizontalIcon,
 } from '@heroicons/vue/24/outline';
 import AppLayout from '@/components/layout/AppLayout.vue';
-import SearchBar from '@/components/common/SearchBar.vue';
 import ExploreLayout from '@/components/layout/ExploreLayout.vue';
+import SearchBar from '@/components/common/SearchBar.vue';
 import ArticleCardGrid from '@/components/common/ArticleCardGrid.vue';
-import ItemDetailModal from '@/components/modals/ItemDetailModal.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import { useItemsStore } from '@/store/items.store';
 import { useAuthStore } from '@/store/auth.store';
 import { useToast } from '@/composables/useToast';
 import { useI18n } from '@/composables/useI18n';
-import type { ItemModel, ItemCategoryModel } from '@/types/models';
+import { ItemModel, ItemCategoryModel } from '@/types/models';
 
 const router = useRouter();
 const itemsStore = useItemsStore();
@@ -175,17 +164,16 @@ const toast = useToast();
 const { t } = useI18n();
 
 const { isAuthenticated } = storeToRefs(authStore);
-
-const searchQuery = ref('');
-const selectedItem = ref<ItemModel | null>(null);
-const isDetailModalOpen = ref(false);
-const isDetailLoading = ref(false);
 const isLoading = ref(false);
 const error = ref('');
 
 // UI state for sidebar selection
 const selectedCategory = ref<ItemCategoryModel | null>(null);
 const itemsToShow = ref(12); // Control cuántos artículos mostrar
+// Search query bound to SearchBar and synced with route `search` query param
+const searchQuery = ref<string>(
+  (router.currentRoute.value.query.search as string) || ''
+);
 
 // Sorted items (most recent first) and filtered by selectedCategory
 const sortedItems = computed(() => {
@@ -226,51 +214,15 @@ const categories: Array<{
   name: string;
   icon?: unknown;
 }> = [
-  {
-    key: 'tools',
-    name: 'Herramientas',
-    icon: WrenchScrewdriverIcon,
-  },
-  {
-    key: 'electronics',
-    name: 'Electrónicos',
-    icon: ComputerDesktopIcon,
-  },
-  {
-    key: 'books',
-    name: 'Libros',
-    icon: BookOpenIcon,
-  },
-  {
-    key: 'sports',
-    name: 'Deportes',
-    icon: PlayIcon,
-  },
-  {
-    key: 'home',
-    name: 'Hogar',
-    icon: HomeIcon,
-  },
-  {
-    key: 'garden',
-    name: 'Jardín',
-    icon: BeakerIcon,
-  },
-  {
-    key: 'clothing',
-    name: 'Ropa',
-    icon: SparklesIcon,
-  },
-  {
-    key: 'games',
-    name: 'Juegos',
-    icon: PlayIcon,
-  },
-  {
-    key: 'other',
-    name: 'Otros',
-    icon: EllipsisHorizontalIcon,
-  },
+  { key: 'tools', name: 'Herramientas', icon: WrenchScrewdriverIcon },
+  { key: 'electronics', name: 'Electrónicos', icon: ComputerDesktopIcon },
+  { key: 'books', name: 'Libros', icon: BookOpenIcon },
+  { key: 'sports', name: 'Deportes', icon: PlayIcon },
+  { key: 'home', name: 'Hogar', icon: HomeIcon },
+  { key: 'garden', name: 'Jardín', icon: BeakerIcon },
+  { key: 'clothing', name: 'Ropa', icon: SparklesIcon },
+  { key: 'games', name: 'Juegos', icon: PlayIcon },
+  { key: 'other', name: 'Otros', icon: EllipsisHorizontalIcon },
 ];
 
 const searchSuggestions = [
@@ -364,62 +316,14 @@ function selectCategory(key: ItemCategoryModel) {
   selectedCategory.value = key === selectedCategory.value ? null : key;
 }
 
+// Navigate to item details page
 function viewDetails(item: ItemModel) {
-  // Open modal and update URL so deep link works
-  selectedItem.value = item;
-  isDetailModalOpen.value = true;
-  router.push({
-    query: {
-      ...router.currentRoute.value.query,
-      itemId: item.$id,
-      modal: 'true',
-    },
-  });
+  if (!item || !item.$id) return;
+  router.push({ path: `/items/${item.$id}` });
 }
 
-// Close handler for modal
-function closeDetailModal() {
-  isDetailModalOpen.value = false;
-  selectedItem.value = null;
-  // remove modal query param - replace so it doesn't add history
-  const newQuery = { ...router.currentRoute.value.query } as Record<
-    string,
-    string
-  >;
-  delete newQuery.modal;
-  router.replace({ path: router.currentRoute.value.path, query: newQuery });
-}
-
-// Open modal on deep link (/items/:id?modal=true)
 onMounted(async () => {
   await loadItems();
-  const { query } = router.currentRoute.value;
-  // Initialize searchQuery from route param if present
-  if (query.search) {
-    searchQuery.value = String(query.search || '');
-  }
-
-  if (query.itemId && query.modal === 'true') {
-    const id = query.itemId as string;
-    isDetailLoading.value = true;
-    try {
-      // try to get item from already loaded items
-      let it: ItemModel | null | undefined = itemsStore.items.find(
-        (i) => i.$id === id
-      );
-      if (!it) {
-        // fetch single item
-        const fetched = await itemsStore.getItemById(id);
-        it = fetched ?? undefined;
-      }
-      if (it) {
-        selectedItem.value = it;
-        isDetailModalOpen.value = true;
-      }
-    } finally {
-      isDetailLoading.value = false;
-    }
-  }
 });
 
 // Keep route query `search` in sync when the user types or clears the search
