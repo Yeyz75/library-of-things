@@ -9,7 +9,7 @@ import {
   remove as deleteItemAPI,
 } from '@/api/items';
 import { ID, uploadMultipleFiles } from '@/api/api';
-import type { ItemModel } from '@/types/models';
+import type { ItemModel, ItemCategoryModel } from '@/types/models';
 
 export const useItemsStore = defineStore('items', () => {
   // State
@@ -50,7 +50,7 @@ export const useItemsStore = defineStore('items', () => {
 
   // Actions
   async function fetchItems(filters?: {
-    category?: string;
+    category?: ItemCategoryModel | string;
     ownerId?: string;
     limit?: number;
   }) {
@@ -62,7 +62,7 @@ export const useItemsStore = defineStore('items', () => {
 
       if (filters?.category) {
         response = await itemsAPI.getItemsByCategory(
-          filters.category as unknown
+          filters.category as ItemCategoryModel
         );
       } else if (filters?.ownerId) {
         response = await itemsAPI.getItemsByOwner(filters.ownerId);
@@ -74,10 +74,58 @@ export const useItemsStore = defineStore('items', () => {
         });
       }
 
-      if (response.success && response.data) {
+      // The API helpers return either a PaginatedResponse<T> (new) or
+      // an ApiResponse<{ documents: T[]; total: number }> (legacy).
+      // Normalize both shapes to an ItemModel[] for the local store.
+      type Paginated<T> = {
+        data: T[];
+        pagination: unknown;
+      };
+
+      type Legacy<T> = {
+        success: boolean;
+        data: {
+          documents: T[];
+          total: number;
+        };
+        error?: string;
+      };
+
+      const isPaginated = (v: unknown): v is Paginated<ItemModel> => {
+        return (
+          !!v &&
+          typeof v === 'object' &&
+          'pagination' in (v as Record<string, unknown>)
+        );
+      };
+
+      const isLegacy = (v: unknown): v is Legacy<ItemModel> => {
+        return (
+          !!v &&
+          typeof v === 'object' &&
+          'success' in (v as Record<string, unknown>)
+        );
+      };
+
+      if (isPaginated(response)) {
+        items.value = response.data;
+      } else if (isLegacy(response) && response.data) {
         items.value = response.data.documents;
       } else {
-        throw new Error(response.error || 'Failed to fetch items');
+        // Fallback error: try to extract an 'error' string if present
+        let fallbackMessage = 'Failed to fetch items';
+        if (
+          response &&
+          typeof response === 'object' &&
+          Object.prototype.hasOwnProperty.call(response, 'error')
+        ) {
+          const maybeError = (response as Record<string, unknown>).error;
+          if (typeof maybeError === 'string') {
+            fallbackMessage = maybeError;
+          }
+        }
+
+        throw new Error(fallbackMessage);
       }
     } catch (err: unknown) {
       const errorMessage =
