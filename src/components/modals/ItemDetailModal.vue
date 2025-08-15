@@ -2,8 +2,9 @@
   <BaseModal
     :is-open="isOpen"
     @close="onClose"
-    :size="size"
+    :size="size || 'xl'"
     aria-label="Detalle del artículo"
+    class="max-w-5xl"
   >
     <template #header>
       <div class="flex-1"></div>
@@ -20,26 +21,29 @@
       </div>
     </div>
 
-    <div v-else-if="currentItem">
-      <ArticleDetailView
-        :item="currentItem"
-        :categories="categoryOptions"
-        :currentUserId="userId"
-        @reserve="$emit('reserve', currentItem)"
-        @share="$emit('share', currentItem)"
-        @contact="$emit('contact', currentItem)"
-        @delete="$emit('delete', currentItem)"
-      />
-
-      <div class="mt-6 border-t border-gray-200 dark:border-gray-700 pt-6 px-6">
+    <div v-else-if="currentItem" class="modal-single-column">
+      <div class="detail-column p-6">
+        <ArticleDetailView
+          :item="currentItem"
+          :categories="categoryOptions"
+          :currentUserId="userId"
+          @reserve="$emit('reserve', currentItem)"
+          @share="$emit('share', currentItem)"
+          @contact="$emit('contact', currentItem)"
+          @delete="$emit('delete', currentItem)"
+        />
+      </div>
+      <div
+        class="reviews-section border-t border-gray-100 dark:border-gray-800 p-6 mt-4 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+      >
         <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xl font-bold">{{ $t('reviews.title') }}</h2>
-          <div class="flex items-center space-x-4">
+          <h2 class="text-lg font-semibold">{{ $t('reviews.title') }}</h2>
+          <div class="flex items-center space-x-2">
             <div v-if="currentItem.averageRating" class="flex items-center">
               <StarRating
                 :rating="currentItem.averageRating"
                 :review-count="currentItem.totalReviews"
-                :show-text="true"
+                :show-text="false"
               />
             </div>
             <router-link
@@ -52,7 +56,7 @@
                   reviewId: existingReview?.$id,
                 },
               }"
-              class="btn-secondary"
+              class="btn-secondary text-sm"
             >
               <PlusIcon v-if="!existingReview" class="h-4 w-4 mr-2" />
               <PencilIcon v-else class="h-4 w-4 mr-2" />
@@ -60,17 +64,18 @@
             </router-link>
           </div>
         </div>
-
-        <ReviewsList
-          :item-id="currentItem.$id"
-          :show-item-info="false"
-          :show-sort-options="true"
-          :show-page-size-selector="true"
-          :initial-page-size="5"
-          :pagination-size="'md'"
-          @photo-click="handleReviewPhotoClick"
-          @review-updated="handleReviewUpdated"
-        />
+        <div class="reviews-scroll">
+          <ReviewsList
+            :item-id="currentItem.$id"
+            :show-item-info="false"
+            :show-sort-options="true"
+            :show-page-size-selector="true"
+            :initial-page-size="5"
+            :pagination-size="'md'"
+            @photo-click="handleReviewPhotoClick"
+            @review-updated="handleReviewUpdated"
+          />
+        </div>
       </div>
     </div>
   </BaseModal>
@@ -220,5 +225,30 @@ function handleReviewUpdated() {
   justify-content: center;
   background: rgba(0, 0, 0, 0.3);
   z-index: 60;
+}
+
+.modal-single-column {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.detail-column {
+  overflow: auto;
+  min-width: 0;
+}
+
+.reviews-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 70vh;
+  min-width: 0;
+  z-index: 10;
+}
+
+.reviews-scroll {
+  overflow: auto;
+  padding-top: 0.5rem;
 }
 </style>

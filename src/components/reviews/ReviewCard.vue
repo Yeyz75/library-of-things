@@ -168,13 +168,7 @@ const openPhotoModal = (photoUrl: string) => {
 
 <style scoped>
 .review-card {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.2s ease;
+  @apply bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6 mb-4 shadow transition-shadow;
 }
 
 .review-card:hover {
@@ -218,13 +212,13 @@ const openPhotoModal = (photoUrl: string) => {
 .reviewer-name {
   font-size: 1rem;
   font-weight: 600;
-  color: #111827;
+  @apply text-gray-900 dark:text-gray-100;
   margin: 0;
 }
 
 .review-date {
   font-size: 0.875rem;
-  color: #6b7280;
+  @apply text-gray-500 dark:text-gray-400;
   margin: 0;
 }
 
@@ -256,8 +250,7 @@ const openPhotoModal = (photoUrl: string) => {
   gap: 0.75rem;
   margin-bottom: 1rem;
   padding: 1rem;
-  background: #f9fafb;
-  border-radius: 0.5rem;
+  @apply bg-gray-50 dark:bg-gray-800 rounded-lg;
 }
 
 .aspect-rating {
@@ -268,25 +261,24 @@ const openPhotoModal = (photoUrl: string) => {
 
 .aspect-label {
   font-size: 0.875rem;
-  color: #374151;
+  @apply text-gray-700 dark:text-gray-200;
   min-width: 140px;
 }
 
 .aspect-value {
   font-size: 0.75rem;
-  color: #6b7280;
+  @apply text-gray-500 dark:text-gray-400;
   margin-left: 0.25rem;
 }
 
 .review-comment {
   margin-bottom: 1rem;
   padding: 1rem;
-  background: #f9fafb;
-  border-radius: 0.5rem;
+  @apply bg-gray-50 dark:bg-gray-800 rounded-lg;
 }
 
 .review-comment p {
-  color: #374151;
+  @apply text-gray-700 dark:text-gray-200;
   line-height: 1.6;
   margin: 0;
 }
@@ -326,7 +318,7 @@ const openPhotoModal = (photoUrl: string) => {
 
 .item-title {
   font-size: 0.875rem;
-  color: #6b7280;
+  @apply text-gray-500 dark:text-gray-400;
   margin: 0;
 }
 
