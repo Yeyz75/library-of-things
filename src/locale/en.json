@@ -398,6 +398,18 @@
     "noResultsDescription": "Try adjusting your search terms or filters to find what you're looking for.",
     "clearFilters": "Clear Filters",
     "reserve": "Reserve",
+    "pagination": {
+      "navigation": "Page navigation",
+      "loading": "Loading...",
+      "previousPage": "Previous page",
+      "nextPage": "Next page",
+      "firstPage": "First page",
+      "lastPage": "Last page",
+      "currentPage": "Current page, page {page}",
+      "goToPage": "Go to page {page}",
+      "itemsPerPage": "Items per page:",
+      "selectPageSize": "Select items per page"
+    },
     "viewDetails": "View Details",
     "notAvailable": "Not Available"
   },

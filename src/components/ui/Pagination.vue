@@ -4,7 +4,7 @@
       'flex items-center justify-between',
       size === 'sm' ? 'gap-2' : size === 'lg' ? 'gap-6' : 'gap-4',
     ]"
-    :aria-label="$t('pagination.navigation', 'Navegación de páginas')"
+    :aria-label="$t('search.pagination.navigation', 'Navegación de páginas')"
     role="navigation"
   >
     <!-- Items info (left side) -->
@@ -21,7 +21,7 @@
           <div
             class="animate-spinner h-4 w-4 border-2 border-primary-500 border-t-transparent rounded-full"
           ></div>
-          <span>{{ $t('pagination.loading', 'Cargando...') }}</span>
+          <span>{{ $t('search.pagination.loading', 'Cargando...') }}</span>
         </div>
       </template>
       <template v-else>
@@ -48,7 +48,7 @@
             : 'border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50 hover:border-neutral-400 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:hover:border-neutral-500',
         ]"
         @click="goToPreviousPage"
-        :aria-label="$t('pagination.previousPage', 'Página anterior')"
+        :aria-label="$t('search.pagination.previousPage', 'Página anterior')"
       >
         <ChevronLeftIcon class="h-4 w-4" />
       </button>
@@ -84,7 +84,7 @@
             : 'border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50 hover:border-neutral-400 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:hover:border-neutral-500',
         ]"
         @click="goToNextPage"
-        :aria-label="$t('pagination.nextPage', 'Página siguiente')"
+        :aria-label="$t('search.pagination.nextPage', 'Página siguiente')"
       >
         <ChevronRightIcon class="h-4 w-4" />
       </button>
@@ -98,7 +98,7 @@
         :disabled="loading || disabled"
         :class="pageButtonClasses(false)"
         @click="goToPage(1)"
-        :aria-label="$t('pagination.firstPage', 'Primera página')"
+        :aria-label="$t('search.pagination.firstPage', 'Primera página')"
       >
         1
       </button>
@@ -136,7 +136,7 @@
             : 'border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50 hover:border-neutral-400 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:hover:border-neutral-500',
         ]"
         @click="goToPreviousPage"
-        :aria-label="$t('pagination.previousPage', 'Página anterior')"
+        :aria-label="$t('search.pagination.previousPage', 'Página anterior')"
       >
         <ChevronLeftIcon class="h-4 w-4" />
       </button>
@@ -151,11 +151,11 @@
         :aria-label="
           page === currentPage
             ? $t(
-                'pagination.currentPage',
+                'search.pagination.currentPage',
                 { page },
                 `Página actual, página ${page}`
               )
-            : $t('pagination.goToPage', { page }, `Ir a página ${page}`)
+            : $t('search.pagination.goToPage', { page }, `Ir a página ${page}`)
         "
         :aria-current="page === currentPage ? 'page' : undefined"
       >
@@ -179,7 +179,7 @@
             : 'border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50 hover:border-neutral-400 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:hover:border-neutral-500',
         ]"
         @click="goToNextPage"
-        :aria-label="$t('pagination.nextPage', 'Página siguiente')"
+        :aria-label="$t('search.pagination.nextPage', 'Página siguiente')"
       >
         <ChevronRightIcon class="h-4 w-4" />
       </button>
@@ -206,7 +206,7 @@
         :disabled="loading || disabled"
         :class="pageButtonClasses(false)"
         @click="goToPage(totalPages)"
-        :aria-label="$t('pagination.lastPage', 'Última página')"
+        :aria-label="$t('search.pagination.lastPage', 'Última página')"
       >
         {{ totalPages }}
       </button>
@@ -224,7 +224,7 @@
         :for="`page-size-${componentId}`"
         class="text-neutral-600 dark:text-neutral-400 whitespace-nowrap"
       >
-        {{ $t('pagination.itemsPerPage', 'Elementos por página:') }}
+        {{ $t('search.pagination.itemsPerPage', 'Elementos por página:') }}
       </label>
       <select
         :id="`page-size-${componentId}`"
@@ -245,7 +245,10 @@
         ]"
         @change="handlePageSizeChange"
         :aria-label="
-          $t('pagination.selectPageSize', 'Seleccionar elementos por página')
+          $t(
+            'search.pagination.selectPageSize',
+            'Seleccionar elementos por página'
+          )
         "
       >
         <option v-for="option in pageSizeOptions" :key="option" :value="option">

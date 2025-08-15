@@ -398,6 +398,18 @@
     "noResultsDescription": "Intenta ajustar tus términos de búsqueda o filtros para encontrar lo que buscas.",
     "clearFilters": "Limpiar Filtros",
     "reserve": "Reservar",
+    "pagination": {
+      "navigation": "Navegación de páginas",
+      "loading": "Cargando...",
+      "previousPage": "Página anterior",
+      "nextPage": "Página siguiente",
+      "firstPage": "Primera página",
+      "lastPage": "Última página",
+      "currentPage": "Página actual, página {page}",
+      "goToPage": "Ir a la página {page}",
+      "itemsPerPage": "Elementos por página:",
+      "selectPageSize": "Seleccionar elementos por página"
+    },
     "viewDetails": "Ver Detalles",
     "notAvailable": "No Disponible"
   },
