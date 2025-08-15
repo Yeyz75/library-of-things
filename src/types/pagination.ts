@@ -93,6 +93,26 @@ export interface UrlPaginationParams {
   [key: string]: string | undefined;
 }
 
+// Tipos para useUrlPagination
+export interface UseUrlPaginationOptions {
+  prefix?: string;
+  defaultPage?: number;
+  defaultPageSize?: number;
+  allowedPageSizes?: number[];
+  debounceDelay?: number;
+  preserveQuery?: boolean;
+}
+
+export interface UseUrlPaginationReturn {
+  currentPage: Ref<number>;
+  pageSize: Ref<number>;
+  goToPage: (page: number) => Promise<void>;
+  changePageSize: (size: number) => Promise<void>;
+  updatePagination: (page: number, size?: number) => Promise<void>;
+  reset: () => Promise<void>;
+  getUrlParams: () => Record<string, string>;
+}
+
 // Configuración por defecto
 export const DEFAULT_PAGINATION_CONFIG: PaginationConfig = {
   defaultPageSize: 20,
