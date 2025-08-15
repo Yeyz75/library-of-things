@@ -4,24 +4,40 @@
     class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-3 sm:px-6 rounded-lg"
     aria-label="Pagination"
   >
-    <!-- Mobile View -->
-    <div class="flex flex-1 justify-between sm:hidden">
+    <!-- Mobile View (optimized) -->
+    <div
+      ref="mobileRoot"
+      class="flex flex-1 items-center justify-between sm:hidden"
+      role="navigation"
+      aria-label="Mobile pagination navigation"
+    >
       <button
         @click="goToPage(currentPage - 1)"
         :disabled="currentPage <= 1 || props.loading || props.disabled"
-        class="relative inline-flex items-center rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+        :aria-disabled="currentPage <= 1 || props.loading || props.disabled"
+        class="touch-target relative inline-flex items-center justify-center rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+        aria-label="Previous page"
       >
-        Previous
+        <ChevronLeftIcon class="h-6 w-6" aria-hidden="true" />
       </button>
-      <span class="text-sm text-gray-700 dark:text-gray-300 flex items-center">
-        Page {{ currentPage }} of {{ totalPages }}
-      </span>
+
+      <div class="flex-1 text-center px-3">
+        <div class="text-sm text-gray-700 dark:text-gray-300">Page</div>
+        <div class="text-base font-semibold text-gray-900 dark:text-gray-100">
+          {{ currentPage }} / {{ totalPages }}
+        </div>
+      </div>
+
       <button
         @click="goToPage(currentPage + 1)"
         :disabled="currentPage >= totalPages || props.loading || props.disabled"
-        class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+        :aria-disabled="
+          currentPage >= totalPages || props.loading || props.disabled
+        "
+        class="touch-target relative inline-flex items-center justify-center rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+        aria-label="Next page"
       >
-        Next
+        <ChevronRightIcon class="h-6 w-6" aria-hidden="true" />
       </button>
     </div>
 
@@ -108,7 +124,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline';
 import type {
   BasePaginationPropsModel,
@@ -126,6 +142,8 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<Emits>();
+
+const mobileRoot = ref<HTMLElement | null>(null);
 
 const startItem = computed(() => {
   return (props.currentPage - 1) * props.pageSize + 1;
@@ -197,6 +215,73 @@ function goToPage(page: number) {
     emit('page-change', page);
   }
 }
+
+// --- Mobile touch / orientation support ---
+let touchStartX = 0;
+let touchCurrentX = 0;
+const swipeThreshold = 50; // px
+
+function onTouchStart(e: TouchEvent) {
+  touchStartX = e.touches[0]?.clientX ?? 0;
+}
+
+function onTouchMove(e: TouchEvent) {
+  touchCurrentX = e.touches[0]?.clientX ?? 0;
+}
+
+function onTouchEnd() {
+  const delta = touchCurrentX - touchStartX;
+  if (Math.abs(delta) > swipeThreshold) {
+    if (delta < 0) {
+      // swipe left -> next page
+      goToPage(props.currentPage + 1);
+    } else {
+      // swipe right -> prev page
+      goToPage(props.currentPage - 1);
+    }
+  }
+  touchStartX = 0;
+  touchCurrentX = 0;
+}
+
+function onOrientationChange() {
+  // emit a small event so parent can react if needed
+  const win = window as Window & {
+    screen?: { orientation?: { type?: string } };
+  };
+
+  const orientationType =
+    win.screen?.orientation?.type ??
+    (window.innerWidth > window.innerHeight ? 'landscape' : 'portrait');
+
+  emit('orientation-change', {
+    orientation: orientationType,
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+}
+
+onMounted(() => {
+  if (mobileRoot.value) {
+    mobileRoot.value.addEventListener('touchstart', onTouchStart, {
+      passive: true,
+    });
+    mobileRoot.value.addEventListener('touchmove', onTouchMove, {
+      passive: true,
+    });
+    mobileRoot.value.addEventListener('touchend', onTouchEnd);
+  }
+  window.addEventListener('orientationchange', onOrientationChange);
+});
+
+onBeforeUnmount(() => {
+  if (mobileRoot.value) {
+    mobileRoot.value.removeEventListener('touchstart', onTouchStart);
+    mobileRoot.value.removeEventListener('touchmove', onTouchMove);
+    mobileRoot.value.removeEventListener('touchend', onTouchEnd);
+  }
+  window.removeEventListener('orientationchange', onOrientationChange);
+});
 
 function changePageSize(event: Event) {
   const target = event.target as HTMLSelectElement;

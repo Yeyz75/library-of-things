@@ -37,6 +37,9 @@ export interface BasePaginationPropsModel {
 export interface BasePaginationEmitsModel {
   'page-change': [page: number];
   'page-size-change': [pageSize: number];
+  'orientation-change': [
+    payload: { orientation: string; width: number; height: number },
+  ];
 }
 
 export interface EmptyStatePropsModel {
