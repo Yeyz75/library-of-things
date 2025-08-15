@@ -8,15 +8,54 @@ export function useReservations() {
   const reservations = ref<ReservationModel[]>([]);
   const ui = useUIStore();
 
+  // Helper para normalizar distintas formas de respuesta (PaginatedResponse | ApiResponse | array)
+  const extractDocuments = <T>(response: unknown): T[] => {
+    if (!response) return [];
+    if (Array.isArray(response)) return response as T[];
+    if (typeof response === 'object' && response !== null) {
+      const obj = response as Record<string, unknown>;
+      if ('data' in obj && Array.isArray(obj['data'] as unknown[])) {
+        return obj['data'] as T[];
+      }
+      if (
+        'data' in obj &&
+        obj['data'] !== undefined &&
+        typeof obj['data'] === 'object'
+      ) {
+        const inner = obj['data'] as Record<string, unknown>;
+        if (
+          'documents' in inner &&
+          Array.isArray(inner['documents'] as unknown[])
+        ) {
+          return inner['documents'] as T[];
+        }
+      }
+      if ('documents' in obj && Array.isArray(obj['documents'] as unknown[])) {
+        return obj['documents'] as T[];
+      }
+    }
+    return [];
+  };
+
   const loadReservations = async (): Promise<void> => {
     ui.setLoading(true);
     ui.clearError();
     try {
+      // getReservationsIndex() devuelve ApiResponse<{documents,total}>
       const response = await getReservationsIndex();
-      if (response.success && response.data) {
-        reservations.value = response.data.documents;
+      const respObj = response as {
+        success?: boolean;
+        data?: { documents?: ReservationModel[] };
+        error?: string;
+      };
+      if (
+        respObj.success &&
+        respObj.data &&
+        Array.isArray(respObj.data.documents)
+      ) {
+        reservations.value = respObj.data.documents;
       } else {
-        throw new Error(response.error || 'Error al cargar las reservas');
+        throw new Error(respObj.error || 'Error al cargar las reservas');
       }
     } catch (err) {
       const message =
@@ -34,11 +73,13 @@ export function useReservations() {
     ui.clearError();
     try {
       const response = await reservationsAPI.getReservationsByStatus(status);
-      if (response.success && response.data) {
-        reservations.value = response.data.documents;
+      const docs = extractDocuments<ReservationModel>(response);
+      if (docs.length > 0) {
+        reservations.value = docs;
       } else {
+        const maybe = response as unknown as Record<string, unknown>;
         throw new Error(
-          response.error || 'Error al cargar reservas por estado'
+          (maybe?.error as string) || 'Error al cargar reservas por estado'
         );
       }
     } catch (err) {
@@ -57,11 +98,13 @@ export function useReservations() {
     ui.clearError();
     try {
       const response = await reservationsAPI.getReservationsByBorrower(userId);
-      if (response.success && response.data) {
-        reservations.value = response.data.documents;
+      const docs = extractDocuments<ReservationModel>(response);
+      if (docs.length > 0) {
+        reservations.value = docs;
       } else {
+        const maybe = response as unknown as Record<string, unknown>;
         throw new Error(
-          response.error || 'Error al cargar reservas del usuario'
+          (maybe?.error as string) || 'Error al cargar reservas del usuario'
         );
       }
     } catch (err) {
@@ -80,11 +123,13 @@ export function useReservations() {
     ui.clearError();
     try {
       const response = await reservationsAPI.getReservationsByOwner(ownerId);
-      if (response.success && response.data) {
-        reservations.value = response.data.documents;
+      const docs = extractDocuments<ReservationModel>(response);
+      if (docs.length > 0) {
+        reservations.value = docs;
       } else {
+        const maybe = response as unknown as Record<string, unknown>;
         throw new Error(
-          response.error || 'Error al cargar reservas del propietario'
+          (maybe?.error as string) || 'Error al cargar reservas del propietario'
         );
       }
     } catch (err) {
