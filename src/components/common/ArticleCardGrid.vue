@@ -110,7 +110,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const _emit = defineEmits<{
+defineEmits<{
   viewDetails: [item: ItemModel];
   reserve: [item: ItemModel];
   share: [item: ItemModel];

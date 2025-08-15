@@ -60,7 +60,7 @@
           <div v-if="isAuthenticated" class="relative">
             <!-- User Avatar/Menu -->
             <button
-              @click="showUserMenu = !showUserMenu"
+              @click.stop="showUserMenu = !showUserMenu"
               class="flex items-center space-x-2 text-neutral-600 dark:text-neutral-300 hover:text-primary-600 dark:hover:text-primary-400 focus-ring rounded-xl p-2 transition-all duration-200 hover:bg-neutral-50 dark:hover:bg-neutral-800"
             >
               <img
@@ -95,7 +95,7 @@
               <div
                 v-if="showUserMenu"
                 v-click-outside="() => (showUserMenu = false)"
-                class="absolute right-0 mt-2 w-64 glass rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10 py-2 z-50 border border-neutral-200/20 dark:border-neutral-800/20"
+                class="absolute right-0 mt-2 w-64 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10 py-2 z-50 border border-neutral-200/20 dark:border-neutral-800/20"
               >
                 <div
                   class="px-4 py-3 border-b border-neutral-200/20 dark:border-neutral-800/20"
