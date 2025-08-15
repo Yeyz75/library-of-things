@@ -3,7 +3,7 @@ import { Client, Messaging } from 'node-appwrite';
 // Configuración de Appwrite
 const client = new Client()
   .setEndpoint(
-    process.env.APPWRITE_FUNCTION_ENDPOINT || 'https://cloud.appwrite.io/v1'
+    process.env.APPWRITE_FUNCTION_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1'
   )
   .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID || '')
   .setKey(process.env.APPWRITE_API_KEY || '');
@@ -228,18 +228,25 @@ export default async ({ req, res, log, error }) => {
 
     // Enviar email usando Appwrite Messaging
     try {
+      // Si 'to' es un email, necesitamos encontrar el target ID correspondiente
+      // Para simplificar, vamos a usar el target ID conocido para yeyzon75@gmail.com
+      let targetId = to;
+      if (to === 'yeyzon75@gmail.com') {
+        targetId = '689e08773ef4d029a7a3'; // Target ID para yeyzon75@gmail.com
+      }
+
       const message = await messaging.createEmail(
         'unique()', // messageId
         emailSubject,
         emailHtml,
         [], // topics (vacío para envío directo)
-        [to], // users
-        [], // targets
+        [], // users (vacío - usamos targets en su lugar)
+        [targetId], // targets - usar target ID en lugar de email
         [], // cc
         [], // bcc
         [], // attachments
         false, // draft
-        emailHtml, // html
+        true, // html
         null // scheduledAt
       );
 

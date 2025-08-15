@@ -1,0 +1,22 @@
+{
+  "projectId": "6896389f003d07dec077",
+  "projectName": "Library Of Things",
+  "endpoint": "https://nyc.cloud.appwrite.io/v1",
+  "functions": [
+    {
+      "$id": "send-email-notification",
+      "name": "Send Email Notification",
+      "runtime": "node-18.0",
+      "path": "appwrite-functions/send-email-notification",
+      "entrypoint": "src/main.js",
+      "ignore": [".git"],
+      "execute": [],
+      "events": [],
+      "schedule": "",
+      "timeout": 15,
+      "enabled": true,
+      "logging": true,
+      "scopes": ["messages.write"]
+    }
+  ]
+}
