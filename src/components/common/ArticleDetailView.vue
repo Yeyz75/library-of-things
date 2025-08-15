@@ -1,12 +1,12 @@
 <template>
   <div
-    class="max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-800"
+    class="max-w-2xl mx-auto bg-white dark:bg-gray-900 rounded-2xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-800"
   >
     <!-- Header con información básica -->
     <div class="relative">
       <!-- Imagen principal -->
       <div
-        class="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 overflow-hidden"
+        class="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 overflow-hidden max-h-56 md:max-h-[300px]"
       >
         <img
           v-if="item.imageUrls?.[0]"
@@ -29,8 +29,10 @@
             class="inline-flex items-center px-3 py-1 text-sm font-medium rounded-full backdrop-blur-md bg-white/80 dark:bg-gray-900/80 border border-white/20"
             :class="statusClasses"
           >
-            <span class="w-2 h-2 rounded-full mr-2" :class="statusDotClasses">
-            </span>
+            <span
+              class="w-2 h-2 rounded-full mr-2"
+              :class="statusDotClasses"
+            ></span>
             {{ statusText }}
           </span>
 
@@ -79,7 +81,7 @@
           <button
             v-for="(imageUrl, index) in item.imageUrls.slice(1, 5)"
             :key="index"
-            class="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 border-white/50 hover:border-white transition-colors"
+            class="flex-shrink-0 w-12 h-12 rounded-lg overflow-hidden border-2 border-white/50 hover:border-white transition-colors"
           >
             <img
               :src="imageUrl"
@@ -89,7 +91,7 @@
           </button>
           <div
             v-if="item.imageUrls.length > 5"
-            class="flex-shrink-0 w-16 h-16 rounded-lg bg-black/50 backdrop-blur-md flex items-center justify-center text-white text-sm font-medium border-2 border-white/50"
+            class="flex-shrink-0 w-12 h-12 rounded-lg bg-black/50 backdrop-blur-md flex items-center justify-center text-white text-xs font-medium border-2 border-white/50"
           >
             +{{ item.imageUrls.length - 4 }}
           </div>
@@ -98,11 +100,11 @@
     </div>
 
     <!-- Contenido principal -->
-    <div class="p-6 lg:p-8">
+    <div class="p-4 lg:p-6">
       <!-- Título y propietario -->
-      <div class="mb-6">
+      <div class="mb-4">
         <h1
-          class="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-3 leading-tight"
+          class="text-lg lg:text-xl font-bold text-gray-900 dark:text-gray-100 mb-1 leading-tight"
         >
           {{ item.title }}
         </h1>
@@ -110,7 +112,7 @@
         <!-- Información del propietario -->
         <div class="flex items-center gap-3 mb-4">
           <div
-            class="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center text-white font-medium text-sm"
+            class="w-9 h-9 rounded-full bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center text-white font-medium text-xs"
           >
             {{ getOwnerInitials(item.ownerName) }}
           </div>
@@ -126,49 +128,49 @@
       </div>
 
       <!-- Descripción -->
-      <div class="mb-8">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+      <div class="mb-5">
+        <h3 class="text-md font-semibold text-gray-900 dark:text-gray-100 mb-2">
           Descripción
         </h3>
-        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
           {{ item.description }}
         </p>
       </div>
 
       <!-- Información adicional en grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
         <!-- Condición -->
-        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-4">
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-3">
           <h4 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">
             Condición
           </h4>
-          <p class="text-gray-700 dark:text-gray-300">
+          <p class="text-gray-700 dark:text-gray-300 text-sm">
             {{ item.condition || 'Buena' }}
           </p>
         </div>
 
         <!-- Ubicación -->
-        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-4">
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-3">
           <h4 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">
             Ubicación
           </h4>
-          <p class="text-gray-700 dark:text-gray-300">
+          <p class="text-gray-700 dark:text-gray-300 text-sm">
             {{ item.location || 'No especificada' }}
           </p>
         </div>
 
         <!-- Fecha de publicación -->
-        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-4">
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-3">
           <h4 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">
             Publicado
           </h4>
-          <p class="text-gray-700 dark:text-gray-300">
+          <p class="text-gray-700 dark:text-gray-300 text-sm">
             {{ formatDate(item.$createdAt) }}
           </p>
         </div>
 
         <!-- Tags -->
-        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-4">
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-3">
           <h4 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">
             Etiquetas
           </h4>
@@ -177,37 +179,36 @@
               v-for="tag in item.tags || ['general']"
               :key="tag"
               class="px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 rounded-md"
+              >{{ tag }}</span
             >
-              {{ tag }}
-            </span>
           </div>
         </div>
       </div>
 
       <!-- Acciones principales -->
-      <div class="flex flex-col sm:flex-row gap-3">
+      <div class="flex flex-col sm:flex-row gap-2">
         <button
           v-if="item.isAvailable"
           @click="$emit('reserve', item)"
-          class="flex-1 bg-gradient-to-r from-primary-600 to-purple-600 hover:from-primary-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+          class="flex-1 bg-gradient-to-r from-primary-600 to-purple-600 hover:from-primary-700 hover:to-purple-700 text-white font-semibold py-2 px-4 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md transform"
         >
-          <CalendarIcon class="h-5 w-5 inline mr-2" />
+          <CalendarIcon class="h-4 w-4 inline mr-2" />
           Solicitar Préstamo
         </button>
         <button
           v-else
           disabled
-          class="flex-1 bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 font-semibold py-3 px-6 rounded-xl cursor-not-allowed"
+          class="flex-1 bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 font-semibold py-2 px-4 rounded-xl cursor-not-allowed"
         >
-          <ClockIcon class="h-5 w-5 inline mr-2" />
+          <ClockIcon class="h-4 w-4 inline mr-2" />
           No Disponible
         </button>
 
         <button
           @click="$emit('contact', item)"
-          class="sm:w-auto bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold py-3 px-6 rounded-xl transition-colors duration-200"
+          class="sm:w-auto bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold py-2 px-4 rounded-xl transition-colors duration-200"
         >
-          <ChatBubbleLeftIcon class="h-5 w-5 inline mr-2" />
+          <ChatBubbleLeftIcon class="h-4 w-4 inline mr-2" />
           Contactar
         </button>
       </div>
