@@ -193,7 +193,7 @@
 
       <!-- Donation Modal -->
       <BaseModal
-        v-if="showDonationModal"
+        :isOpen="showDonationModal"
         @close="showDonationModal = false"
         :title="t('donations.modal.title')"
       >

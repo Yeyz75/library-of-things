@@ -169,7 +169,7 @@
 
       <!-- Contact Modal -->
       <BaseModal
-        v-if="showContactModal"
+        :isOpen="showContactModal"
         @close="showContactModal = false"
         :title="t('help.contactModal.title')"
       >

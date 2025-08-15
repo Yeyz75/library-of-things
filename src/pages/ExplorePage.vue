@@ -323,7 +323,7 @@ async function loadItems() {
 
 function handleSearch(
   query: string,
-  filters: Record<string, string | undefined>
+  filters?: Record<string, string | undefined>
 ) {
   // Navigate to search results page with query and filters
   const queryParams: Record<string, string> = {};
