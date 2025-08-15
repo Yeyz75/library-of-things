@@ -188,10 +188,23 @@ const featuredItems = computed(() => {
 });
 
 function scrollToHowItWorks() {
-  const el = howItWorksSectionRef.value;
-  if (el instanceof HTMLElement) {
-    el.scrollIntoView({ behavior: 'smooth' });
+  // The ref may point to a component instance (when used with
+  // <HowItWorksSection ref="howItWorksSectionRef" />) so resolve the DOM
+  // element. Component refs expose `$el`. Use safer typing to satisfy TS.
+  const refValue = howItWorksSectionRef.value as unknown;
+  let domEl: HTMLElement | null = null;
+
+  if (refValue instanceof HTMLElement) {
+    domEl = refValue;
+  } else if (
+    refValue &&
+    typeof refValue === 'object' &&
+    (refValue as Record<string, unknown>)['$el'] instanceof HTMLElement
+  ) {
+    domEl = (refValue as Record<string, HTMLElement>)['$el'];
   }
+
+  if (domEl) domEl.scrollIntoView({ behavior: 'smooth' });
 }
 
 async function loadItems() {
