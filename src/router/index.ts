@@ -72,7 +72,13 @@ const router = createRouter({
     {
       path: '/search',
       name: 'Search',
-      component: () => import('@/pages/SearchPage.vue'),
+      component: () => import('@/pages/ExplorePage.vue'),
+      meta: { layout: 'app' },
+    },
+    {
+      path: '/explore',
+      name: 'Explore',
+      component: () => import('@/pages/ExplorePage.vue'),
       meta: { layout: 'app' },
     },
     {

@@ -217,6 +217,7 @@
     "items": {
       "title": "Artículos Recientes",
       "subtitle": "Explora y filtra artículos en tu área",
+      "categorySubtitle": "Artículos filtrados por categoría",
       "allCategories": "Todas las Categorías",
       "loading": "Cargando artículos...",
       "error": "Error al cargar artículos",
@@ -471,6 +472,7 @@
     "available": "Disponible",
     "borrowed": "Prestado",
     "reserve": "Reservar",
+    "reserved": "Reservado",
     "notAvailable": "No Disponible",
     "details": "Detalles",
     "itemCard": "Tarjeta de Artículo",
@@ -690,7 +692,12 @@
     "retry": "Reintentar",
     "refresh": "Actualizar",
     "hide": "Ocultar",
-    "viewMore": "Ver más"
+    "viewMore": "Ver más",
+    "loadMore": "Cargar más",
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "daysAgo": "Hace {days} días",
+    "updated": "Actualizado"
   },
   "footer": {
     "description": "Comparte, pide prestado y descubre elementos increíbles en tu comunidad. Construyendo conexiones a través de recursos compartidos.",

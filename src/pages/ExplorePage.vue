@@ -1,52 +1,42 @@
 <template>
   <AppLayout>
-    <div class="container py-8">
-      <!-- Hero Section with Prominent Search -->
-      <div class="text-center mb-12">
-        <div class="max-w-4xl mx-auto">
+    <div class="container py-6">
+      <!-- Header más compacto -->
+      <div class="text-center mb-8">
+        <div class="max-w-3xl mx-auto">
           <h1
-            class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4 font-display"
+            class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-3 font-display"
           >
             {{ t('browseItems.title') }}
           </h1>
           <p
-            class="text-xl text-gray-600 dark:text-gray-400 mb-8 leading-relaxed"
+            class="text-lg text-gray-600 dark:text-gray-400 mb-6 leading-relaxed"
           >
             {{ t('home.categories.subtitle') }}
           </p>
 
-          <!-- Prominent Search Bar -->
-          <div class="relative max-w-2xl mx-auto mb-8">
-            <div class="relative group">
-              <div
-                class="absolute inset-0 bg-gradient-to-r from-primary-500 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition-opacity duration-300"
-              ></div>
-              <div
-                class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-2"
-              >
-                <SearchBar
-                  v-model="searchQuery"
-                  :categories="categories"
-                  :suggestions="searchSuggestions"
-                  :placeholder="t('search.placeholder')"
-                  :prominent="true"
-                  @search="handleSearch"
-                  class="border-0 shadow-none bg-transparent"
-                />
-              </div>
-            </div>
+          <!-- Barra de búsqueda más compacta -->
+          <div class="relative max-w-md mx-auto mb-4">
+            <SearchBar
+              v-model="searchQuery"
+              :categories="categories"
+              :suggestions="searchSuggestions"
+              :placeholder="t('search.placeholder')"
+              @search="handleSearch"
+              class="shadow-sm"
+            />
           </div>
 
-          <!-- Quick Search Suggestions -->
-          <div class="flex flex-wrap gap-2 justify-center mb-8">
+          <!-- Búsquedas rápidas más pequeñas -->
+          <div class="flex flex-wrap gap-2 justify-center">
             <span class="text-sm text-gray-500 dark:text-gray-400 mr-2"
               >{{ t('search.quickSearch') }}:</span
             >
             <button
-              v-for="suggestion in popularSearches"
+              v-for="suggestion in popularSearches.slice(0, 4)"
               :key="suggestion"
               @click="selectQuickSearch(suggestion)"
-              class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-primary-100 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 transform hover:scale-105"
+              class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-primary-100 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200"
             >
               {{ suggestion }}
             </button>
@@ -54,27 +44,24 @@
         </div>
       </div>
 
-      <!-- Explore layout: sidebar categorias + listado de artículos -->
+      <!-- Layout principal -->
       <ExploreLayout
         :categories="categories"
-        :title="t('home.items.title')"
-        :subtitle="t('home.items.subtitle')"
+        :title="getMainTitle()"
+        :subtitle="getMainSubtitle()"
         :selected="selectedCategory"
         @select-category="selectCategory"
       >
         <template #default>
           <!-- Loading -->
-          <div v-if="isLoading" class="text-center py-16">
-            <div class="relative">
+          <div v-if="isLoading" class="text-center py-12">
+            <div class="relative inline-block">
               <div
-                class="w-16 h-16 border-4 border-primary-200 dark:border-primary-800 border-t-primary-600 dark:border-t-primary-400 rounded-full animate-spin mx-auto mb-4"
-              ></div>
-              <div
-                class="absolute inset-0 w-16 h-16 border-4 border-transparent border-t-purple-600 dark:border-t-purple-400 rounded-full animate-ping mx-auto"
+                class="w-12 h-12 border-4 border-primary-200 dark:border-primary-800 border-t-primary-600 dark:border-t-primary-400 rounded-full animate-spin"
               ></div>
             </div>
             <p
-              class="text-lg font-medium text-gray-600 dark:text-gray-400 animate-pulse"
+              class="text-base font-medium text-gray-600 dark:text-gray-400 mt-4"
             >
               {{ t('home.items.loading') }}
             </p>
@@ -91,7 +78,7 @@
             />
           </div>
 
-          <!-- Items list -->
+          <!-- Items grid -->
           <div v-else>
             <div v-if="filteredItems.length === 0">
               <EmptyState
@@ -108,16 +95,35 @@
               />
             </div>
 
-            <div v-else class="space-y-4">
-              <ArticleCard
-                v-for="item in visibleItems"
-                :key="item.$id"
-                :item="item"
-                :categories="categories"
-                @viewDetails="viewDetails"
-                @reserve="handleReserve"
-                @share="handleShare"
-              />
+            <!-- Grid de artículos más compacto -->
+            <div v-else>
+              <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <ArticleCardGrid
+                  v-for="item in visibleItems"
+                  :key="item.$id"
+                  :item="item"
+                  :categories="categories"
+                  @viewDetails="viewDetails"
+                  @reserve="handleReserve"
+                  @share="handleShare"
+                />
+              </div>
+
+              <!-- Mostrar más artículos si hay -->
+              <div
+                v-if="filteredItems.length > visibleItems.length"
+                class="text-center mt-8"
+              >
+                <button
+                  @click="loadMoreItems"
+                  class="inline-flex items-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors duration-200"
+                >
+                  {{ t('common.loadMore') }}
+                  <span class="ml-2 text-sm">
+                    ({{ filteredItems.length - visibleItems.length }} más)
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
         </template>
@@ -143,7 +149,7 @@ import {
 import AppLayout from '@/components/layout/AppLayout.vue';
 import SearchBar from '@/components/common/SearchBar.vue';
 import ExploreLayout from '@/components/layout/ExploreLayout.vue';
-import ArticleCard from '@/components/common/ArticleCard.vue';
+import ArticleCardGrid from '@/components/common/ArticleCardGrid.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import { useItemsStore } from '@/store/items.store';
 import { useAuthStore } from '@/store/auth.store';
@@ -165,10 +171,11 @@ const error = ref('');
 
 // UI state for sidebar selection
 const selectedCategory = ref<ItemCategoryModel | null>(null);
+const itemsToShow = ref(12); // Control cuántos artículos mostrar
 
 // Sorted items (most recent first) and filtered by selectedCategory
 const sortedItems = computed(() => {
-  // items coming from store may already be ordered by API
+  // Use the same logic as HomePage - direct access to store
   return [...itemsStore.items].sort((a, b) => {
     const da = new Date(a.$createdAt || '').getTime() || 0;
     const db = new Date(b.$createdAt || '').getTime() || 0;
@@ -184,7 +191,9 @@ const filteredItems = computed(() => {
 });
 
 // Visible items: show a reasonable number on the explore page
-const visibleItems = computed(() => filteredItems.value.slice(0, 20));
+const visibleItems = computed(() =>
+  filteredItems.value.slice(0, itemsToShow.value)
+);
 
 const categories: Array<{
   key: ItemCategoryModel;
@@ -265,13 +274,34 @@ async function loadItems() {
   error.value = '';
 
   try {
-    await itemsStore.fetchItems({ limit: 12 });
-  } catch {
+    // Use the same logic as HomePage
+    await itemsStore.fetchItems({ limit: 24 });
+  } catch (err) {
+    console.error('Error loading items:', err);
     error.value = t('home.items.error');
     toast.error(t('home.items.error'), t('common.error'));
   } finally {
     isLoading.value = false;
   }
+}
+
+function getMainTitle(): string {
+  if (selectedCategory.value) {
+    const category = categories.find((c) => c.key === selectedCategory.value);
+    return category?.name || t('home.items.title');
+  }
+  return t('home.items.title');
+}
+
+function getMainSubtitle(): string {
+  if (selectedCategory.value) {
+    return t('home.items.categorySubtitle');
+  }
+  return t('home.items.subtitle');
+}
+
+function loadMoreItems() {
+  itemsToShow.value += 12;
 }
 
 function handleSearch(
