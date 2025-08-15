@@ -307,6 +307,41 @@ export interface ApiResponseModel<T> {
   success?: boolean;
 }
 
+// Extensión para respuestas de API con paginación
+export interface ApiResponseWithPaginationModel<T> extends ApiResponseModel<T> {
+  pagination?: {
+    currentPage: number;
+    totalPages: number;
+    totalItems: number;
+    itemsPerPage: number;
+  };
+}
+
+// Modelos específicos para paginación (complementan los tipos en pagination.ts)
+export interface PaginationMetaModel {
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+  itemsPerPage: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
+export interface PaginatedItemsResponseModel {
+  data: ItemModel[];
+  pagination: PaginationMetaModel;
+}
+
+export interface PaginatedReservationsResponseModel {
+  data: ReservationModel[];
+  pagination: PaginationMetaModel;
+}
+
+export interface PaginatedReviewsResponseModel {
+  data: ReviewModel[];
+  pagination: PaginationMetaModel;
+}
+
 export type ItemCategoryModel =
   | 'tools'
   | 'electronics'
