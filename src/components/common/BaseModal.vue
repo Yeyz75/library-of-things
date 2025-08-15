@@ -29,25 +29,35 @@
         >
           <div
             v-if="isOpen"
-            class="relative z-50 w-full max-w-lg mx-4 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 transition-colors duration-300"
+            ref="modalContent"
+            role="dialog"
+            aria-modal="true"
+            tabindex="-1"
+            class="relative z-50 w-full max-w-lg mx-4 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 transition-colors duration-300 overflow-auto max-h-[95vh] sm:rounded-lg"
             :class="sizeClass"
+            v-bind="attrs"
           >
             <!-- Header -->
             <div
-              v-if="title || $slots.header"
-              class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700"
+              v-if="title || $slots.header || closable"
+              class="relative border-b border-gray-200 dark:border-gray-700"
             >
-              <slot name="header">
-                <h3
-                  class="text-lg font-semibold text-gray-900 dark:text-gray-100"
-                >
-                  {{ title }}
-                </h3>
-              </slot>
+              <div v-if="title || $slots.header" class="p-6">
+                <slot name="header">
+                  <h3
+                    class="text-lg font-semibold text-gray-900 dark:text-gray-100"
+                  >
+                    {{ title }}
+                  </h3>
+                </slot>
+              </div>
+
+              <!-- Close button positioned absolutely to avoid empty header space -->
               <button
                 v-if="closable"
                 @click="handleClose"
-                class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none focus:text-gray-600 dark:focus:text-gray-300 transition ease-in-out duration-150 p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
+                aria-label="Close"
+                class="absolute top-3 right-3 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none focus:text-gray-600 dark:focus:text-gray-300 transition ease-in-out duration-150 p-1 rounded-md"
               >
                 <XMarkIcon class="h-6 w-6" />
               </button>
@@ -73,7 +83,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted } from 'vue';
+import {
+  computed,
+  onMounted,
+  onUnmounted,
+  ref,
+  watch,
+  nextTick,
+  useAttrs,
+} from 'vue';
 import { XMarkIcon } from '@heroicons/vue/24/outline';
 import type { BaseModalPropsModel, BaseModalEmitsModel } from '@/types/models';
 
@@ -103,11 +121,38 @@ function handleClose() {
   emit('close');
 }
 
+const attrs = useAttrs();
+
 function handleBackdropClick(event: MouseEvent) {
   if (props.closeOnBackdrop && event.target === event.currentTarget) {
     handleClose();
   }
 }
+
+// Focus management: focus first focusable inside modal on open, restore focus on close
+const modalContent = ref<HTMLElement | null>(null);
+let previousActiveElement: HTMLElement | null = null;
+
+watch(
+  () => props.isOpen,
+  async (open) => {
+    if (open) {
+      previousActiveElement = document.activeElement as HTMLElement | null;
+      await nextTick();
+      const el = modalContent.value;
+      if (el) {
+        const focusable = el.querySelector<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusable) focusable.focus();
+        else el.focus();
+      }
+    } else {
+      if (previousActiveElement) previousActiveElement.focus();
+      previousActiveElement = null;
+    }
+  }
+);
 
 // Close modal on escape key
 onMounted(() => {

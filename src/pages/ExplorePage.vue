@@ -132,6 +132,7 @@
       <ItemDetailModal
         :is-open="isDetailModalOpen"
         :item="selectedItem"
+        :is-loading="isDetailLoading"
         :categories="categories"
         @close="closeDetailModal"
         @reserve="handleReserve"
@@ -178,6 +179,7 @@ const { isAuthenticated } = storeToRefs(authStore);
 const searchQuery = ref('');
 const selectedItem = ref<ItemModel | null>(null);
 const isDetailModalOpen = ref(false);
+const isDetailLoading = ref(false);
 const isLoading = ref(false);
 const error = ref('');
 
@@ -382,18 +384,23 @@ onMounted(async () => {
   const { query } = router.currentRoute.value;
   if (query.itemId && query.modal === 'true') {
     const id = query.itemId as string;
-    // try to get item from already loaded items
-    let it: ItemModel | null | undefined = itemsStore.items.find(
-      (i) => i.$id === id
-    );
-    if (!it) {
-      // fetch single item
-      const fetched = await itemsStore.getItemById(id);
-      it = fetched ?? undefined;
-    }
-    if (it) {
-      selectedItem.value = it;
-      isDetailModalOpen.value = true;
+    isDetailLoading.value = true;
+    try {
+      // try to get item from already loaded items
+      let it: ItemModel | null | undefined = itemsStore.items.find(
+        (i) => i.$id === id
+      );
+      if (!it) {
+        // fetch single item
+        const fetched = await itemsStore.getItemById(id);
+        it = fetched ?? undefined;
+      }
+      if (it) {
+        selectedItem.value = it;
+        isDetailModalOpen.value = true;
+      }
+    } finally {
+      isDetailLoading.value = false;
     }
   }
 });
