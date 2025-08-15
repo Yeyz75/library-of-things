@@ -379,19 +379,13 @@ const submitReview = async () => {
 
 <style scoped>
 .create-review-form {
-  background: white;
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  @apply bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow;
 }
 
 .form-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #111827;
-  margin: 0 0 1.5rem 0;
-  text-align: center;
+  @apply text-gray-900 dark:text-gray-100 text-center mb-6;
 }
 
 .form-group {
@@ -402,8 +396,7 @@ const submitReview = async () => {
   display: block;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #374151;
-  margin-bottom: 0.5rem;
+  @apply text-gray-700 dark:text-gray-200 mb-2;
 }
 
 .aspect-ratings-grid {
@@ -411,8 +404,7 @@ const submitReview = async () => {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
   padding: 1rem;
-  background: #f9fafb;
-  border-radius: 0.5rem;
+  @apply bg-gray-50 dark:bg-gray-800 rounded-lg;
 }
 
 .aspect-item {
@@ -423,21 +415,18 @@ const submitReview = async () => {
 
 .aspect-label {
   font-size: 0.875rem;
-  color: #374151;
   font-weight: 500;
+  @apply text-gray-700 dark:text-gray-200;
 }
 
 .form-textarea {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #d1d5db;
   border-radius: 0.5rem;
   font-size: 0.875rem;
   resize: vertical;
   min-height: 120px;
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+  @apply border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 transition-colors;
 }
 
 .form-textarea:focus {
