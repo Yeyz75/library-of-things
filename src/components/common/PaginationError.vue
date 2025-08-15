@@ -35,8 +35,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
-
 const { message, disabled, allowManualRefresh } = defineProps({
   message: {
     type: String,
