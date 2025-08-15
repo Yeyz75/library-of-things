@@ -390,6 +390,7 @@
     "placeholder": "Buscar artículos para pedir prestado...",
     "quickSearch": "Búsquedas populares",
     "clickToExplore": "Haz clic para explorar",
+    "browse": "Explorar artículos",
     "results": "Resultados de Búsqueda",
     "resultsCount": "{count} artículos encontrados",
     "resultsFor": "para \"{query}\"",
@@ -398,6 +399,7 @@
     "noResultsDescription": "Intenta ajustar tus términos de búsqueda o filtros para encontrar lo que buscas.",
     "clearFilters": "Limpiar Filtros",
     "reserve": "Reservar",
+    "popularHint": "Usa la barra de búsqueda arriba o explora por categoría para encontrar artículos.",
     "pagination": {
       "navigation": "Navegación de páginas",
       "loading": "Cargando...",

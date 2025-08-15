@@ -4,12 +4,12 @@
       <!-- Header Section -->
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-          Search Items
+          {{ t('search.title') }}
         </h1>
         <SearchBar
           :modelValue="searchQuery"
           @update:modelValue="(value) => (searchQuery = value)"
-          placeholder="Search for items to borrow..."
+          :placeholder="t('search.placeholder')"
           @search="handleSearch"
         />
       </div>
@@ -17,7 +17,7 @@
       <!-- Categories Section -->
       <div v-if="!searchQuery && !selectedCategory" class="mb-8">
         <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
-          Browse by Category
+          {{ t('categories.title') }}
         </h2>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           <button
@@ -28,10 +28,10 @@
           >
             <div class="text-2xl mb-2">{{ category.icon }}</div>
             <h3 class="font-medium text-gray-900 dark:text-gray-100">
-              {{ category.name }}
+              {{ t(category.nameKey) }}
             </h3>
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              Browse items
+              {{ t('search.browse') }}
             </p>
           </button>
         </div>
@@ -41,17 +41,20 @@
       <div v-if="hasSearched" class="mb-6">
         <div class="flex items-center justify-between">
           <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
-            <span v-if="searchQuery"
-              >Search Results for "{{ searchQuery }}"</span
-            >
-            <span v-else-if="selectedCategory">{{
-              getCategoryName(selectedCategory)
-            }}</span>
-            <span v-else>All Items</span>
+            <span v-if="searchQuery">
+              {{ t('search.resultsFor', { query: searchQuery }) }}
+            </span>
+            <span v-else-if="selectedCategory">
+              {{ getCategoryName(selectedCategory) }}
+            </span>
+            <span v-else>
+              {{ t('search.results') }}
+            </span>
           </h2>
           <div class="text-sm text-gray-500 dark:text-gray-400">
-            {{ pagination.totalItems.value }}
-            {{ pagination.totalItems.value === 1 ? 'item' : 'items' }} found
+            {{
+              t('search.resultsCount', { count: pagination.totalItems.value })
+            }}
           </div>
         </div>
 
@@ -64,7 +67,7 @@
             v-if="searchQuery"
             class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200"
           >
-            Search: "{{ searchQuery }}"
+            {{ t('common.search') }}: "{{ searchQuery }}"
             <button @click="clearSearch" class="ml-2 hover:text-primary-600">
               <XMarkIcon class="h-4 w-4" />
             </button>
@@ -73,7 +76,7 @@
             v-if="selectedCategory"
             class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200"
           >
-            Category: {{ getCategoryName(selectedCategory) }}
+            {{ t('filters.category') }}: {{ getCategoryName(selectedCategory) }}
             <button @click="clearCategory" class="ml-2 hover:text-blue-600">
               <XMarkIcon class="h-4 w-4" />
             </button>
@@ -86,7 +89,9 @@
         <div
           class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"
         ></div>
-        <p class="mt-4 text-gray-600 dark:text-gray-400">Searching items...</p>
+        <p class="mt-4 text-gray-600 dark:text-gray-400">
+          {{ t('search.searching') }}
+        </p>
       </div>
 
       <!-- Error State -->
@@ -98,7 +103,7 @@
             <ExclamationTriangleIcon class="h-8 w-8 mx-auto" />
           </div>
           <h3 class="text-lg font-medium text-red-800 dark:text-red-300 mb-2">
-            Search Failed
+            {{ t('common.error') }}
           </h3>
           <p class="text-red-700 dark:text-red-400 mb-4">
             {{ pagination.error.value }}
@@ -107,7 +112,7 @@
             @click="pagination.refresh"
             class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200"
           >
-            Try Again
+            {{ t('home.items.tryAgain') }}
           </button>
         </div>
       </div>
@@ -125,20 +130,21 @@
           </div>
         </div>
         <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
-          No Items Found
+          {{ t('search.noResults') }}
         </h3>
         <p class="text-gray-600 dark:text-gray-400 mb-4">
-          <span v-if="searchQuery"
-            >No items match your search for "{{ searchQuery }}". Try different
-            keywords or browse by category.</span
-          >
-          <span v-else>No items found in this category.</span>
+          <span v-if="searchQuery">
+            {{ t('search.noResultsDescription') }}
+          </span>
+          <span v-else>
+            {{ t('home.items.noItemsInCategory') }}
+          </span>
         </p>
         <button
           @click="clearSearch"
           class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors duration-200"
         >
-          Clear Search
+          {{ t('search.clearFilters') }}
         </button>
       </div>
 
@@ -169,14 +175,18 @@
                   }"
                   class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
                 >
-                  {{ item.isAvailable ? 'Available' : 'Unavailable' }}
+                  {{
+                    item.isAvailable
+                      ? t('itemCard.available')
+                      : t('itemCard.notAvailable')
+                  }}
                 </span>
                 <button
                   v-if="item.isAvailable"
                   class="px-3 py-1.5 bg-primary-600 text-white text-sm rounded-md hover:bg-primary-700 transition-colors duration-200"
                   @click="handleReserve(item)"
                 >
-                  Reserve
+                  {{ t('search.reserve') }}
                 </button>
               </div>
             </div>
@@ -200,14 +210,14 @@
       <!-- Popular Items (when no search) -->
       <div v-if="!hasSearched" class="mt-12">
         <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
-          Popular Items
+          {{ t('home.featuredItems.title') }}
         </h2>
         <div
           class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
         >
           <div class="text-center py-8 col-span-full">
             <p class="text-gray-500 dark:text-gray-400">
-              Use the search bar above or browse by category to find items.
+              {{ t('search.popularHint') }}
             </p>
           </div>
         </div>
@@ -226,23 +236,24 @@ import { usePagination } from '@/composables/usePagination';
 import { itemsAPI } from '@/api';
 import type { ItemCategoryModel, ItemModel } from '@/types/models';
 import type { PaginatedResponse } from '@/types/pagination';
+import { useI18n } from '@/composables/useI18n';
 
 // Reactive state for search criteria
 const searchQuery = ref('');
 const selectedCategory = ref<string>('');
 const hasSearched = ref(false);
 
-// Categories configuration
+// Categories configuration (use translation keys for names)
 const categories = ref([
-  { key: 'tools', name: 'Tools', icon: '🔧' },
-  { key: 'electronics', name: 'Electronics', icon: '📱' },
-  { key: 'books', name: 'Books', icon: '📚' },
-  { key: 'sports', name: 'Sports', icon: '⚽' },
-  { key: 'home', name: 'Home', icon: '🏠' },
-  { key: 'garden', name: 'Garden', icon: '🌱' },
-  { key: 'clothing', name: 'Clothing', icon: '👕' },
-  { key: 'games', name: 'Games', icon: '🎮' },
-  { key: 'other', name: 'Other', icon: '📦' },
+  { key: 'tools', nameKey: 'home.categories.tools', icon: '🔧' },
+  { key: 'electronics', nameKey: 'home.categories.electronics', icon: '📱' },
+  { key: 'books', nameKey: 'home.categories.books', icon: '📚' },
+  { key: 'sports', nameKey: 'home.categories.sports', icon: '⚽' },
+  { key: 'home', nameKey: 'home.categories.home', icon: '🏠' },
+  { key: 'garden', nameKey: 'home.categories.garden', icon: '🌱' },
+  { key: 'clothing', nameKey: 'items.categories.clothing', icon: '👕' },
+  { key: 'games', nameKey: 'home.categories.games', icon: '🎮' },
+  { key: 'other', nameKey: 'home.categories.other', icon: '📦' },
 ]);
 
 // Pagination fetch function that handles both search and category filtering
@@ -283,10 +294,13 @@ const pagination = usePagination<ItemModel>({
   initialPageSize: 20,
 });
 
+// I18n
+const { t } = useI18n();
+
 // Helper functions
 const getCategoryName = (key: string) => {
   const category = categories.value.find((cat) => cat.key === key);
-  return category ? category.name : key;
+  return category ? t(category.nameKey) : key;
 };
 
 // Search functions

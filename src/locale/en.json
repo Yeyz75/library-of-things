@@ -390,6 +390,7 @@
     "placeholder": "Search for items to borrow...",
     "quickSearch": "Popular Searches",
     "clickToExplore": "Click to explore",
+    "browse": "Browse items",
     "results": "Search Results",
     "resultsCount": "{count} items found",
     "resultsFor": "for \"{query}\"",
@@ -398,6 +399,7 @@
     "noResultsDescription": "Try adjusting your search terms or filters to find what you're looking for.",
     "clearFilters": "Clear Filters",
     "reserve": "Reserve",
+    "popularHint": "Use the search bar above or browse by category to find items.",
     "pagination": {
       "navigation": "Page navigation",
       "loading": "Loading...",
