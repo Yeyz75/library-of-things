@@ -54,147 +54,74 @@
         </div>
       </div>
 
-      <!-- Categories Section - Redesigned -->
-      <div class="mb-12">
-        <h2
-          class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-8 text-center"
-        >
-          {{ t('home.categories.title') }}
-        </h2>
-        <div
-          class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
-        >
-          <router-link
-            v-for="(category, index) in categories"
-            :key="category.key"
-            :to="`/search?category=${category.key}`"
-            :style="{ animationDelay: `${index * 80}ms` }"
-            class="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 cursor-pointer overflow-hidden category-card-hover particle-effect animate-fade-in-scale"
-          >
-            <!-- Gradient overlay on hover -->
-            <div
-              class="absolute inset-0 bg-gradient-to-br from-primary-500/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-            ></div>
+      <!-- Explore layout: sidebar categorias + listado de artículos -->
+      <ExploreLayout
+        :categories="categories"
+        :title="t('home.items.title')"
+        :subtitle="t('home.items.subtitle')"
+        :selected="selectedCategory"
+        @select-category="selectCategory"
+      >
+        <template #default>
+          <!-- Loading -->
+          <div v-if="isLoading" class="text-center py-16">
+            <div class="relative">
+              <div
+                class="w-16 h-16 border-4 border-primary-200 dark:border-primary-800 border-t-primary-600 dark:border-t-primary-400 rounded-full animate-spin mx-auto mb-4"
+              ></div>
+              <div
+                class="absolute inset-0 w-16 h-16 border-4 border-transparent border-t-purple-600 dark:border-t-purple-400 rounded-full animate-ping mx-auto"
+              ></div>
+            </div>
+            <p
+              class="text-lg font-medium text-gray-600 dark:text-gray-400 animate-pulse"
+            >
+              {{ t('home.items.loading') }}
+            </p>
+          </div>
 
-            <div class="relative text-center">
-              <div
-                class="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-2xl p-4 mb-4 group-hover:from-primary-100 dark:group-hover:from-primary-900/30 group-hover:to-purple-100 dark:group-hover:to-purple-900/30 transition-all duration-300 w-16 h-16 mx-auto flex items-center justify-center transform group-hover:scale-110"
-              >
-                <component
-                  :is="category.icon"
-                  class="h-8 w-8 text-gray-600 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300"
-                />
-              </div>
-              <h3
-                class="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300 text-sm"
-              >
-                {{ t(`items.categories.${category.key}`) }}
-              </h3>
-              <div
-                class="mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              >
-                <span class="text-xs text-gray-500 dark:text-gray-400">{{
-                  t('search.clickToExplore')
-                }}</span>
-              </div>
+          <!-- Error -->
+          <div v-else-if="error" class="text-center py-12">
+            <EmptyState
+              type="error"
+              :title="error"
+              :description="t('home.items.error')"
+              :action-text="t('home.items.tryAgain')"
+              @action="loadItems"
+            />
+          </div>
+
+          <!-- Items list -->
+          <div v-else>
+            <div v-if="filteredItems.length === 0">
+              <EmptyState
+                type="no-items"
+                :title="t('home.items.noItems')"
+                :description="t('home.items.noItemsDescription')"
+                :action-text="
+                  isAuthenticated
+                    ? t('home.items.addFirstItem')
+                    : t('home.items.signUpToAdd')
+                "
+                :show-action="true"
+                @action="handleEmptyStateAction"
+              />
             </div>
 
-            <!-- Hover indicator -->
-            <div
-              class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"
-            ></div>
-          </router-link>
-        </div>
-      </div>
-
-      <!-- Recent Items with Better Design -->
-      <div>
-        <div class="flex items-center justify-between mb-8">
-          <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-            {{ t('home.items.title') }}
-          </h2>
-          <router-link
-            to="/search"
-            class="inline-flex items-center px-4 py-2 text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/30 rounded-xl transition-all duration-200 transform hover:scale-105"
-          >
-            {{ t('home.featuredItems.browseAll') }}
-            <svg
-              class="ml-2 h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5l7 7-7 7"
+            <div v-else class="space-y-4">
+              <ArticleCard
+                v-for="item in visibleItems"
+                :key="item.$id"
+                :item="item"
+                :categories="categories"
+                @viewDetails="viewDetails"
+                @reserve="handleReserve"
+                @share="handleShare"
               />
-            </svg>
-          </router-link>
-        </div>
-
-        <!-- Loading State with Better Animation -->
-        <div v-if="isLoading" class="text-center py-16">
-          <div class="relative">
-            <div
-              class="w-16 h-16 border-4 border-primary-200 dark:border-primary-800 border-t-primary-600 dark:border-t-primary-400 rounded-full animate-spin mx-auto mb-4"
-            ></div>
-            <div
-              class="absolute inset-0 w-16 h-16 border-4 border-transparent border-t-purple-600 dark:border-t-purple-400 rounded-full animate-ping mx-auto"
-            ></div>
+            </div>
           </div>
-          <p
-            class="text-lg font-medium text-gray-600 dark:text-gray-400 animate-pulse"
-          >
-            {{ t('home.items.loading') }}
-          </p>
-        </div>
-
-        <!-- Error State -->
-        <div v-else-if="error" class="text-center py-12">
-          <EmptyState
-            type="error"
-            :title="error"
-            :description="t('home.items.error')"
-            :action-text="t('home.items.tryAgain')"
-            @action="loadItems"
-          />
-        </div>
-
-        <!-- Items Grid with Enhanced Design -->
-        <div
-          v-else-if="items.length > 0"
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          <ItemCard
-            v-for="item in items"
-            :key="item.$id"
-            :item="item"
-            :categories="categories"
-            :show-distance="true"
-            :show-rating="true"
-            @click="$router.push(`/items/${item.$id}`)"
-            @reserve="handleReserve"
-            @share="handleShare"
-          />
-        </div>
-
-        <!-- Empty State -->
-        <EmptyState
-          v-else
-          type="no-items"
-          :title="t('home.items.noItems')"
-          :description="t('home.items.noItemsDescription')"
-          :action-text="
-            isAuthenticated
-              ? t('home.items.addFirstItem')
-              : t('home.items.signUpToAdd')
-          "
-          :show-action="true"
-          @action="handleEmptyStateAction"
-        />
-      </div>
+        </template>
+      </ExploreLayout>
     </div>
   </AppLayout>
 </template>
@@ -215,13 +142,14 @@ import {
 } from '@heroicons/vue/24/outline';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import SearchBar from '@/components/common/SearchBar.vue';
-import ItemCard from '@/components/common/ItemCard.vue';
+import ExploreLayout from '@/components/layout/ExploreLayout.vue';
+import ArticleCard from '@/components/common/ArticleCard.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
 import { useItemsStore } from '@/store/items.store';
 import { useAuthStore } from '@/store/auth.store';
 import { useToast } from '@/composables/useToast';
 import { useI18n } from '@/composables/useI18n';
-import { ItemModel } from '@/types/models';
+import type { ItemModel, ItemCategoryModel } from '@/types/models';
 
 const router = useRouter();
 const itemsStore = useItemsStore();
@@ -235,7 +163,34 @@ const searchQuery = ref('');
 const isLoading = ref(false);
 const error = ref('');
 
-const categories = [
+// UI state for sidebar selection
+const selectedCategory = ref<ItemCategoryModel | null>(null);
+
+// Sorted items (most recent first) and filtered by selectedCategory
+const sortedItems = computed(() => {
+  // items coming from store may already be ordered by API
+  return [...itemsStore.items].sort((a, b) => {
+    const da = new Date(a.$createdAt || '').getTime() || 0;
+    const db = new Date(b.$createdAt || '').getTime() || 0;
+    return db - da;
+  });
+});
+
+const filteredItems = computed(() => {
+  if (!selectedCategory.value) return sortedItems.value;
+  return sortedItems.value.filter(
+    (it) => it.category === selectedCategory.value
+  );
+});
+
+// Visible items: show a reasonable number on the explore page
+const visibleItems = computed(() => filteredItems.value.slice(0, 20));
+
+const categories: Array<{
+  key: ItemCategoryModel;
+  name: string;
+  icon?: unknown;
+}> = [
   {
     key: 'tools',
     name: 'Herramientas',
@@ -303,9 +258,7 @@ const popularSearches = [
   'guitarra',
 ];
 
-const items = computed(() => {
-  return itemsStore.items.slice(0, 6); // Show only first 6 items
-});
+// NOTE: items are read directly from the store via `sortedItems` / `filteredItems`.
 
 async function loadItems() {
   isLoading.value = true;
@@ -349,6 +302,14 @@ function handleSearch(
 function selectQuickSearch(suggestion: string) {
   searchQuery.value = suggestion;
   handleSearch(suggestion, {});
+}
+
+function selectCategory(key: ItemCategoryModel) {
+  selectedCategory.value = key === selectedCategory.value ? null : key;
+}
+
+function viewDetails(item: ItemModel) {
+  router.push(`/items/${item.$id}`);
 }
 
 function handleReserve(item: ItemModel) {

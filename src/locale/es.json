@@ -216,6 +216,7 @@
     },
     "items": {
       "title": "Artículos Recientes",
+      "subtitle": "Explora y filtra artículos en tu área",
       "allCategories": "Todas las Categorías",
       "loading": "Cargando artículos...",
       "error": "Error al cargar artículos",
@@ -687,7 +688,9 @@
     "submit": "Enviar",
     "confirm": "Confirmar",
     "retry": "Reintentar",
-    "refresh": "Actualizar"
+    "refresh": "Actualizar",
+    "hide": "Ocultar",
+    "viewMore": "Ver más"
   },
   "footer": {
     "description": "Comparte, pide prestado y descubre elementos increíbles en tu comunidad. Construyendo conexiones a través de recursos compartidos.",
