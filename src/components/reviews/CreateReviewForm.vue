@@ -193,13 +193,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import type {
   CreateReviewDataModel as CreateReviewData,
   ReviewModel,
 } from '@/types/models';
 import type {
-  CreateReviewFormPhotoPreviewModel,
   CreateReviewFormPropsModel,
   CreateReviewFormEmitsModel,
 } from '@/types/models';
@@ -216,9 +215,19 @@ const emit = defineEmits<CreateReviewFormEmitsModel>();
 const fileInput = ref<HTMLInputElement>();
 const isSubmitting = ref(false);
 
-interface PhotoPreview extends CreateReviewFormPhotoPreviewModel {}
+interface PhotoPreview {
+  file?: File;
+  preview: string;
+  existing?: boolean;
+}
 
 const selectedPhotos = ref<PhotoPreview[]>([]);
+
+// Expose reviewType for template v-if checks
+const reviewType = props.reviewType;
+
+// If editing an existing review, populate selectedPhotos with existing photo URLs
+// (the watch is declared later after formData is defined)
 
 const formData = reactive<{
   overallRating: number;
@@ -243,6 +252,46 @@ const formData = reactive<{
   },
   comment: props.existingReview?.comment || '',
 });
+
+// If editing an existing review, populate selectedPhotos with existing photo URLs
+watch(
+  () => props.existingReview,
+  (rev) => {
+    if (!rev) return;
+
+    // Populate form fields
+    formData.overallRating = rev.overallRating || 0;
+    formData.aspectRatings.communication =
+      (rev.aspectRatings && rev.aspectRatings.communication) || 0;
+    formData.aspectRatings.punctuality =
+      (rev.aspectRatings && rev.aspectRatings.punctuality) || 0;
+    if (props.reviewType === 'borrower_to_owner') {
+      formData.aspectRatings.itemCondition =
+        (rev.aspectRatings && rev.aspectRatings.itemCondition) || 0;
+    }
+    if (props.reviewType === 'owner_to_borrower') {
+      formData.aspectRatings.reliability =
+        (rev.aspectRatings && rev.aspectRatings.reliability) || 0;
+    }
+    formData.comment = rev.comment || '';
+
+    // Populate photo previews with existing URLs (no File object)
+    selectedPhotos.value = [];
+    if (Array.isArray(rev.photos)) {
+      rev.photos.forEach((p: string) => {
+        const url = p || '';
+        if (url) {
+          selectedPhotos.value.push({
+            file: undefined,
+            preview: url,
+            existing: true,
+          });
+        }
+      });
+    }
+  },
+  { immediate: true }
+);
 
 const errors = reactive({
   overallRating: '',
@@ -356,7 +405,17 @@ const submitReview = async () => {
   isSubmitting.value = true;
 
   try {
-    const reviewData: CreateReviewData = {
+    // Separate new files from existing photo previews
+    const newFiles: File[] = selectedPhotos.value
+      .filter((p) => p.file instanceof File)
+      .map((p) => p.file!) as File[];
+
+    // Collect existing photo URLs if any
+    const existingPhotoUrls: string[] = selectedPhotos.value
+      .filter((p) => p.existing)
+      .map((p) => p.preview);
+
+    const reviewData: CreateReviewData & { existingPhotoUrls?: string[] } = {
       reservationId: props.reservationId,
       itemId: props.itemId,
       reviewerId: props.reviewerId,
@@ -365,7 +424,8 @@ const submitReview = async () => {
       overallRating: formData.overallRating,
       aspectRatings: { ...formData.aspectRatings },
       comment: formData.comment.trim(),
-      photos: selectedPhotos.value.map((p) => p.file),
+      photos: newFiles,
+      existingPhotoUrls,
     };
 
     emit('submit', reviewData);
