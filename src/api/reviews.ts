@@ -36,7 +36,7 @@ export const reviewsAPI = {
     });
   },
 
-  // Obtener reviews por usuario revisado
+  // Obtener reviews por usuario revisado con paginación
   async getReviewsByReviewedUser(
     reviewedUserId: string,
     limit?: number,
@@ -59,7 +59,17 @@ export const reviewsAPI = {
     return index(options);
   },
 
-  // Obtener reviews por item
+  // Obtener reviews por usuario revisado con paginación estándar
+  async getReviewsByReviewedUserPaginated(
+    reviewedUserId: string,
+    page: number = 1,
+    pageSize: number = 5
+  ): Promise<ApiResponse<{ documents: ReviewModel[]; total: number }>> {
+    const offset = (page - 1) * pageSize;
+    return this.getReviewsByReviewedUser(reviewedUserId, pageSize, offset);
+  },
+
+  // Obtener reviews por item con paginación
   async getReviewsByItem(
     itemId: string,
     limit?: number,
@@ -80,6 +90,16 @@ export const reviewsAPI = {
     }
 
     return index(options);
+  },
+
+  // Obtener reviews por item con paginación estándar
+  async getReviewsByItemPaginated(
+    itemId: string,
+    page: number = 1,
+    pageSize: number = 5
+  ): Promise<ApiResponse<{ documents: ReviewModel[]; total: number }>> {
+    const offset = (page - 1) * pageSize;
+    return this.getReviewsByItem(itemId, pageSize, offset);
   },
 
   // Obtener reviews por reserva
@@ -318,7 +338,9 @@ export const {
   getReviewsByType,
   getReviewsByReviewer,
   getReviewsByReviewedUser,
+  getReviewsByReviewedUserPaginated,
   getReviewsByItem,
+  getReviewsByItemPaginated,
   getReviewsByReservation,
   getReviewsByRating,
   getReviewsWithMinRating,

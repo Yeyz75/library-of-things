@@ -77,6 +77,26 @@
             </div>
           </div>
 
+          <!-- User Reviews Section -->
+          <div class="mb-8 py-6 border-b border-gray-200">
+            <h3
+              class="text-lg font-medium text-gray-900 dark:text-gray-50 mb-4"
+            >
+              {{ t('profile.reviews.title') }}
+            </h3>
+            <ReviewsList
+              v-if="currentUser?.$id"
+              :user-id="currentUser.$id"
+              :show-item-info="true"
+              :show-sort-options="true"
+              :show-page-size-selector="false"
+              :initial-page-size="3"
+              :page-size-options="[3, 5, 10]"
+              :pagination-size="'sm'"
+              @photo-click="handleReviewPhotoClick"
+            />
+          </div>
+
           <!-- Account Information -->
           <div>
             <h3
@@ -156,6 +176,7 @@ import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import BaseLoader from '@/components/common/BaseLoader.vue';
+import ReviewsList from '@/components/reviews/ReviewsList.vue';
 import { useAuthStore } from '@/store/auth.store';
 import { useItemsStore } from '@/store/items.store';
 import { useReservationsStore } from '@/store/reservations.store';
@@ -214,6 +235,12 @@ async function handleSignOut() {
   } finally {
     isSigningOut.value = false;
   }
+}
+
+// Handle photo clicks from reviews
+function handleReviewPhotoClick(photoUrl: string) {
+  // TODO: Implement photo modal/lightbox functionality
+  console.log('Photo clicked:', photoUrl);
 }
 
 onMounted(async () => {

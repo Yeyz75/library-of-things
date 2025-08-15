@@ -231,6 +231,9 @@
   "profile": {
     "title": "Profile Settings",
     "memberSince": "Member since {date}",
+    "reviews": {
+      "title": "My Reviews"
+    },
     "stats": {
       "itemsShared": "Items Shared",
       "itemsBorrowed": "Items Borrowed",
@@ -615,6 +618,44 @@
       "message": "Message",
       "send": "Send",
       "success": "Your message has been sent. We'll get back to you soon."
+    }
+  },
+  "reviews": {
+    "title": "Reviews",
+    "loading": "Loading reviews...",
+    "loadingMore": "Loading more reviews...",
+    "empty": {
+      "title": "No reviews",
+      "description": "No reviews have been written for this item yet."
+    },
+    "error": {
+      "title": "Error loading reviews",
+      "retry": "Retry"
+    },
+    "sortBy": "Sort by",
+    "sort": {
+      "newest": "Newest",
+      "oldest": "Oldest",
+      "highest": "Highest rating",
+      "lowest": "Lowest rating"
+    },
+    "filter": {
+      "all": "All reviews",
+      "borrowerToOwner": "As lender",
+      "ownerToBorrower": "As borrower"
+    },
+    "pagination": {
+      "showing": "Showing {start} - {end} of {total} reviews",
+      "itemsPerPage": "Reviews per page",
+      "page": "Page {page} of {total}",
+      "noResults": "No reviews found",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "stats": {
+      "totalReviews": "Total reviews",
+      "averageRating": "Average rating",
+      "ratingDistribution": "Rating distribution"
     }
   },
   "common": {

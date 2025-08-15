@@ -244,29 +244,21 @@
             </div>
           </div>
 
-          <!-- Reviews List -->
-          <div v-if="reviews.length > 0" class="space-y-6">
-            <ReviewCard
-              v-for="review in reviews"
-              :key="review.$id"
-              :review="review"
-            />
+          <!-- Reviews List with Pagination -->
+          <ReviewsList
+            v-if="currentItem"
+            :item-id="currentItem.$id"
+            :show-item-info="false"
+            :show-sort-options="true"
+            :show-page-size-selector="true"
+            :initial-page-size="5"
+            :pagination-size="'md'"
+            @photo-click="handleReviewPhotoClick"
+            @review-updated="handleReviewUpdated"
+          />
 
-            <!-- Load More Button -->
-            <div v-if="hasMoreReviews" class="text-center pt-4">
-              <button
-                @click="loadMoreReviews"
-                :disabled="reviewsLoading"
-                class="btn-secondary"
-              >
-                <BaseLoader v-if="reviewsLoading" size="sm" class="mr-2" />
-                {{ reviewsLoading ? 'Loading...' : 'Load More Reviews' }}
-              </button>
-            </div>
-          </div>
-
-          <!-- Empty State -->
-          <div v-else class="text-center py-12">
+          <!-- Empty State for when no reviews exist -->
+          <div v-if="!currentItem?.totalReviews" class="text-center py-12">
             <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-8">
               <h3
                 class="text-lg font-medium text-gray-900 dark:text-gray-50 mb-2"
@@ -359,7 +351,7 @@ import AppLayout from '@/components/layout/AppLayout.vue';
 import BaseLoader from '@/components/common/BaseLoader.vue';
 import BaseModal from '@/components/common/BaseModal.vue';
 import ReserveModal from '@/components/modals/ReserveModal.vue';
-import ReviewCard from '@/components/reviews/ReviewCard.vue';
+import ReviewsList from '@/components/reviews/ReviewsList.vue';
 import StarRating from '@/components/reviews/StarRating.vue';
 import CreateReviewForm from '@/components/reviews/CreateReviewForm.vue';
 import { useAuthStore } from '@/store/auth.store';
@@ -377,14 +369,7 @@ const router = useRouter();
 const authStore = useAuthStore();
 const itemsStore = useItemsStore();
 const reservationsStore = useReservationsStore();
-const {
-  loadItemReviews,
-  reviews,
-  isLoading: reviewsLoading,
-  createReview,
-  updateReview,
-  getExistingReview,
-} = useReviews();
+const { createReview, updateReview, getExistingReview } = useReviews();
 
 const { isAuthenticated, userId } = storeToRefs(authStore);
 
@@ -393,9 +378,7 @@ const showReserveModal = ref(false);
 const showDeleteModal = ref(false);
 const showCreateReviewModal = ref(false);
 const isDeleting = ref(false);
-const reviewsOffset = ref(0);
-const reviewsLimit = ref(5);
-const hasMoreReviews = ref(false);
+// Reviews are now handled by ReviewsList component
 const existingReview = ref<Review | null>(null);
 const isEditingReview = ref(false);
 
@@ -484,7 +467,7 @@ async function handleReviewCreated(reviewData: CreateReviewDataModel) {
     if (result) {
       showCreateReviewModal.value = false;
       isEditingReview.value = false;
-      await loadItemReviewsData();
+      // Reviews will be automatically refreshed by ReviewsList component
       await checkExistingReview();
     }
   } catch (error) {
@@ -510,30 +493,19 @@ function openReviewModal() {
   showCreateReviewModal.value = true;
 }
 
-async function loadItemReviewsData() {
-  if (!currentItem.value) return;
-
-  reviewsOffset.value = 0;
-  const response = await loadItemReviews(
-    currentItem.value.$id,
-    reviewsLimit.value,
-    reviewsOffset.value
-  );
-
-  hasMoreReviews.value = response && response.length === reviewsLimit.value;
+// Handle photo clicks from reviews
+function handleReviewPhotoClick(photoUrl: string) {
+  // TODO: Implement photo modal/lightbox functionality
+  console.log('Photo clicked:', photoUrl);
 }
 
-async function loadMoreReviews() {
-  if (!currentItem.value) return;
-
-  reviewsOffset.value += reviewsLimit.value;
-  const response = await loadItemReviews(
-    currentItem.value.$id,
-    reviewsLimit.value,
-    reviewsOffset.value
-  );
-
-  hasMoreReviews.value = response && response.length === reviewsLimit.value;
+// Handle review updates
+function handleReviewUpdated(_review: unknown) {
+  // Refresh item data to update review counts
+  // parameter is unused but kept for the event signature
+  if (currentItem.value) {
+    itemsStore.fetchItemById(currentItem.value.$id);
+  }
 }
 
 const completedReservation = computed(() => {
@@ -565,8 +537,7 @@ async function loadItem() {
       // Verificar si ya existe una reseña
       await checkExistingReview();
     }
-    // Cargar reseñas después de cargar el ítem
-    await loadItemReviewsData();
+    // Reviews are now loaded by the ReviewsList component
   }
 }
 

@@ -231,6 +231,9 @@
   "profile": {
     "title": "Configuración del Perfil",
     "memberSince": "Miembro desde {date}",
+    "reviews": {
+      "title": "Mis Reseñas"
+    },
     "stats": {
       "itemsShared": "Artículos Compartidos",
       "itemsBorrowed": "Artículos Prestados",
@@ -615,6 +618,44 @@
       "message": "Mensaje",
       "send": "Enviar",
       "success": "Tu mensaje ha sido enviado. Nos pondremos en contacto contigo pronto."
+    }
+  },
+  "reviews": {
+    "title": "Reseñas",
+    "loading": "Cargando reseñas...",
+    "loadingMore": "Cargando más reseñas...",
+    "empty": {
+      "title": "No hay reseñas",
+      "description": "Aún no se han escrito reseñas para este elemento."
+    },
+    "error": {
+      "title": "Error al cargar reseñas",
+      "retry": "Intentar de nuevo"
+    },
+    "sortBy": "Ordenar por",
+    "sort": {
+      "newest": "Más recientes",
+      "oldest": "Más antiguos",
+      "highest": "Mejor calificación",
+      "lowest": "Menor calificación"
+    },
+    "filter": {
+      "all": "Todas las reseñas",
+      "borrowerToOwner": "Como prestamista",
+      "ownerToBorrower": "Como prestatario"
+    },
+    "pagination": {
+      "showing": "Mostrando {start} - {end} de {total} reseñas",
+      "itemsPerPage": "Reseñas por página",
+      "page": "Página {page} de {total}",
+      "noResults": "No se encontraron reseñas",
+      "previous": "Anterior",
+      "next": "Siguiente"
+    },
+    "stats": {
+      "totalReviews": "Total de reseñas",
+      "averageRating": "Calificación promedio",
+      "ratingDistribution": "Distribución de calificaciones"
     }
   },
   "common": {
