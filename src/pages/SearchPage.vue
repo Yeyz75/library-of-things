@@ -96,25 +96,13 @@
 
       <!-- Error State -->
       <div v-else-if="pagination.error.value" class="text-center py-12">
-        <div
-          class="bg-red-100 dark:bg-red-900/20 border border-red-300 dark:border-red-700 rounded-lg p-6 max-w-md mx-auto"
-        >
-          <div class="text-red-600 dark:text-red-400 mb-4">
-            <ExclamationTriangleIcon class="h-8 w-8 mx-auto" />
-          </div>
-          <h3 class="text-lg font-medium text-red-800 dark:text-red-300 mb-2">
-            {{ t('common.error') }}
-          </h3>
-          <p class="text-red-700 dark:text-red-400 mb-4">
-            {{ pagination.error.value }}
-          </p>
-          <button
-            @click="pagination.refresh"
-            class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200"
-          >
-            {{ t('home.items.tryAgain') }}
-          </button>
-        </div>
+        <PaginationError
+          :message="pagination.error.value"
+          :disabled="pagination.loading.value"
+          @retry="pagination.retry"
+          @refresh="pagination.refresh"
+          :allowManualRefresh="true"
+        />
       </div>
 
       <!-- Empty State -->
@@ -228,10 +216,11 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { XMarkIcon, ExclamationTriangleIcon } from '@heroicons/vue/24/outline';
+import { XMarkIcon } from '@heroicons/vue/24/outline';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import SearchBar from '@/components/common/SearchBar.vue';
 import Pagination from '@/components/ui/Pagination.vue';
+import PaginationError from '@/components/common/PaginationError.vue';
 import { usePagination } from '@/composables/usePagination';
 import { itemsAPI } from '@/api';
 import type { ItemCategoryModel, ItemModel } from '@/types/models';

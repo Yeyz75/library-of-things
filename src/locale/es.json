@@ -228,6 +228,12 @@
       "signUpToAdd": "Regístrate para Agregar Artículos"
     }
   },
+  "paginationError": {
+    "title": "Error al cargar resultados",
+    "message": "Ocurrió un error al obtener esta página.",
+    "retry": "Reintentar",
+    "refresh": "Actualizar"
+  },
   "profile": {
     "title": "Configuración del Perfil",
     "memberSince": "Miembro desde {date}",

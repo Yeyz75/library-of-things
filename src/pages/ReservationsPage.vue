@@ -63,18 +63,13 @@
             v-else-if="borrowedPagination.error.value"
             class="text-center py-12"
           >
-            <div
-              class="bg-error-50 text-error-600 p-6 rounded-lg max-w-md mx-auto"
-            >
-              <p class="font-medium">{{ t('reservations.error') }}</p>
-              <p class="text-sm mt-1">{{ borrowedPagination.error.value }}</p>
-              <button
-                @click="borrowedPagination.refresh()"
-                class="btn-primary mt-4"
-              >
-                {{ t('reservations.tryAgain') }}
-              </button>
-            </div>
+            <PaginationError
+              :message="borrowedPagination.error.value"
+              :disabled="borrowedPagination.loading.value"
+              @retry="borrowedPagination.retry"
+              @refresh="borrowedPagination.refresh"
+              :allowManualRefresh="true"
+            />
           </div>
 
           <!-- Empty State -->
@@ -211,18 +206,13 @@
             v-else-if="lendingPagination.error.value"
             class="text-center py-12"
           >
-            <div
-              class="bg-error-50 text-error-600 p-6 rounded-lg max-w-md mx-auto"
-            >
-              <p class="font-medium">{{ t('reservations.error') }}</p>
-              <p class="text-sm mt-1">{{ lendingPagination.error.value }}</p>
-              <button
-                @click="lendingPagination.refresh()"
-                class="btn-primary mt-4"
-              >
-                {{ t('reservations.tryAgain') }}
-              </button>
-            </div>
+            <PaginationError
+              :message="lendingPagination.error.value"
+              :disabled="lendingPagination.loading.value"
+              @retry="lendingPagination.retry"
+              @refresh="lendingPagination.refresh"
+              :allowManualRefresh="true"
+            />
           </div>
 
           <!-- Empty State -->
@@ -359,6 +349,7 @@ import {
 import AppLayout from '@/components/layout/AppLayout.vue';
 import BaseLoader from '@/components/common/BaseLoader.vue';
 import Pagination from '@/components/ui/Pagination.vue';
+import PaginationError from '@/components/common/PaginationError.vue';
 import { useAuthStore } from '@/store/auth.store';
 import { useReservationsStore } from '@/store/reservations.store';
 import { useI18n } from '@/composables/useI18n';

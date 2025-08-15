@@ -228,6 +228,12 @@
       "signUpToAdd": "Sign Up to Add Items"
     }
   },
+  "paginationError": {
+    "title": "Failed to load results",
+    "message": "An error occurred while fetching this page.",
+    "retry": "Retry",
+    "refresh": "Refresh"
+  },
   "profile": {
     "title": "Profile Settings",
     "memberSince": "Member since {date}",

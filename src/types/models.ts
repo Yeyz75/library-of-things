@@ -30,6 +30,8 @@ export interface BasePaginationPropsModel {
   showPageSize?: boolean;
   pageSizeOptions?: number[];
   maxVisiblePages?: number;
+  loading?: boolean;
+  disabled?: boolean;
 }
 
 export interface BasePaginationEmitsModel {

@@ -61,6 +61,9 @@ export interface UsePaginationOptions<T> {
   ) => Promise<PaginatedResponse<T>>;
   syncWithUrl?: boolean;
   urlParamPrefix?: string;
+  // Opciones de reintento
+  maxRetries?: number;
+  retryDelayMs?: number;
 }
 
 export interface UsePaginationReturn<T> {
@@ -72,12 +75,15 @@ export interface UsePaginationReturn<T> {
   items: Ref<T[]>;
   loading: Ref<boolean>;
   error: Ref<string | null>;
+  attempts?: Ref<number>;
+  lastError?: Ref<Error | null>;
 
   // Métodos
   goToPage: (page: number) => Promise<void>;
   changePageSize: (size: number) => Promise<void>;
   refresh: () => Promise<void>;
   reset: () => void;
+  retry?: () => Promise<void>;
 }
 
 export interface PaginationErrorProps {

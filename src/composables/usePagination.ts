@@ -31,6 +31,8 @@ export function usePagination<T>(
   const items = ref<T[]>([]) as Ref<T[]>;
   const loading = ref(false);
   const error = ref<string | null>(null);
+  const attempts = ref(0);
+  const lastError = ref<Error | null>(null);
 
   // Computed properties
   const totalPages = computed(() =>
@@ -41,50 +43,77 @@ export function usePagination<T>(
   const fetchData = async (...args: unknown[]): Promise<void> => {
     if (loading.value) return; // Prevenir múltiples llamadas simultáneas
 
-    try {
-      loading.value = true;
-      error.value = null;
+    // internal retry/backoff settings
+    const maxRetries = options.maxRetries ?? 2;
+    const baseDelay = options.retryDelayMs ?? 300; // ms
 
-      // Validar página actual antes de hacer la petición
-      const validPage = validatePageNumber(currentPage.value, totalPages.value);
-      if (validPage !== currentPage.value) {
-        currentPage.value = validPage;
-        return; // El watch se encargará de hacer la nueva petición
+    let attempt = 0;
+
+    const attemptFetch = async (): Promise<void> => {
+      attempt += 1;
+      attempts.value = attempt;
+
+      try {
+        loading.value = true;
+        error.value = null;
+        lastError.value = null;
+
+        // Validar página actual antes de hacer la petición
+        const validPage = validatePageNumber(
+          currentPage.value,
+          totalPages.value
+        );
+        if (validPage !== currentPage.value) {
+          currentPage.value = validPage;
+          return; // El watch se encargará de hacer la nueva petición
+        }
+
+        const response: PaginatedResponse<T> = await options.fetchFunction(
+          currentPage.value,
+          pageSize.value,
+          ...args
+        );
+
+        // Validar respuesta
+        if (!response || !response.data || !response.pagination) {
+          throw new Error('Invalid response format from fetchFunction');
+        }
+
+        // Actualizar estado
+        items.value = response.data;
+        totalItems.value = response.pagination.totalItems;
+
+        // Validar que la página actual sigue siendo válida después de la respuesta
+        const newTotalPages = calculateTotalPages(
+          response.pagination.totalItems,
+          pageSize.value
+        );
+
+        if (currentPage.value > newTotalPages && newTotalPages > 0) {
+          currentPage.value = newTotalPages;
+          return; // El watch se encargará de hacer la nueva petición
+        }
+      } catch (err) {
+        lastError.value = err instanceof Error ? err : new Error(String(err));
+        const message = lastError.value.message || 'Error loading data';
+        error.value = message;
+        items.value = [];
+        totalItems.value = 0;
+        console.error('usePagination fetchData error:', err);
+
+        if (attempt <= maxRetries) {
+          // Exponential backoff
+          const delay = baseDelay * Math.pow(2, attempt - 1);
+          await new Promise((res) => setTimeout(res, delay));
+          return attemptFetch();
+        }
+        // if max retries exceeded, rethrow/stop
+      } finally {
+        loading.value = false;
       }
+    };
 
-      const response: PaginatedResponse<T> = await options.fetchFunction(
-        currentPage.value,
-        pageSize.value,
-        ...args
-      );
-
-      // Validar respuesta
-      if (!response || !response.data || !response.pagination) {
-        throw new Error('Invalid response format from fetchFunction');
-      }
-
-      // Actualizar estado
-      items.value = response.data;
-      totalItems.value = response.pagination.totalItems;
-
-      // Validar que la página actual sigue siendo válida después de la respuesta
-      const newTotalPages = calculateTotalPages(
-        response.pagination.totalItems,
-        pageSize.value
-      );
-
-      if (currentPage.value > newTotalPages && newTotalPages > 0) {
-        currentPage.value = newTotalPages;
-        return; // El watch se encargará de hacer la nueva petición
-      }
-    } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Error loading data';
-      items.value = [];
-      totalItems.value = 0;
-      console.error('usePagination fetchData error:', err);
-    } finally {
-      loading.value = false;
-    }
+    return attemptFetch();
   };
 
   // Función debounced para evitar múltiples llamadas rápidas
@@ -149,11 +178,19 @@ export function usePagination<T>(
     items,
     loading,
     error,
+    attempts,
+    lastError,
 
     // Métodos
     goToPage,
     changePageSize,
     refresh,
+    // manual retry method for UI
+    retry: async () => {
+      attempts.value = 0;
+      lastError.value = null;
+      await fetchData();
+    },
     reset,
   };
 }
