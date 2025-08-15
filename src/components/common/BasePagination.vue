@@ -135,10 +135,19 @@ interface Props extends BasePaginationPropsModel {}
 
 interface Emits extends BasePaginationEmitsModel {}
 
-const props = withDefaults(defineProps<Props>(), {
+interface LocalProps {
+  enableSwipe?: boolean;
+  swipeThreshold?: number;
+  emitOrientation?: boolean;
+}
+
+const props = withDefaults(defineProps<Props & LocalProps>(), {
   showPageSize: true,
   pageSizeOptions: () => [10, 20, 50, 100],
   maxVisiblePages: 7,
+  enableSwipe: true,
+  swipeThreshold: 50,
+  emitOrientation: true,
 });
 
 const emit = defineEmits<Emits>();
@@ -219,7 +228,8 @@ function goToPage(page: number) {
 // --- Mobile touch / orientation support ---
 let touchStartX = 0;
 let touchCurrentX = 0;
-const swipeThreshold = 50; // px
+// use prop default if provided
+const swipeThreshold = computed(() => props.swipeThreshold ?? 50);
 
 function onTouchStart(e: TouchEvent) {
   touchStartX = e.touches[0]?.clientX ?? 0;
@@ -231,7 +241,7 @@ function onTouchMove(e: TouchEvent) {
 
 function onTouchEnd() {
   const delta = touchCurrentX - touchStartX;
-  if (Math.abs(delta) > swipeThreshold) {
+  if (props.enableSwipe && Math.abs(delta) > swipeThreshold.value) {
     if (delta < 0) {
       // swipe left -> next page
       goToPage(props.currentPage + 1);
@@ -254,15 +264,17 @@ function onOrientationChange() {
     win.screen?.orientation?.type ??
     (window.innerWidth > window.innerHeight ? 'landscape' : 'portrait');
 
-  emit('orientation-change', {
-    orientation: orientationType,
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
+  if (props.emitOrientation) {
+    emit('orientation-change', {
+      orientation: orientationType,
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  }
 }
 
 onMounted(() => {
-  if (mobileRoot.value) {
+  if (mobileRoot.value && props.enableSwipe) {
     mobileRoot.value.addEventListener('touchstart', onTouchStart, {
       passive: true,
     });
@@ -271,16 +283,20 @@ onMounted(() => {
     });
     mobileRoot.value.addEventListener('touchend', onTouchEnd);
   }
-  window.addEventListener('orientationchange', onOrientationChange);
+  if (props.emitOrientation) {
+    window.addEventListener('orientationchange', onOrientationChange);
+  }
 });
 
 onBeforeUnmount(() => {
-  if (mobileRoot.value) {
+  if (mobileRoot.value && props.enableSwipe) {
     mobileRoot.value.removeEventListener('touchstart', onTouchStart);
     mobileRoot.value.removeEventListener('touchmove', onTouchMove);
     mobileRoot.value.removeEventListener('touchend', onTouchEnd);
   }
-  window.removeEventListener('orientationchange', onOrientationChange);
+  if (props.emitOrientation) {
+    window.removeEventListener('orientationchange', onOrientationChange);
+  }
 });
 
 function changePageSize(event: Event) {
