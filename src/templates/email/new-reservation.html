@@ -1,326 +1,342 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Nueva solicitud de préstamo</title>
     <style>
-        /* Reset styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #374151;
-            background-color: #f9fafb;
-        }
-        
+      /* Reset styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+          Cantarell, sans-serif;
+        line-height: 1.6;
+        color: #374151;
+        background-color: #f9fafb;
+      }
+
+      .email-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      .header {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        padding: 32px 24px;
+        text-align: center;
+      }
+
+      .header h1 {
+        color: #ffffff;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .header p {
+        color: #d1fae5;
+        font-size: 16px;
+      }
+
+      .content {
+        padding: 32px 24px;
+      }
+
+      .greeting {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 16px;
+      }
+
+      .message {
+        font-size: 16px;
+        line-height: 1.7;
+        color: #4b5563;
+        margin-bottom: 24px;
+      }
+
+      .item-card {
+        background-color: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 24px 0;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .item-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 8px;
+        object-fit: cover;
+        background-color: #e5e7eb;
+      }
+
+      .item-details h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 4px;
+      }
+
+      .item-details p {
+        font-size: 14px;
+        color: #6b7280;
+      }
+
+      .reservation-details {
+        background-color: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        padding: 16px;
+        margin: 24px 0;
+        border-radius: 0 8px 8px 0;
+      }
+
+      .reservation-details h4 {
+        font-size: 16px;
+        font-weight: 600;
+        color: #92400e;
+        margin-bottom: 8px;
+      }
+
+      .detail-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 4px;
+        font-size: 14px;
+      }
+
+      .detail-label {
+        font-weight: 500;
+        color: #92400e;
+      }
+
+      .detail-value {
+        color: #451a03;
+      }
+
+      .borrower-message {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 16px;
+        margin: 24px 0;
+        font-style: italic;
+        color: #4b5563;
+      }
+
+      .action-buttons {
+        text-align: center;
+        margin: 32px 0;
+      }
+
+      .approve-button {
+        display: inline-block;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: #ffffff;
+        text-decoration: none;
+        padding: 14px 28px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 16px;
+        margin: 8px;
+        transition: transform 0.2s;
+      }
+
+      .reject-button {
+        display: inline-block;
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: #ffffff;
+        text-decoration: none;
+        padding: 14px 28px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 16px;
+        margin: 8px;
+        transition: transform 0.2s;
+      }
+
+      .view-button {
+        display: inline-block;
+        background-color: #ffffff;
+        color: #6b7280;
+        text-decoration: none;
+        padding: 12px 24px;
+        border: 2px solid #d1d5db;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 14px;
+        margin: 8px;
+      }
+
+      .approve-button:hover,
+      .reject-button:hover {
+        transform: translateY(-1px);
+      }
+
+      .footer {
+        background-color: #f3f4f6;
+        padding: 24px;
+        text-align: center;
+        border-top: 1px solid #e5e7eb;
+      }
+
+      .footer p {
+        font-size: 14px;
+        color: #6b7280;
+        margin-bottom: 8px;
+      }
+
+      .footer a {
+        color: #10b981;
+        text-decoration: none;
+      }
+
+      /* Responsive */
+      @media (max-width: 600px) {
         .email-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+          margin: 0;
+          box-shadow: none;
         }
-        
-        .header {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            padding: 32px 24px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            color: #ffffff;
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-        
-        .header p {
-            color: #d1fae5;
-            font-size: 16px;
-        }
-        
-        .content {
-            padding: 32px 24px;
-        }
-        
-        .greeting {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 16px;
-        }
-        
-        .message {
-            font-size: 16px;
-            line-height: 1.7;
-            color: #4b5563;
-            margin-bottom: 24px;
-        }
-        
-        .item-card {
-            background-color: #f0fdf4;
-            border: 1px solid #bbf7d0;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 24px 0;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        
-        .item-image {
-            width: 80px;
-            height: 80px;
-            border-radius: 8px;
-            object-fit: cover;
-            background-color: #e5e7eb;
-        }
-        
-        .item-details h3 {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 4px;
-        }
-        
-        .item-details p {
-            font-size: 14px;
-            color: #6b7280;
-        }
-        
-        .reservation-details {
-            background-color: #fef3c7;
-            border-left: 4px solid #f59e0b;
-            padding: 16px;
-            margin: 24px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        
-        .reservation-details h4 {
-            font-size: 16px;
-            font-weight: 600;
-            color: #92400e;
-            margin-bottom: 8px;
-        }
-        
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 4px;
-            font-size: 14px;
-        }
-        
-        .detail-label {
-            font-weight: 500;
-            color: #92400e;
-        }
-        
-        .detail-value {
-            color: #451a03;
-        }
-        
-        .borrower-message {
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 16px;
-            margin: 24px 0;
-            font-style: italic;
-            color: #4b5563;
-        }
-        
-        .action-buttons {
-            text-align: center;
-            margin: 32px 0;
-        }
-        
-        .approve-button {
-            display: inline-block;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: #ffffff;
-            text-decoration: none;
-            padding: 14px 28px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 16px;
-            margin: 8px;
-            transition: transform 0.2s;
-        }
-        
-        .reject-button {
-            display: inline-block;
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            color: #ffffff;
-            text-decoration: none;
-            padding: 14px 28px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 16px;
-            margin: 8px;
-            transition: transform 0.2s;
-        }
-        
-        .view-button {
-            display: inline-block;
-            background-color: #ffffff;
-            color: #6b7280;
-            text-decoration: none;
-            padding: 12px 24px;
-            border: 2px solid #d1d5db;
-            border-radius: 8px;
-            font-weight: 500;
-            font-size: 14px;
-            margin: 8px;
-        }
-        
-        .approve-button:hover, .reject-button:hover {
-            transform: translateY(-1px);
-        }
-        
+
+        .header,
+        .content,
         .footer {
-            background-color: #f3f4f6;
-            padding: 24px;
-            text-align: center;
-            border-top: 1px solid #e5e7eb;
+          padding: 24px 16px;
         }
-        
-        .footer p {
-            font-size: 14px;
-            color: #6b7280;
-            margin-bottom: 8px;
+
+        .item-card {
+          flex-direction: column;
+          text-align: center;
         }
-        
-        .footer a {
-            color: #10b981;
-            text-decoration: none;
+
+        .item-image {
+          width: 120px;
+          height: 120px;
         }
-        
-        /* Responsive */
-        @media (max-width: 600px) {
-            .email-container {
-                margin: 0;
-                box-shadow: none;
-            }
-            
-            .header, .content, .footer {
-                padding: 24px 16px;
-            }
-            
-            .item-card {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .item-image {
-                width: 120px;
-                height: 120px;
-            }
-            
-            .detail-row {
-                flex-direction: column;
-                gap: 4px;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-            }
-            
-            .approve-button, .reject-button, .view-button {
-                display: block;
-                margin: 8px 0;
-            }
+
+        .detail-row {
+          flex-direction: column;
+          gap: 4px;
         }
+
+        .action-buttons {
+          flex-direction: column;
+        }
+
+        .approve-button,
+        .reject-button,
+        .view-button {
+          display: block;
+          margin: 8px 0;
+        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="email-container">
-        <div class="header">
-            <h1>📦 Nueva Solicitud</h1>
-            <p>Alguien quiere tomar prestado tu item</p>
+      <div class="header">
+        <h1>📦 Nueva Solicitud</h1>
+        <p>Alguien quiere tomar prestado tu item</p>
+      </div>
+
+      <div class="content">
+        <div class="greeting">¡Hola {{ownerName}}! 👋</div>
+
+        <div class="message">
+          <strong>{{borrowerName}}</strong> ha solicitado tomar prestado uno de
+          tus items. Revisa los detalles y decide si quieres aprobar esta
+          solicitud.
         </div>
-        
-        <div class="content">
-            <div class="greeting">
-                ¡Hola {{ownerName}}! 👋
-            </div>
-            
-            <div class="message">
-                <strong>{{borrowerName}}</strong> ha solicitado tomar prestado uno de tus items. 
-                Revisa los detalles y decide si quieres aprobar esta solicitud.
-            </div>
-            
-            <div class="item-card">
-                {{#if itemImageUrl}}
-                <img src="{{itemImageUrl}}" alt="{{itemTitle}}" class="item-image">
-                {{else}}
-                <div class="item-image" style="display: flex; align-items: center; justify-content: center; background-color: #e5e7eb; color: #9ca3af; font-size: 24px;">
-                    📦
-                </div>
-                {{/if}}
-                <div class="item-details">
-                    <h3>{{itemTitle}}</h3>
-                    <p>Solicitado por <strong>{{borrowerName}}</strong></p>
-                </div>
-            </div>
-            
-            <div class="reservation-details">
-                <h4>📅 Detalles de la Reserva</h4>
-                <div class="detail-row">
-                    <span class="detail-label">Fecha de inicio:</span>
-                    <span class="detail-value">{{startDate}}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Fecha de devolución:</span>
-                    <span class="detail-value">{{endDate}}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Solicitante:</span>
-                    <span class="detail-value">{{borrowerName}}</span>
-                </div>
-            </div>
-            
-            {{#if message}}
-            <div class="borrower-message">
-                <strong>Mensaje del solicitante:</strong><br>
-                "{{message}}"
-            </div>
-            {{/if}}
-            
-            <div class="action-buttons">
-                <a href="{{actionUrl}}&decision=approve" class="approve-button">
-                    ✅ Aprobar Solicitud
-                </a>
-                <a href="{{actionUrl}}&decision=reject" class="reject-button">
-                    ❌ Rechazar Solicitud
-                </a>
-                <br>
-                <a href="{{reservationUrl}}" class="view-button">
-                    👁️ Ver Detalles Completos
-                </a>
-            </div>
-            
-            <div class="message">
-                <small>
-                    💡 <strong>Consejo:</strong> Revisa el perfil del solicitante y su historial 
-                    de préstamos antes de tomar una decisión. Puedes contactar directamente 
-                    con {{borrowerName}} si tienes alguna pregunta.
-                </small>
-            </div>
+
+        <div class="item-card">
+          {{#if itemImageUrl}}
+          <img src="{{itemImageUrl}}" alt="{{itemTitle}}" class="item-image" />
+          {{else}}
+          <div
+            class="item-image"
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background-color: #e5e7eb;
+              color: #9ca3af;
+              font-size: 24px;
+            "
+          >
+            📦
+          </div>
+          {{/if}}
+          <div class="item-details">
+            <h3>{{itemTitle}}</h3>
+            <p>Solicitado por <strong>{{borrowerName}}</strong></p>
+          </div>
         </div>
-        
-        <div class="footer">
-            <p><strong>Library of Things</strong></p>
-            <p>Construyendo comunidades más sostenibles, un préstamo a la vez</p>
-            <p>
-                <a href="{{reservationUrl}}">Ver en la app</a> | 
-                <a href="#">Centro de ayuda</a>
-            </p>
+
+        <div class="reservation-details">
+          <h4>📅 Detalles de la Reserva</h4>
+          <div class="detail-row">
+            <span class="detail-label">Fecha de inicio:</span>
+            <span class="detail-value">{{startDate}}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Fecha de devolución:</span>
+            <span class="detail-value">{{endDate}}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Solicitante:</span>
+            <span class="detail-value">{{borrowerName}}</span>
+          </div>
         </div>
+
+        {{#if message}}
+        <div class="borrower-message">
+          <strong>Mensaje del solicitante:</strong><br />
+          "{{message}}"
+        </div>
+        {{/if}}
+
+        <div class="action-buttons">
+          <a href="{{actionUrl}}&decision=approve" class="approve-button">
+            ✅ Aprobar Solicitud
+          </a>
+          <a href="{{actionUrl}}&decision=reject" class="reject-button">
+            ❌ Rechazar Solicitud
+          </a>
+          <br />
+          <a href="{{reservationUrl}}" class="view-button">
+            👁️ Ver Detalles Completos
+          </a>
+        </div>
+
+        <div class="message">
+          <small>
+            💡 <strong>Consejo:</strong> Revisa el perfil del solicitante y su
+            historial de préstamos antes de tomar una decisión. Puedes contactar
+            directamente con {{borrowerName}} si tienes alguna pregunta.
+          </small>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p><strong>Library of Things</strong></p>
+        <p>Construyendo comunidades más sostenibles, un préstamo a la vez</p>
+        <p>
+          <a href="{{reservationUrl}}">Ver en la app</a> |
+          <a href="#">Centro de ayuda</a>
+        </p>
+      </div>
     </div>
-</body>
+  </body>
 </html>

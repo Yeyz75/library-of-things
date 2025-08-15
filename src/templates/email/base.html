@@ -1,242 +1,244 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{subject}}</title>
     <style>
-        /* Reset styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #374151;
-            background-color: #f9fafb;
-        }
-        
+      /* Reset styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+          Cantarell, sans-serif;
+        line-height: 1.6;
+        color: #374151;
+        background-color: #f9fafb;
+      }
+
+      .email-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 32px 24px;
+        text-align: center;
+      }
+
+      .header h1 {
+        color: #ffffff;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .header p {
+        color: #e5e7eb;
+        font-size: 16px;
+      }
+
+      .content {
+        padding: 32px 24px;
+      }
+
+      .greeting {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 16px;
+      }
+
+      .message {
+        font-size: 16px;
+        line-height: 1.7;
+        color: #4b5563;
+        margin-bottom: 24px;
+      }
+
+      .item-card {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 24px 0;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .item-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 8px;
+        object-fit: cover;
+        background-color: #e5e7eb;
+      }
+
+      .item-details h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 4px;
+      }
+
+      .item-details p {
+        font-size: 14px;
+        color: #6b7280;
+      }
+
+      .reservation-details {
+        background-color: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        padding: 16px;
+        margin: 24px 0;
+        border-radius: 0 8px 8px 0;
+      }
+
+      .reservation-details h4 {
+        font-size: 16px;
+        font-weight: 600;
+        color: #92400e;
+        margin-bottom: 8px;
+      }
+
+      .detail-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 4px;
+        font-size: 14px;
+      }
+
+      .detail-label {
+        font-weight: 500;
+        color: #92400e;
+      }
+
+      .detail-value {
+        color: #451a03;
+      }
+
+      .cta-button {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #ffffff;
+        text-decoration: none;
+        padding: 14px 28px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 16px;
+        text-align: center;
+        margin: 24px 0;
+        transition: transform 0.2s;
+      }
+
+      .cta-button:hover {
+        transform: translateY(-1px);
+      }
+
+      .secondary-button {
+        display: inline-block;
+        background-color: #ffffff;
+        color: #667eea;
+        text-decoration: none;
+        padding: 12px 24px;
+        border: 2px solid #667eea;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 14px;
+        text-align: center;
+        margin: 8px 8px 8px 0;
+      }
+
+      .footer {
+        background-color: #f3f4f6;
+        padding: 24px;
+        text-align: center;
+        border-top: 1px solid #e5e7eb;
+      }
+
+      .footer p {
+        font-size: 14px;
+        color: #6b7280;
+        margin-bottom: 8px;
+      }
+
+      .footer a {
+        color: #667eea;
+        text-decoration: none;
+      }
+
+      .social-links {
+        margin-top: 16px;
+      }
+
+      .social-links a {
+        display: inline-block;
+        margin: 0 8px;
+        color: #9ca3af;
+        text-decoration: none;
+      }
+
+      /* Responsive */
+      @media (max-width: 600px) {
         .email-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+          margin: 0;
+          box-shadow: none;
         }
-        
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 32px 24px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            color: #ffffff;
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-        
-        .header p {
-            color: #e5e7eb;
-            font-size: 16px;
-        }
-        
-        .content {
-            padding: 32px 24px;
-        }
-        
-        .greeting {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 16px;
-        }
-        
-        .message {
-            font-size: 16px;
-            line-height: 1.7;
-            color: #4b5563;
-            margin-bottom: 24px;
-        }
-        
-        .item-card {
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 24px 0;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        
-        .item-image {
-            width: 80px;
-            height: 80px;
-            border-radius: 8px;
-            object-fit: cover;
-            background-color: #e5e7eb;
-        }
-        
-        .item-details h3 {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 4px;
-        }
-        
-        .item-details p {
-            font-size: 14px;
-            color: #6b7280;
-        }
-        
-        .reservation-details {
-            background-color: #fef3c7;
-            border-left: 4px solid #f59e0b;
-            padding: 16px;
-            margin: 24px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        
-        .reservation-details h4 {
-            font-size: 16px;
-            font-weight: 600;
-            color: #92400e;
-            margin-bottom: 8px;
-        }
-        
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 4px;
-            font-size: 14px;
-        }
-        
-        .detail-label {
-            font-weight: 500;
-            color: #92400e;
-        }
-        
-        .detail-value {
-            color: #451a03;
-        }
-        
-        .cta-button {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #ffffff;
-            text-decoration: none;
-            padding: 14px 28px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 16px;
-            text-align: center;
-            margin: 24px 0;
-            transition: transform 0.2s;
-        }
-        
-        .cta-button:hover {
-            transform: translateY(-1px);
-        }
-        
-        .secondary-button {
-            display: inline-block;
-            background-color: #ffffff;
-            color: #667eea;
-            text-decoration: none;
-            padding: 12px 24px;
-            border: 2px solid #667eea;
-            border-radius: 8px;
-            font-weight: 500;
-            font-size: 14px;
-            text-align: center;
-            margin: 8px 8px 8px 0;
-        }
-        
+
+        .header,
+        .content,
         .footer {
-            background-color: #f3f4f6;
-            padding: 24px;
-            text-align: center;
-            border-top: 1px solid #e5e7eb;
+          padding: 24px 16px;
         }
-        
-        .footer p {
-            font-size: 14px;
-            color: #6b7280;
-            margin-bottom: 8px;
+
+        .item-card {
+          flex-direction: column;
+          text-align: center;
         }
-        
-        .footer a {
-            color: #667eea;
-            text-decoration: none;
+
+        .item-image {
+          width: 120px;
+          height: 120px;
         }
-        
-        .social-links {
-            margin-top: 16px;
+
+        .detail-row {
+          flex-direction: column;
+          gap: 4px;
         }
-        
-        .social-links a {
-            display: inline-block;
-            margin: 0 8px;
-            color: #9ca3af;
-            text-decoration: none;
-        }
-        
-        /* Responsive */
-        @media (max-width: 600px) {
-            .email-container {
-                margin: 0;
-                box-shadow: none;
-            }
-            
-            .header, .content, .footer {
-                padding: 24px 16px;
-            }
-            
-            .item-card {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .item-image {
-                width: 120px;
-                height: 120px;
-            }
-            
-            .detail-row {
-                flex-direction: column;
-                gap: 4px;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="email-container">
-        <div class="header">
-            <h1>Library of Things</h1>
-            <p>Compartir es cuidar nuestro planeta</p>
+      <div class="header">
+        <h1>Library of Things</h1>
+        <p>Compartir es cuidar nuestro planeta</p>
+      </div>
+
+      <div class="content">{{content}}</div>
+
+      <div class="footer">
+        <p><strong>Library of Things</strong></p>
+        <p>La plataforma de préstamo colaborativo que conecta a tu comunidad</p>
+        <p>
+          <a href="{{unsubscribeUrl}}">Cancelar suscripción</a> |
+          <a href="{{helpUrl}}">Centro de ayuda</a>
+        </p>
+        <div class="social-links">
+          <a href="#">Facebook</a>
+          <a href="#">Twitter</a>
+          <a href="#">Instagram</a>
         </div>
-        
-        <div class="content">
-            {{content}}
-        </div>
-        
-        <div class="footer">
-            <p><strong>Library of Things</strong></p>
-            <p>La plataforma de préstamo colaborativo que conecta a tu comunidad</p>
-            <p>
-                <a href="{{unsubscribeUrl}}">Cancelar suscripción</a> | 
-                <a href="{{helpUrl}}">Centro de ayuda</a>
-            </p>
-            <div class="social-links">
-                <a href="#">Facebook</a>
-                <a href="#">Twitter</a>
-                <a href="#">Instagram</a>
-            </div>
-        </div>
+      </div>
     </div>
-</body>
+  </body>
 </html>
