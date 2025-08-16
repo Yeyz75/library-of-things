@@ -20,7 +20,7 @@
           </p>
         </div>
 
-        <div v-if="itemsStore.isLoading || loadingReview" class="card p-8">
+        <div v-if="!isReady" class="card p-8">
           <BaseLoader size="lg" center />
         </div>
 
@@ -141,6 +141,14 @@ const item = computed(() => itemsStore.currentItem);
 const reservation = computed(() => {
   const reservationId = route.query.reservationId as string;
   return reservationsStore.reservations.find((r) => r.$id === reservationId);
+});
+
+const isReady = computed(() => {
+  const reviewId = route.query.reviewId as string | undefined;
+  if (reviewId) {
+    return Boolean(item.value && reservation.value && existingReview.value);
+  }
+  return Boolean(item.value && reservation.value);
 });
 
 const formatDate = (dateString: string): string => {
