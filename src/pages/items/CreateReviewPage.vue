@@ -160,10 +160,7 @@ const getReviewedUserId = (): string => {
 };
 
 // Load review by ID directly from the API
-const loadReviewById = async (reviewId: string) => {
-  // Simplified: in a real app, you would call the API.
-  // For now, just log and return null to avoid TypeScript errors.
-  console.log('Loading review with ID:', reviewId);
+const loadReviewById = async (_reviewId: string) => {
   return null;
 };
 

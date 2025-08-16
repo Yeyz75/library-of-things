@@ -34,9 +34,12 @@
             :aria-label="ariaLabel"
             aria-modal="true"
             tabindex="-1"
-            class="relative z-50 w-full max-w-lg mx-4 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 transition-colors duration-300 overflow-auto max-h-[95vh] sm:rounded-lg"
-            :class="sizeClass"
-            v-bind="attrs"
+            :class="[
+              'relative z-50 w-full max-w-lg mx-4 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 transition-colors duration-300 overflow-auto max-h-[95vh] sm:rounded-lg',
+              sizeClass,
+              attrs.class,
+            ]"
+            v-bind="{ ...attrs, class: undefined }"
           >
             <!-- Header -->
             <div
@@ -92,7 +95,10 @@ import {
   watch,
   nextTick,
   useAttrs,
+  defineOptions,
 } from 'vue';
+
+defineOptions({ inheritAttrs: false });
 import { XMarkIcon } from '@heroicons/vue/24/outline';
 import type { BaseModalPropsModel, BaseModalEmitsModel } from '@/types/models';
 
