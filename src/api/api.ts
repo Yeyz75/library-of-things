@@ -1,42 +1,24 @@
-import {
-  Client,
-  Account,
-  Databases,
-  Storage,
-  Functions,
-  ID,
-  Query,
-} from 'appwrite';
+import { auth, db, storage } from '../lib/firebase';
+import type {
+  QueryConstraint,
+  QueryDocumentSnapshot,
+  DocumentData,
+} from 'firebase/firestore';
 
-// Configuración del cliente Appwrite
-const client = new Client();
+// Servicios principales de Firebase
+export { auth, db, storage };
 
-client
-  .setEndpoint(
-    import.meta.env.VITE_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1'
-  )
-  .setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID || '');
-
-// Servicios de Appwrite
-export const account = new Account(client);
-export const databases = new Databases(client);
-export const storage = new Storage(client);
-export const functions = new Functions(client);
-
-// Configuración de la base de datos
-export const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID || '';
-
-// IDs de colecciones usando las mismas variables de entorno que ya tienes
+// Puedes definir aquí los nombres de colecciones de Firestore
 export const COLLECTIONS = {
-  USERS: import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID || '',
-  ITEMS: import.meta.env.VITE_APPWRITE_ITEMS_COLLECTION_ID || '',
-  RESERVATIONS: import.meta.env.VITE_APPWRITE_RESERVATIONS_COLLECTION_ID || '',
-  REVIEWS: import.meta.env.VITE_APPWRITE_REVIEWS_COLLECTION_ID || '',
-  USER_STATS: import.meta.env.VITE_APPWRITE_USER_STATS_COLLECTION_ID || '',
+  USERS: 'users',
+  ITEMS: 'items',
+  RESERVATIONS: 'reservations',
+  REVIEWS: 'reviews',
+  USER_STATS: 'userStats',
 } as const;
 
-// Storage Bucket ID
-export const BUCKET_ID = import.meta.env.VITE_APPWRITE_BUCKET_ID || '';
+// Storage Bucket (solo para referencia, Firebase usa el configurado en firebase.ts)
+export const BUCKET_NAME = import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || '';
 
 // Tipos base para respuestas
 export interface ApiResponse<T = unknown> {
@@ -111,50 +93,48 @@ export function apiResource<T extends { $id?: string }>(collectionId: string) {
   }
 
   return {
-    // Listar todos los documentos (index)
+    // Listar todos los documentos (index) usando Firestore modular
     async index(
       options: QueryOptions = {}
     ): Promise<ApiResponse<{ documents: T[]; total: number }>> {
       try {
-        const queries = [];
-
-        if (options.limit) {
-          queries.push(Query.limit(options.limit));
-        }
-
-        if (options.offset) {
-          queries.push(Query.offset(options.offset));
-        }
+        const { collection, getDocs, query, orderBy, limit, where } =
+          await import('firebase/firestore');
+        const queryConstraints: QueryConstraint[] = [];
 
         if (options.orderBy) {
-          const orderType = options.orderType || 'ASC';
-          if (orderType === 'DESC') {
-            queries.push(Query.orderDesc(options.orderBy));
-          } else {
-            queries.push(Query.orderAsc(options.orderBy));
-          }
+          queryConstraints.push(
+            orderBy(
+              options.orderBy,
+              options.orderType === 'DESC' ? 'desc' : 'asc'
+            )
+          );
         }
-
+        if (options.limit) {
+          queryConstraints.push(limit(options.limit));
+        }
         if (options.filters) {
-          queries.push(...options.filters);
+          options.filters.forEach((filter) => {
+            const [field, value] = filter.split('==');
+            if (field && value) {
+              queryConstraints.push(where(field, '==', value));
+            }
+          });
         }
-
         if (options.search) {
-          queries.push(
-            Query.search(options.search.field, options.search.value)
+          queryConstraints.push(
+            where(options.search.field, '==', options.search.value)
           );
         }
 
-        const response = await databases.listDocuments(
-          DATABASE_ID,
-          collectionId,
-          queries
+        const q = query(collection(db, collectionId), ...queryConstraints);
+        const snapshot = await getDocs(q);
+        const documents: T[] = snapshot.docs.map(
+          (doc: QueryDocumentSnapshot<DocumentData>) =>
+            ({ $id: doc.id, ...doc.data() }) as T
         );
-
-        return handleApiSuccess({
-          documents: response.documents as unknown as T[],
-          total: response.total,
-        });
+        const total = documents.length;
+        return handleApiSuccess({ documents, total });
       } catch (error) {
         return handleApiError<{ documents: T[]; total: number }>(error);
       }
@@ -163,13 +143,13 @@ export function apiResource<T extends { $id?: string }>(collectionId: string) {
     // Obtener un documento por ID (show)
     async show(id: string): Promise<ApiResponse<T>> {
       try {
-        const document = await databases.getDocument(
-          DATABASE_ID,
-          collectionId,
-          id
-        );
-
-        return handleApiSuccess(document as unknown as T);
+        const { doc, getDoc } = await import('firebase/firestore');
+        const docRef = doc(db, collectionId, id);
+        const docSnap = await getDoc(docRef);
+        if (!docSnap.exists()) {
+          throw new Error('Documento no encontrado');
+        }
+        return handleApiSuccess({ $id: docSnap.id, ...docSnap.data() } as T);
       } catch (error) {
         return handleApiError<T>(error);
       }
@@ -177,31 +157,24 @@ export function apiResource<T extends { $id?: string }>(collectionId: string) {
 
     // Crear un nuevo documento (save)
     async save(
-      data: Omit<
-        T,
-        | '$id'
-        | '$createdAt'
-        | '$updatedAt'
-        | '$permissions'
-        | '$collectionId'
-        | '$databaseId'
-      >,
-      documentId?: string,
-      permissions?: string[]
+      data: Omit<T, '$id'>,
+      documentId?: string
     ): Promise<ApiResponse<T>> {
       try {
-        const document = await databases.createDocument(
-          DATABASE_ID,
-          collectionId,
-          documentId || ID.unique(),
-          data,
-          permissions
+        const { collection, addDoc, doc, setDoc } = await import(
+          'firebase/firestore'
         );
-
-        return handleApiSuccess(
-          document as unknown as T,
-          'Documento creado exitosamente'
-        );
+        let docRef;
+        if (documentId) {
+          docRef = doc(db, collectionId, documentId);
+          await setDoc(docRef, data);
+        } else {
+          docRef = await addDoc(collection(db, collectionId), data);
+        }
+        const newDoc = documentId
+          ? { $id: documentId, ...data }
+          : { $id: docRef.id, ...data };
+        return handleApiSuccess(newDoc as T, 'Documento creado exitosamente');
       } catch (error) {
         return handleApiError<T>(error);
       }
@@ -210,30 +183,14 @@ export function apiResource<T extends { $id?: string }>(collectionId: string) {
     // Actualizar un documento existente (update)
     async update(
       id: string,
-      data: Partial<
-        Omit<
-          T,
-          | '$id'
-          | '$createdAt'
-          | '$updatedAt'
-          | '$permissions'
-          | '$collectionId'
-          | '$databaseId'
-        >
-      >,
-      permissions?: string[]
+      data: Partial<Omit<T, '$id'>>
     ): Promise<ApiResponse<T>> {
       try {
-        const document = await databases.updateDocument(
-          DATABASE_ID,
-          collectionId,
-          id,
-          data,
-          permissions
-        );
-
+        const { doc, updateDoc } = await import('firebase/firestore');
+        const docRef = doc(db, collectionId, id);
+        await updateDoc(docRef, data);
         return handleApiSuccess(
-          document as unknown as T,
+          { $id: id, ...data } as T,
           'Documento actualizado exitosamente'
         );
       } catch (error) {
@@ -244,15 +201,16 @@ export function apiResource<T extends { $id?: string }>(collectionId: string) {
     // Eliminar un documento (remove)
     async remove(id: string): Promise<ApiResponse<void>> {
       try {
-        await databases.deleteDocument(DATABASE_ID, collectionId, id);
-
+        const { doc, deleteDoc } = await import('firebase/firestore');
+        const docRef = doc(db, collectionId, id);
+        await deleteDoc(docRef);
         return handleApiSuccess(undefined, 'Documento eliminado exitosamente');
       } catch (error) {
         return handleApiError<void>(error);
       }
     },
 
-    // Buscar documentos
+    // Buscar documentos (igual que index pero con search)
     async search(
       searchField: string,
       searchValue: string,
@@ -267,24 +225,26 @@ export function apiResource<T extends { $id?: string }>(collectionId: string) {
     // Contar documentos
     async count(filters?: string[]): Promise<ApiResponse<number>> {
       try {
-        const queries = filters || [];
-        queries.push(Query.limit(1)); // Solo necesitamos el total
-
-        const response = await databases.listDocuments(
-          DATABASE_ID,
-          collectionId,
-          queries
-        );
-
-        return handleApiSuccess(response.total);
+        // Usamos index y devolvemos el total
+        const result = await this.index({ filters });
+        return handleApiSuccess(result.data?.total ?? 0);
       } catch (error) {
         return handleApiError<number>(error);
       }
     },
+
+    // ...métodos migrados arriba...
   };
 }
 
-// Helper functions para storage (migradas desde lib/appwrite)
+// Helper functions para storage con Firebase
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from 'firebase/storage';
+
 export const generateFileMetadata = (
   type: 'avatar' | 'item',
   entityId: string,
@@ -301,33 +261,26 @@ export const generateFileMetadata = (
   };
 };
 
-export const getFilePreview = (fileId: string, width = 400, height = 400) => {
-  return storage.getFilePreview(BUCKET_ID, fileId, width, height);
-};
-
-export const getFileView = (fileId: string) => {
-  return storage.getFileView(BUCKET_ID, fileId);
-};
-
 export const uploadFile = async (
   file: File,
   type: 'avatar' | 'item',
   entityId: string
 ): Promise<{ fileId: string; url: string; metadata: unknown }> => {
   const metadata = generateFileMetadata(type, entityId, file.name);
-
-  const response = await storage.createFile(BUCKET_ID, ID.unique(), file);
-  const url = getFileView(response.$id).toString();
-
+  const fileId = `${type}/${entityId}/${metadata.timestamp}_${metadata.originalName}`;
+  const storageRef = ref(storage, fileId);
+  await uploadBytes(storageRef, file);
+  const url = await getDownloadURL(storageRef);
   return {
-    fileId: response.$id,
+    fileId,
     url,
     metadata,
   };
 };
 
 export const deleteFile = async (fileId: string): Promise<void> => {
-  await storage.deleteFile(BUCKET_ID, fileId);
+  const storageRef = ref(storage, fileId);
+  await deleteObject(storageRef);
 };
 
 export const uploadMultipleFiles = async (
@@ -338,6 +291,3 @@ export const uploadMultipleFiles = async (
   const uploadPromises = files.map((file) => uploadFile(file, type, entityId));
   return Promise.all(uploadPromises);
 };
-
-// Exportar Query y ID para uso en filtros personalizados
-export { Query, ID };
