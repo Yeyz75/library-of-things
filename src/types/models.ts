@@ -432,6 +432,53 @@ export interface UserStatsModel {
   $updatedAt?: string;
 }
 
+// Interfaces adicionales para el sistema de estadísticas avanzado
+export interface AchievementModel {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  category: 'sharing' | 'community' | 'trust' | 'activity' | 'milestone';
+  unlockedAt: string;
+  progress: number;
+  maxProgress: number;
+  isCompleted: boolean;
+}
+
+export interface MonthlyStatsModel {
+  month: string; // YYYY-MM format
+  itemsCreated: number;
+  reservationsMade: number;
+  reservationsReceived: number;
+  reviewsGiven: number;
+  reviewsReceived: number;
+  earnings: number;
+  spent: number;
+}
+
+export interface LeaderboardEntryModel {
+  userId: string;
+  userName: string;
+  userAvatar?: string;
+  score: number;
+  rank: number;
+  category: 'trust' | 'sharing' | 'community' | 'activity';
+}
+
+export interface StatsReportModel {
+  period: 'week' | 'month' | 'quarter' | 'year';
+  startDate: string;
+  endDate: string;
+  totalUsers: number;
+  activeUsers: number;
+  totalItems: number;
+  totalReservations: number;
+  totalReviews: number;
+  averageRating: number;
+  topCategories: Array<{ category: string; count: number }>;
+  topUsers: LeaderboardEntryModel[];
+}
+
 export interface ReviewSummaryModel {
   averageRating?: number;
   totalReviews?: number;
