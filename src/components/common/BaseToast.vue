@@ -3,7 +3,7 @@
     <transition-group
       name="toast"
       tag="div"
-      class="fixed top-4 right-4 z-50 space-y-2"
+      class="fixed top-4 right-4 z-50 space-y-2 max-w-full"
       enter-active-class="transform ease-out duration-300 transition"
       enter-from-class="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
       enter-to-class="translate-y-0 opacity-100 sm:translate-x-0"
@@ -14,11 +14,11 @@
       <div
         v-for="toast in toasts"
         :key="toast.id"
-        class="max-w-sm w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 dark:ring-gray-700 overflow-hidden"
-        :class="getToastClasses(toast.type)"
+        class="w-full bg-white dark:bg-[#0f1720] shadow-lg rounded-lg pointer-events-auto overflow-hidden relative max-w-[calc(100vw-2rem)] sm:max-w-sm"
+        :class="[getToastClasses(toast.type), 'ring-2 ring-opacity-100']"
       >
-        <div class="p-4">
-          <div class="flex items-start">
+        <div class="px-4 py-2">
+          <div class="flex flex-row items-center gap-3 w-full">
             <div class="flex-shrink-0">
               <component
                 :is="getIcon(toast.type)"
@@ -26,24 +26,23 @@
                 :class="getIconClasses(toast.type)"
               />
             </div>
-            <div class="ml-3 w-0 flex-1 pt-0.5">
-              <p
+            <div class="flex-1 min-w-0">
+              <span
                 v-if="toast.title"
-                class="text-sm font-medium text-gray-900 dark:text-gray-100"
+                class="text-sm font-medium text-gray-900 dark:text-gray-100 whitespace-nowrap"
               >
                 {{ toast.title }}
-              </p>
-              <p
-                class="text-sm text-gray-500 dark:text-gray-300"
-                :class="{ 'mt-1': toast.title }"
+              </span>
+              <span
+                class="text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap ml-2"
               >
                 {{ toast.message }}
-              </p>
+              </span>
             </div>
-            <div class="ml-4 flex-shrink-0 flex">
+            <div class="flex-shrink-0 flex ml-3">
               <button
                 @click="removeToast(toast.id)"
-                class="bg-white dark:bg-gray-800 rounded-md inline-flex text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                class="bg-transparent rounded-md inline-flex text-gray-400 dark:text-gray-300 hover:text-gray-200 focus:outline-none"
               >
                 <XMarkIcon class="h-5 w-5" />
               </button>
@@ -88,17 +87,17 @@ function getIcon(type: string) {
 
 function getToastClasses(type: string) {
   const classes = {
-    success: 'border-l-4 border-green-400',
-    error: 'border-l-4 border-red-400',
-    warning: 'border-l-4 border-yellow-400',
-    info: 'border-l-4 border-blue-400',
+    success: 'ring-green-400',
+    error: 'ring-red-400',
+    warning: 'ring-yellow-400',
+    info: 'ring-blue-400',
   };
   return classes[type as keyof typeof classes] || classes.info;
 }
 
 function getIconClasses(type: string) {
   const classes = {
-    success: 'text-green-400',
+    success: 'text-green-600 bg-green-50 rounded-full p-1',
     error: 'text-red-400',
     warning: 'text-yellow-400',
     info: 'text-blue-400',
