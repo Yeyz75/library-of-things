@@ -23,6 +23,7 @@
               :suggestions="searchSuggestions"
               :placeholder="t('search.placeholder')"
               @search="handleSearch"
+              @recent-updated="(list) => (recentSearches = list)"
               class="shadow-sm"
             />
           </div>
@@ -181,16 +182,22 @@ const itemsToShow = ref(12); // Control cuántos artículos mostrar
 const searchQuery = ref<string>(
   (router.currentRoute.value.query.search as string) || ''
 );
-// Búsquedas recientes (solo las 2 últimas)
+// Búsquedas recientes (se reciben desde SearchBar via evento 'recent-updated' o localStorage)
 const recentSearches = ref<string[]>([]);
-watch(searchQuery, (val) => {
-  if (val && val.trim()) {
-    const idx = recentSearches.value.indexOf(val);
-    if (idx !== -1) recentSearches.value.splice(idx, 1);
-    recentSearches.value.unshift(val);
-    recentSearches.value = recentSearches.value.slice(0, 2);
+
+function loadRecentSearchesFromStorage() {
+  try {
+    const saved = localStorage.getItem('recentSearches');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) {
+        recentSearches.value = parsed.slice(0, 2);
+      }
+    }
+  } catch {
+    // ignore
   }
-});
+}
 
 // Sorted items (most recent first) and filtered by selectedCategory
 
@@ -298,6 +305,8 @@ function viewDetails(item: ItemModel) {
 
 onMounted(async () => {
   await loadItems();
+  // cargar búsquedas recientes guardadas como fallback
+  loadRecentSearchesFromStorage();
 });
 
 // Keep route query `search` in sync when the user types or clears the search

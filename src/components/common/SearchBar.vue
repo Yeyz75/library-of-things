@@ -49,7 +49,7 @@
           </button>
         </div>
         <div
-          v-for="(search, index) in recentSearches.slice(0, 5)"
+          v-for="(search, index) in recentSearches.slice(0, 2)"
           :key="index"
           class="flex items-center justify-between px-2 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded group"
         >
@@ -93,6 +93,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   'update:modelValue': [value: string];
   search: [query: string];
+  'recent-updated': [recent: string[]];
 }>();
 
 const searchInput = ref<HTMLInputElement>();
@@ -161,18 +162,22 @@ function selectRecentSearch(search: string) {
 function removeRecentSearch(index: number) {
   recentSearches.value.splice(index, 1);
   saveRecentSearches();
+  emit('recent-updated', recentSearches.value);
 }
 
 function clearAllRecentSearches() {
   recentSearches.value = [];
   saveRecentSearches();
+  emit('recent-updated', recentSearches.value);
 }
 
 function addToRecentSearches(query: string) {
   const searches = recentSearches.value.filter((search) => search !== query);
   searches.unshift(query);
-  recentSearches.value = searches.slice(0, 10);
+  // Limitar a solo 2 búsquedas recientes
+  recentSearches.value = searches.slice(0, 2);
   saveRecentSearches();
+  emit('recent-updated', recentSearches.value);
 }
 
 function saveRecentSearches() {
@@ -183,7 +188,13 @@ function loadRecentSearches() {
   try {
     const saved = localStorage.getItem('recentSearches');
     if (saved) {
-      recentSearches.value = JSON.parse(saved);
+      // Al cargar, asegurarse de recortar a 2 elementos
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) {
+        recentSearches.value = parsed.slice(0, 2);
+        // Persistir el recorte para limpiar localStorage de entradas antiguas
+        saveRecentSearches();
+      }
     }
   } catch (error) {
     console.warn('Failed to load recent searches:', error);
