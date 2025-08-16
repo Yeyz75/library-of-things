@@ -33,7 +33,7 @@
               >{{ t('search.quickSearch') }}:</span
             >
             <button
-              v-for="suggestion in popularSearches.slice(0, 4)"
+              v-for="suggestion in recentSearches"
               :key="suggestion"
               @click="selectQuickSearch(suggestion)"
               class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-primary-100 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200"
@@ -54,7 +54,7 @@
       >
         <template #default>
           <!-- Loading -->
-          <div v-if="isLoading" class="text-center py-12">
+          <div v-if="loading" class="text-center py-12">
             <div class="relative inline-block">
               <div
                 class="w-12 h-12 border-4 border-primary-200 dark:border-primary-800 border-t-primary-600 dark:border-t-primary-400 rounded-full animate-spin"
@@ -133,6 +133,8 @@
 </template>
 
 <script setup lang="ts">
+import { useItems } from '@/composables/useItems';
+const { items, error, searchItems, loading } = useItems();
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
@@ -164,44 +166,31 @@ const toast = useToast();
 const { t } = useI18n();
 
 const { isAuthenticated } = storeToRefs(authStore);
-const isLoading = ref(false);
-const error = ref('');
 
 // UI state for sidebar selection
 const selectedCategory = ref<ItemCategoryModel | null>(null);
 const itemsToShow = ref(12); // Control cuántos artículos mostrar
 // Search query bound to SearchBar and synced with route `search` query param
+
 const searchQuery = ref<string>(
   (router.currentRoute.value.query.search as string) || ''
 );
-
-// Sorted items (most recent first) and filtered by selectedCategory
-const sortedItems = computed(() => {
-  // Use the same logic as HomePage - direct access to store
-  return [...itemsStore.items].sort((a, b) => {
-    const da = new Date(a.$createdAt || '').getTime() || 0;
-    const db = new Date(b.$createdAt || '').getTime() || 0;
-    return db - da;
-  });
+// Búsquedas recientes (solo las 2 últimas)
+const recentSearches = ref<string[]>([]);
+watch(searchQuery, (val) => {
+  if (val && val.trim()) {
+    const idx = recentSearches.value.indexOf(val);
+    if (idx !== -1) recentSearches.value.splice(idx, 1);
+    recentSearches.value.unshift(val);
+    recentSearches.value = recentSearches.value.slice(0, 2);
+  }
 });
 
+// Sorted items (most recent first) and filtered by selectedCategory
+
 const filteredItems = computed(() => {
-  // Start from sorted items and apply category filter if any
-  let list = selectedCategory.value
-    ? sortedItems.value.filter((it) => it.category === selectedCategory.value)
-    : sortedItems.value;
-
-  // Apply text search filter (searchQuery is two-way bound to SearchBar and
-  // also synchronized with the route query param `search`).
-  const q = (searchQuery.value || '').trim().toLowerCase();
-  if (!q) return list;
-
-  return list.filter((it) => {
-    const title = (it.title || '').toLowerCase();
-    const desc = (it.description || '').toLowerCase();
-    const tags = (it.tags || []).join(' ').toLowerCase();
-    return title.includes(q) || desc.includes(q) || tags.includes(q);
-  });
+  if (!selectedCategory.value) return items.value;
+  return items.value.filter((it) => it.category === selectedCategory.value);
 });
 
 // Visible items: show a reasonable number on the explore page
@@ -236,30 +225,13 @@ const searchSuggestions = [
   'games',
 ];
 
-const popularSearches = [
-  'taladro',
-  'laptop',
-  'bicicleta',
-  'cámara',
-  'tienda',
-  'guitarra',
-];
-
-// NOTE: items are read directly from the store via `sortedItems` / `filteredItems`.
-
 async function loadItems() {
-  isLoading.value = true;
-  error.value = '';
-
   try {
     // Use the same logic as HomePage
     await itemsStore.fetchItems({ limit: 24 });
   } catch (err) {
     console.error('Error loading items:', err);
-    error.value = t('home.items.error');
     toast.error(t('home.items.error'), t('common.error'));
-  } finally {
-    isLoading.value = false;
   }
 }
 
@@ -286,25 +258,20 @@ function handleSearch(
   query: string,
   filters?: Record<string, string | undefined>
 ) {
-  // Navigate to search results page with query and filters
+  // Actualizar el query param en la URL
   const queryParams: Record<string, string> = {};
-
-  if (query) {
-    queryParams.search = query;
-  }
-
+  if (query) queryParams.search = query;
   if (filters && typeof filters === 'object') {
     Object.keys(filters).forEach((key) => {
-      if (filters[key]) {
-        queryParams[key] = filters[key] as string;
-      }
+      if (filters[key]) queryParams[key] = filters[key] as string;
     });
   }
-
-  router.push({
-    path: '/search',
+  router.replace({
+    path: router.currentRoute.value.path,
     query: queryParams,
   });
+  // Ejecutar búsqueda remota
+  searchItems(query);
 }
 
 function selectQuickSearch(suggestion: string) {

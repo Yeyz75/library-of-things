@@ -123,6 +123,10 @@ export function useItems() {
   };
 
   const searchItems = async (searchTerm: string): Promise<void> => {
+    if (!searchTerm || searchTerm.trim() === '') {
+      await loadItems();
+      return;
+    }
     ui.setLoading(true);
     ui.clearError();
     try {
