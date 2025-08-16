@@ -117,6 +117,8 @@ import { useAuthStore } from '@/store/auth.store';
 import { useItemsStore } from '@/store/items.store';
 import { useReservationsStore } from '@/store/reservations.store';
 import { useReviews } from '@/composables/useReviews';
+import { show } from '@/api/reviews';
+import { reviewFormatter } from '@/utils/reviewFormatter';
 import { storeToRefs } from 'pinia';
 import { useI18n } from '@/composables/useI18n';
 import type { ReviewModel, CreateReviewDataModel } from '@/types/models';
@@ -160,8 +162,18 @@ const getReviewedUserId = (): string => {
 };
 
 // Load review by ID directly from the API
-const loadReviewById = async (_reviewId: string) => {
-  return null;
+const loadReviewById = async (reviewId: string) => {
+  const response = await show(reviewId);
+  if (response.success && response.data) {
+    // Inferir el tipo que espera formatReview y castear response.data a ese tipo
+    type RawReview = Parameters<typeof reviewFormatter.formatReview>[0];
+    existingReview.value = reviewFormatter.formatReview(
+      response.data as RawReview
+    );
+  } else {
+    existingReview.value = null;
+    error.value = response.error || 'No se pudo cargar la reseña';
+  }
 };
 
 const loadData = async () => {
@@ -185,7 +197,7 @@ const loadData = async () => {
     // Load existing review if editing
     if (reviewId) {
       loadingReview.value = true;
-      existingReview.value = await loadReviewById(reviewId);
+      await loadReviewById(reviewId);
       loadingReview.value = false;
     }
   } catch (err) {
