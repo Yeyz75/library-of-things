@@ -134,7 +134,14 @@
 
 <script setup lang="ts">
 import { useItems } from '@/composables/useItems';
-const { items, error, searchItems, loading } = useItems();
+// also grab the composable loader so ExplorePage initializes the same data
+const {
+  items,
+  error,
+  searchItems,
+  loading,
+  loadItems: loadItemsComposable,
+} = useItems();
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
@@ -153,14 +160,13 @@ import ExploreLayout from '@/components/layout/ExploreLayout.vue';
 import SearchBar from '@/components/common/SearchBar.vue';
 import ArticleCardGrid from '@/components/common/ArticleCardGrid.vue';
 import EmptyState from '@/components/common/EmptyState.vue';
-import { useItemsStore } from '@/store/items.store';
+// note: we rely on the composable for loading items on this page
 import { useAuthStore } from '@/store/auth.store';
 import { useToast } from '@/composables/useToast';
 import { useI18n } from '@/composables/useI18n';
 import { ItemModel, ItemCategoryModel } from '@/types/models';
 
 const router = useRouter();
-const itemsStore = useItemsStore();
 const authStore = useAuthStore();
 const toast = useToast();
 const { t } = useI18n();
@@ -227,8 +233,9 @@ const searchSuggestions = [
 
 async function loadItems() {
   try {
-    // Use the same logic as HomePage
-    await itemsStore.fetchItems({ limit: 24 });
+    // Delegate loading to the composable so `items` ref used in this page
+    // is populated consistently (fixes initial empty state on reload)
+    await loadItemsComposable();
   } catch (err) {
     console.error('Error loading items:', err);
     toast.error(t('home.items.error'), t('common.error'));
